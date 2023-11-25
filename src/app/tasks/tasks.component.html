@@ -1,0 +1,11 @@
+<h2>Tasks</h2>
+<form [formGroup]="formGroup">
+  <input type="text" formControlName="name">
+  <button type="button" (click)="addTask()" [disabled]="!canAddTask">+</button>
+</form>
+@for(task of tasks; track task) {
+  <div>{{task}} <button type="button" (click)="editTask(task)">E</button> <button type="button" (click)="removeTask(task)">-</button></div>
+}
+@empty {
+  <div>No tasks found</div>
+}

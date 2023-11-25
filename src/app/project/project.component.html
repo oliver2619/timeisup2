@@ -1,0 +1,10 @@
+<tiu-menu></tiu-menu>
+<h1>{{project}}</h1>
+<form [formGroup]="formGroup">
+  <label for="project.name">Name</label>
+  <input id="project.name" type="text" formControlName="name">
+</form>
+<button type="button" (click)="save()" [disabled]="!canSave">Save</button>
+<button type="button" (click)="reset()" [disabled]="!canReset">Reset</button>
+<button type="button" routerLink="..">Back</button>
+<tiu-tasks></tiu-tasks>

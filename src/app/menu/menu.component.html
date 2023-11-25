@@ -1,0 +1,16 @@
+<div class="menu-group">
+  <a routerLink="/overview">Time is up</a>
+  <a routerLink="/day" routerLinkActive="active">D</a>
+  <a routerLink="/month" routerLinkActive="active">M</a>
+</div>
+<div class="menu-group">
+  <ng-content></ng-content>
+</div>
+<div class="menu-group">
+  <button #menuButton type="button" (click)="toggleMenu()" [ngClass]="{active: dropDownVisible}">M</button>
+</div>
+<div #dropDown class="dropdown" [ngClass]="{visible: dropDownVisible}" style="left: {{dropDownPosition.x}}px; top: {{dropDownPosition.y}}px">
+  <a routerLink="/projects" routerLinkActive="active">Projects</a>
+  <a routerLink="/settings" routerLinkActive="active">Settings</a>
+  <a routerLink="/about" routerLinkActive="active">About</a>
+</div>

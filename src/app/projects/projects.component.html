@@ -1,0 +1,12 @@
+<tiu-menu></tiu-menu>
+<h1>Projects</h1>
+<form [formGroup]="formGroup">
+  <input type="text" formControlName="name">
+  <button type="button" (click)="addProject()" [disabled]="!canAddProject">+</button>
+</form>
+@for(p of projects; track p) {
+  <div>{{p}} <button type="button" (click)="editProject(p)">E</button> <button type="button" (click)="removeProject(p)">-</button></div>
+}
+@empty {
+  <div>No projects found</div>
+}

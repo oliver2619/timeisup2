@@ -1,0 +1,34 @@
+@import "../../style/shared";
+
+:host {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-self: stretch;
+  justify-content: space-between;
+  background-color: $bg-color-3;
+}
+
+.dropdown {
+  visibility: hidden;
+  position: absolute;
+  border: 1px solid $border-color-frame;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: $bg-color-5;
+
+  &.visible {
+    visibility: visible;
+  }
+}
+
+button {
+  @include button();
+}
+
+a {
+  padding: $spacing-1;
+  color: $color-1;
+  text-decoration: none;
+}
