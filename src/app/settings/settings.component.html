@@ -1,8 +1,18 @@
 <tiu-menu></tiu-menu>
-<h1>Settings</h1>
-<form [formGroup]="formGroup">
-  <label for="settings.maxHoursPerDay">Maximum hours per day</label>
-  <input id="settings.maxHoursPerDay" type="number" formControlName="maxHoursPerDay" min="1" max="24">
-</form>
-<button type="button" (click)="save()">Save</button>
-<button type="button" (click)="reset()">Reset</button>
+<div>
+  <h1>Settings</h1>
+  <form [formGroup]="formGroup">
+    <div class="form-group">
+      <label for="settings.maxHoursPerDay">Maximum hours per day</label>
+      <input id="settings.maxHoursPerDay" type="number" formControlName="maxHoursPerDay" min="1" max="24">
+    </div>
+    <div class="form-group">
+      <label for="settings.hoursPerWeek">Hours per week</label>
+      <input id="settings.hoursPerWeek" type="number" formControlName="hoursPerWeek" min="1" max="168">
+    </div>
+  </form>
+  <div class="button-list">
+    <button type="button" (click)="save()" class="button green">Save</button>
+    <button type="button" (click)="reset()" class="button red">Reset</button>
+  </div>
+</div>

@@ -1,15 +1,114 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {MenuComponent} from "../menu/menu.component";
+import { MenuComponent } from "../menu/menu.component";
+import { SelectProjectComponent } from "../select-project/select-project.component";
+import { SelectTaskComponent } from "../select-task/select-task.component";
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ModelService } from '../model.service';
+import { DayEntriesComponent } from "../day-entries/day-entries.component";
+
+interface DayRecordingFormValue {
+  project: string;
+  task: string;
+  comment: string;
+}
 
 @Component({
   selector: 'tiu-day-recording',
   standalone: true,
-  imports: [CommonModule, MenuComponent],
   templateUrl: './day-recording.component.html',
   styleUrl: './day-recording.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, MenuComponent, SelectProjectComponent, SelectTaskComponent, ReactiveFormsModule, DayEntriesComponent]
 })
-export class DayRecordingComponent {
+export class DayRecordingComponent implements OnDestroy {
 
+  readonly formGroup: FormGroup;
+
+  workingHours = 0;
+  workingTime = new Date();
+
+  pauseHours = 0;
+  pauseTime = new Date();
+
+  year = 0;
+  month = 0;
+  day = 0;
+
+  private timer: number;
+
+  get canSaveComment(): boolean {
+    return this.formGroup.controls['comment'].dirty;
+  }
+
+  get canStart(): boolean {
+    return this.formGroup.valid;
+  }
+
+  get canStop(): boolean {
+    return this.modelService.isRecording;
+  }
+
+  get projectControl(): FormControl<string> {
+    return this.formGroup.controls['project'] as FormControl<string>;
+  }
+
+  get taskControl(): FormControl<string> {
+    return this.formGroup.controls['task'] as FormControl<string>;
+  }
+
+  private get value(): DayRecordingFormValue {
+    return this.formGroup.value as DayRecordingFormValue;
+  }
+
+  constructor(private readonly modelService: ModelService, formBuilder: FormBuilder, changeDetectorRef: ChangeDetectorRef) {
+    this.formGroup = formBuilder.group({});
+    this.formGroup.addControl('project', formBuilder.control('', [Validators.required]));
+    this.formGroup.addControl('task', formBuilder.control('', [Validators.required]));
+    this.formGroup.addControl('comment', formBuilder.control(this.modelService.comment, []));
+    this.timer = setInterval(() => {
+      this.update();
+      changeDetectorRef.markForCheck();
+    }, 500);
+    this.update();
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.timer);
+  }
+
+  start() {
+    this.modelService.startTask(this.value.project, this.value.task);
+    this.update();
+  }
+
+  stop() {
+    this.modelService.stop();
+    this.update();
+  }
+
+  saveComment() {
+    this.modelService.comment = this.value.comment;
+    this.formGroup.controls['comment'].markAsPristine();
+  }
+
+  private update() {
+    const day = this.modelService.activeDay;
+    this.year = day.year;
+    this.month = day.month;
+    this.day = day.day;
+    const recordings = this.modelService.getDayAggregatedRecordings(this.year, this.month, this.day);
+    if (recordings != undefined) {
+      this.workingHours = recordings.totalWorkingHours;
+      this.pauseHours = recordings.totalPauseHours;
+    } else {
+      this.workingHours = 0;
+      this.pauseHours = 0;
+    }
+    this.workingTime = new Date();
+    this.workingTime.setTime(this.workingHours * 3600_000);
+    this.pauseTime = new Date();
+    this.pauseTime.setTime(this.pauseHours * 3600_000);
+  }
 }

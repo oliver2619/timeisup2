@@ -1,0 +1,6 @@
+<select #select [disabled]="isEmpty" (change)="onChange(select.value)">
+    @for(project of projects; track project) {
+        <option [value]="project">{{project}}</option>
+    }
+</select>
+<!-- <button type="button" class="fas fa-caret-down"></button> -->

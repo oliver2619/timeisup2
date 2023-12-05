@@ -1,2 +1,20 @@
-<tiu-menu></tiu-menu>
-<p>month-overview works!</p>
+<tiu-menu>
+    <button type="button" (click)="removeAll()" [disabled]="!canRemoveAll" class="menu-button red"><span class="fas fa-trash-can"></span></button>
+</tiu-menu>
+<div>
+    <form [formGroup]="formGroup">
+        <div class="input-group">
+            <select formControlName="month">
+                @for(year of years; track year){
+                    <optgroup label="{{year}}">
+                        @for(month of getMonthsOfYear(year); track month.key) {
+                            <option value="{{month.key}}">{{month.value}}</option>
+                        }
+                    </optgroup>
+                }
+            </select>
+            <span>{{selectedYear}}</span>
+        </div>
+    </form>
+    <tiu-month-overview-entries [month]="selectedMonth" [year]="selectedYear"></tiu-month-overview-entries>
+</div>

@@ -1,12 +1,23 @@
 <tiu-menu></tiu-menu>
-<h1>Projects</h1>
-<form [formGroup]="formGroup">
-  <input type="text" formControlName="name">
-  <button type="button" (click)="addProject()" [disabled]="!canAddProject">+</button>
-</form>
-@for(p of projects; track p) {
-  <div>{{p}} <button type="button" (click)="editProject(p)">E</button> <button type="button" (click)="removeProject(p)">-</button></div>
-}
-@empty {
-  <div>No projects found</div>
-}
+<div>
+  <h1>Projects</h1>
+  <form [formGroup]="formGroup">
+    <div class="input-group">
+      <input type="text" formControlName="name">
+      <button type="button" (click)="addProject()" [disabled]="!canAddProject" class="green"><span class="fas fa-plus"></span></button>
+    </div>
+  </form>
+  <table>
+    @for(p of projects; track p) {
+      <tr>
+        <td>{{p}}</td>
+        <td>
+          <button type="button" (click)="editProject(p)" class="button yellow"><span class="fas fa-pen-to-square"></span></button>
+        </td>
+        <td>
+          <button type="button" (click)="removeProject(p)" [disabled]="!canRemoveProject(p)" class="button red"><span class="fas fa-trash-can"></span></button>
+        </td>
+      </tr>
+    }
+  </table>
+</div>

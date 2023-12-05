@@ -1,11 +1,12 @@
-import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {MenuComponent} from "../menu/menu.component";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Subscription} from "rxjs";
-import {ModelService} from "../model.service";
-import {ProjectRouteParams} from "../project/project.component";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MenuComponent } from "../menu/menu.component";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Subscription } from "rxjs";
+import { ModelService } from "../model.service";
+import { ProjectRouteParams } from "../project/project.component";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { MessageBoxService } from '../message-box.service';
 
 interface TasksFormValue {
   name: string;
@@ -17,7 +18,7 @@ interface TasksFormValue {
   imports: [CommonModule, MenuComponent, ReactiveFormsModule],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class TasksComponent implements OnDestroy {
 
@@ -36,10 +37,10 @@ export class TasksComponent implements OnDestroy {
     return this.formGroup.value as TasksFormValue;
   }
 
-  constructor(private readonly modelService: ModelService, private readonly router: Router, route: ActivatedRoute, formBuilder: FormBuilder) {
+  constructor(private readonly modelService: ModelService, private readonly router: Router, private readonly messageBoxService: MessageBoxService, route: ActivatedRoute, formBuilder: FormBuilder) {
     this.formGroup = formBuilder.group({});
     this.formGroup.addControl('name', formBuilder.control('', [Validators.required]));
-    this.subscription = route.params.subscribe({next: value => this.onRouteChange(value as ProjectRouteParams)});
+    this.subscription = route.params.subscribe({ next: value => this.onRouteChange(value as ProjectRouteParams) });
   }
 
   ngOnDestroy(): void {
@@ -54,12 +55,23 @@ export class TasksComponent implements OnDestroy {
     this.formGroup.setValue(v);
   }
 
+  canRemoveTask(task: string): boolean {
+    return !this.modelService.isTaskInUse(this.project, task);
+  }
+
   editTask(task: string) {
     this.router.navigate(['projects', this.project, 'tasks', task]);
   }
 
   removeTask(task: string) {
-    this.modelService.removeTask(this.project, task);
+    this.messageBoxService.question(`Do you want to remove task ${task} from project ${this.project}?`).subscribe({
+      next: result => {
+        if (result) {
+          this.modelService.removeTask(this.project, task);
+          this.updateTasks();
+        }
+      }
+    });
   }
 
   private onRouteChange(params: ProjectRouteParams) {

@@ -1,0 +1,47 @@
+<tiu-menu></tiu-menu>
+<div>
+    <h1>{{date | date:'EEE, MMM d'}}</h1>
+    <table>
+        <tr>
+            <th colspan="2">Start - end</th>
+            <td class="number">{{start | date:'HH:mm'}}</td>
+            <td class="number">{{end | date:'HH:mm'}}</td>
+        </tr>
+        <tr class="green">
+            <th colspan="2">Total working time</th>
+            <td class="number">{{totalWorkingTime | date:'HH:mm':'GMT'}}</td>
+            <td class="number">{{totalWorkingHours | number:'1.1-1'}}h</td>
+        </tr>
+        <tr>
+            <th colspan="2">Total pause time</th>
+            <td class="number">{{totalPauseTime | date:'HH:mm':'GMT'}}</td>
+            <td class="number">{{totalPauseHours | number:'1.1-1'}}h</td>
+        </tr>
+        @for(p of projects; track p.project) {
+            <tr>
+                <th colspan="2">{{p.project}}</th>
+                <td class="number">{{p.totalTime | date:'HH:mm':'GMT'}}</td>
+                <td class="number">{{p.totalHours | number:'1.1-1'}}h</td>
+            </tr>
+            @for(t of p.tasks; track t.task) {
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>{{t.task}}</th>
+                    <td class="number">{{t.totalTime | date:'HH:mm':'GMT'}}</td>
+                    <td class="number">{{t.totalHours | number:'1.1-1'}}h</td>
+                </tr>
+            }
+        }
+        @if(hasComment) {
+            <tr>
+                <th colspan="2">Comment</th>
+                <td colspan="2">{{comment}}</td>
+            </tr>
+        }
+    </table>
+    <div class="button-list center">
+        <button type="button" (click)="previous()" [disabled]="!hasPrevious" class="button"><span class="fas fa-caret-left"></span></button>
+        <button type="button" routerLink="../../../.." class="button">Close</button>
+        <button type="button" (click)="next()" [disabled]="!hasNext" class="button"><span class="fas fa-caret-right"></span></button>
+    </div>
+</div>

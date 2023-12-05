@@ -1,0 +1,5 @@
+<select #select [disabled]="isEmpty" (change)="onChange(select.value)">
+    @for(task of tasks; track task) {
+        <option [value]="task">{{task}}</option>
+    }
+</select>

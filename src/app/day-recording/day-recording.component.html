@@ -1,4 +1,34 @@
-<tiu-menu>
-  <button type="button">Play</button>
-</tiu-menu>
-<p>day-recording works!</p>
+<tiu-menu></tiu-menu>
+<div>
+    <form [formGroup]="formGroup">
+        <div class="input-group">
+            <tiu-select-project [project-control]="projectControl"></tiu-select-project>
+            <tiu-select-task [project-control]="projectControl" [task-control]="taskControl"></tiu-select-task>
+        </div>
+        <div class="button-list center">
+            <button type="button" (click)="start()" [disabled]="!canStart" class="button large green"><span class="fas fa-play"></span></button>
+            <button type="button" (click)="stop()" [disabled]="!canStop" class="button large red"><span class="fas fa-stop"></span></button>
+        </div>
+        <div class="form-group">
+            <label for="dayRecording.comment">Comment</label>
+            <div class="input-group">
+                <input id="dayRecording.comment" type="text" formControlName="comment">
+                <button type="button" (click)="saveComment()" [disabled]="!canSaveComment" class="green"><span class="fas fa-check"></span></button>
+            </div>
+        </div>
+    </form>
+    <div class="form">
+        <div class="form-2-columns">
+            <div class="form-group">
+                <label>Worked</label>
+                <input type="text" readonly="readonly" value="{{workingTime | date:'HH:mm':'GMT'}} / {{workingHours | number:'1.1-1'}}h" size="8" class="number">
+            </div>
+            <div class="form-group">
+                <label>Paused</label>
+                <input type="text" readonly="readonly" value="{{pauseTime | date:'HH:mm':'GMT'}} / {{pauseHours | number:'1.1-1'}}h" size="8" class="number">
+            </div>
+        </div>
+    </div>
+    <h2>Log</h2>
+    <tiu-day-entries [year]="year" [month]="month" [day]="day"></tiu-day-entries>
+</div>

@@ -1,9 +1,10 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {MenuComponent} from "../menu/menu.component";
-import {ModelService} from "../model.service";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {Router} from "@angular/router";
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MenuComponent } from "../menu/menu.component";
+import { ModelService } from "../model.service";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { Router } from "@angular/router";
+import { MessageBoxService } from '../message-box.service';
 
 interface ProjectsFormValue {
   name: string;
@@ -15,7 +16,7 @@ interface ProjectsFormValue {
   imports: [CommonModule, MenuComponent, ReactiveFormsModule],
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class ProjectsComponent {
 
@@ -32,7 +33,7 @@ export class ProjectsComponent {
     return this.formGroup.value as ProjectsFormValue;
   }
 
-  constructor(private readonly modelService: ModelService, private readonly router: Router, formBuilder: FormBuilder) {
+  constructor(private readonly modelService: ModelService, private readonly router: Router, private readonly messageBoxService: MessageBoxService, formBuilder: FormBuilder) {
     this.formGroup = formBuilder.group({});
     this.formGroup.addControl('name', formBuilder.control('', [Validators.required]));
     this.updateProjects();
@@ -46,13 +47,23 @@ export class ProjectsComponent {
     this.formGroup.setValue(v);
   }
 
+  canRemoveProject(name: string): boolean {
+    return !this.modelService.isProjectInUse(name);
+  }
+
   editProject(name: string) {
     this.router.navigate(['projects', name]);
   }
 
   removeProject(name: string) {
-    this.modelService.removeProject(name);
-    this.updateProjects();
+    this.messageBoxService.question(`Do you want to remove project ${name}?`).subscribe({
+      next: result => {
+        if (result) {
+          this.modelService.removeProject(name);
+          this.updateProjects();
+        }
+      }
+    });
   }
 
   private updateProjects() {

@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, Component, ElementRef, HostListener, ViewChild} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {RouterLink, RouterLinkActive} from "@angular/router";
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink, RouterLinkActive } from "@angular/router";
 
 @Component({
   selector: 'tiu-menu',
@@ -13,7 +13,7 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
 export class MenuComponent {
 
   dropDownVisible = false;
-  dropDownPosition: { x: number, y: number } = {x: 0, y: 0};
+  dropDownPosition: { x: number, y: number } = { x: 0, y: 0 };
 
   @ViewChild('menuButton')
   menuButton: ElementRef<HTMLButtonElement> | undefined;

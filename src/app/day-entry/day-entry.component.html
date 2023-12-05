@@ -1,1 +1,45 @@
-<p>day-entry works!</p>
+<tiu-menu></tiu-menu>
+<div>
+    <form [formGroup]="formGroup">
+        <div class="form-group">
+            <label>Project</label>
+            <tiu-select-project [project-control]="projectControl"></tiu-select-project>
+        </div>
+        <div class="form-group">
+            <label>Task</label>
+            <tiu-select-task [project-control]="projectControl" [task-control]="taskControl"></tiu-select-task>
+        </div>
+        <div class="form-group">
+            <label>Start</label>
+            <div class="input-group">
+                <input type="number" formControlName="startHour" min="0" max="23" size="2">
+                <span>:</span>
+                <input type="number" formControlName="startMinute"min="0" max="59" size="2">
+                @if(canAlignBackwards) {
+                    <button type="button" (click)="alignBackwards()" class="fas fa-backward-step"></button>
+                }
+            </div>
+        </div>
+        @if(hasEnd) {
+            <div class="form-group">
+                <label>End</label>
+                <div class="input-group">
+                    <input type="number" formControlName="endHour" min="0" max="23" size="2">
+                    <span>:</span>
+                    <input type="number" formControlName="endMinute" min="0" max="59" size="2">
+                    @if(canAlignForwards) {
+                        <button type="button" (click)="alignForwards()"><span class="fas fa-forward-step"></span></button>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Duration</label>
+                <input type="text" readonly="readonly" value="{{durationTime | date:'HH:mm':'GMT'}} / {{durationHours | number:'1.1-1'}}h" size="8" class="number">
+            </div>
+        }
+    </form>
+    <div class="button-list">
+        <button type="button" (click)="save()" [disabled]="!canSave" class="button green">Save</button>
+        <button type="button" (click)="navigateToParent()" class="button">Cancel</button>
+    </div>
+</div>

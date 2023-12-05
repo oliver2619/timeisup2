@@ -1,0 +1,28 @@
+<table>
+    <thead>
+        <tr>
+            <th>Project<br>Task</th>
+            <th>Start<br>End</th>
+            <th colspan="3">Duration</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for(item of items; track item.index) {
+            <tr [ngClass]="{yellow: item.isActive}" class="small">
+                <td>{{item.project}}<br>{{item.task}}</td>
+                <td>
+                    <span [ngClass]="{invalid: !item.startValid}">{{item.start | date:'HH:mm'}}</span>
+                    <br>
+                    <span [ngClass]="{invalid: !item.endValid}">{{item.end | date:'HH:mm'}}</span>
+                </td>
+                <td [ngClass]="{invalid: !item.durationValid}">{{item.durationTime | date:'HH:mm':'GMT'}}<br>{{item.durationHours | number:'1.1-1'}}h</td>
+                <td>
+                    <button type="button" (click)="edit(item.index)" class="button yellow"><span class="fas fa-pen-to-square"></span></button>
+                </td>
+                <td>
+                    <button type="button" (click)="remove(item.index)" class="button red"><span class="fas fa-trash-can"></span></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

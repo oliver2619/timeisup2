@@ -1,15 +1,20 @@
-import {Routes} from '@angular/router';
-import {SplashComponent} from "./splash/splash.component";
-import {OverviewComponent} from "./overview/overview.component";
-import {DayRecordingComponent} from "./day-recording/day-recording.component";
-import {MonthOverviewComponent} from "./month-overview/month-overview.component";
-import {SettingsComponent} from "./settings/settings.component";
-import {AboutComponent} from "./about/about.component";
-import {ProjectsComponent} from "./projects/projects.component";
-import {ProjectComponent} from "./project/project.component";
-import {projectGuard} from "./project.guard";
-import {TaskComponent} from "./task/task.component";
-import {taskGuard} from "./task.guard";
+import { Routes } from '@angular/router';
+import { SplashComponent } from "./splash/splash.component";
+import { OverviewComponent } from "./overview/overview.component";
+import { DayRecordingComponent } from "./day-recording/day-recording.component";
+import { MonthOverviewComponent } from "./month-overview/month-overview.component";
+import { SettingsComponent } from "./settings/settings.component";
+import { AboutComponent } from "./about/about.component";
+import { ProjectsComponent } from "./projects/projects.component";
+import { ProjectComponent } from "./project/project.component";
+import { projectGuard } from "./project.guard";
+import { TaskComponent } from "./task/task.component";
+import { taskGuard } from "./task.guard";
+import { MonthOverviewEntryComponent } from './month-overview-entry/month-overview-entry.component';
+import { DayEntryComponent } from './day-entry/day-entry.component';
+import { monthOverviewEntryGuard } from './month-overview-entry.guard';
+import { activeDayGuard } from './active-day.guard';
+import { MonthEditEntryComponent } from './month-edit-entry/month-edit-entry.component';
 
 export const routes: Routes = [{
   path: '',
@@ -24,9 +29,29 @@ export const routes: Routes = [{
   pathMatch: 'full',
   component: DayRecordingComponent
 }, {
+  path: 'day/:year/:month/:day/:index',
+  pathMatch: 'full',
+  canActivate: [activeDayGuard],
+  component: DayEntryComponent
+}, {
   path: 'month',
   pathMatch: 'full',
   component: MonthOverviewComponent
+}, {
+  path: 'month/:year/:month/:day/edit',
+  pathMatch: 'full',
+  canActivate: [monthOverviewEntryGuard],
+  component: MonthEditEntryComponent
+}, {
+  path: 'month/:year/:month/:day/edit/:index',
+  pathMatch: 'full',
+  canActivate: [activeDayGuard],
+  component: DayEntryComponent
+}, {
+  path: 'month/:year/:month/:day/view',
+  pathMatch: 'full',
+  canActivate: [monthOverviewEntryGuard],
+  component: MonthOverviewEntryComponent
 }, {
   path: 'settings',
   pathMatch: 'full',

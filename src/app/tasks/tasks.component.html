@@ -1,11 +1,16 @@
 <h2>Tasks</h2>
 <form [formGroup]="formGroup">
-  <input type="text" formControlName="name">
-  <button type="button" (click)="addTask()" [disabled]="!canAddTask">+</button>
+  <div class="input-group">
+    <input type="text" formControlName="name">
+    <button type="button" (click)="addTask()" [disabled]="!canAddTask" class="green"><span class="fas fa-plus"></span></button>
+  </div>
 </form>
-@for(task of tasks; track task) {
-  <div>{{task}} <button type="button" (click)="editTask(task)">E</button> <button type="button" (click)="removeTask(task)">-</button></div>
-}
-@empty {
-  <div>No tasks found</div>
-}
+<table>
+  @for(task of tasks; track task) {
+    <tr>
+      <td>{{task}}</td>
+      <td><button type="button" (click)="editTask(task)" class="button yellow"><span class="fas fa-pen-to-square"></span></button></td>
+      <td><button type="button" (click)="removeTask(task)" [disabled]="!canRemoveTask(task)" class="button red"><span class="fas fa-trash-can"></span></button></td>
+    </tr>
+  }
+</table>

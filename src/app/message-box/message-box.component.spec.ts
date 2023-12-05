@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WeekEntryComponent } from './week-entry.component';
+import { MessageBoxComponent } from './message-box.component';
 
-describe('WeekEntryComponent', () => {
-  let component: WeekEntryComponent;
-  let fixture: ComponentFixture<WeekEntryComponent>;
+describe('MessageBoxComponent', () => {
+  let component: MessageBoxComponent;
+  let fixture: ComponentFixture<MessageBoxComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [WeekEntryComponent]
+      imports: [MessageBoxComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(WeekEntryComponent);
+    fixture = TestBed.createComponent(MessageBoxComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

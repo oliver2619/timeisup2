@@ -6,6 +6,7 @@ import {ModelService} from "../model.service";
 
 interface SettingsFormValue {
   maxHoursPerDay: number;
+  hoursPerWeek: number;
 }
 
 @Component({
@@ -27,16 +28,19 @@ export class SettingsComponent {
   constructor(private readonly modelService: ModelService, formBuilder: FormBuilder) {
     this.formGroup = formBuilder.group({});
     this.formGroup.addControl('maxHoursPerDay', formBuilder.control(this.modelService.maxHoursPerDay, [Validators.required, Validators.min(1), Validators.max(24)]))
+    this.formGroup.addControl('hoursPerWeek', formBuilder.control(this.modelService.hoursPerWeek, [Validators.required, Validators.min(1), Validators.max(168)]))
   }
 
   reset() {
     const v = this.value;
     v.maxHoursPerDay = this.modelService.maxHoursPerDay;
+    v.hoursPerWeek = this.modelService.hoursPerWeek;
     this.formGroup.setValue(v);
   }
 
   save() {
     this.modelService.maxHoursPerDay = this.value.maxHoursPerDay;
+    this.modelService.hoursPerWeek = this.value.hoursPerWeek;
   }
 
 }
