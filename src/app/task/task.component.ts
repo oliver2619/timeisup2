@@ -14,6 +14,7 @@ export interface TaskRouteParams {
 
 interface TaskFormValue {
   name: string;
+  active: boolean;
 }
 
 @Component({
@@ -34,11 +35,12 @@ export class TaskComponent implements OnDestroy {
   private readonly subscription: Subscription;
 
   get canReset(): boolean {
-    return this.value.name !== this.task;
+    return this.formGroup.dirty;
   }
 
   get canSave(): boolean {
-    return this.formGroup.valid && !this.modelService.hasTask(this.project, this.value.name);
+    const v = this.value;
+    return this.formGroup.valid && this.formGroup.dirty && (!this.modelService.hasTask(this.project, v.name) || this.task == v.name);
   }
 
   private get value(): TaskFormValue {
@@ -48,6 +50,7 @@ export class TaskComponent implements OnDestroy {
   constructor(private readonly modelService: ModelService, private readonly router: Router, route: ActivatedRoute, formBuilder: FormBuilder) {
     this.formGroup = formBuilder.group({});
     this.formGroup.addControl('name', formBuilder.control('', Validators.required));
+    this.formGroup.addControl('active', formBuilder.control(true));
     this.subscription = route.params.subscribe({next: value => this.onRouteChange(value as TaskRouteParams)});
   }
 
@@ -58,13 +61,19 @@ export class TaskComponent implements OnDestroy {
   reset() {
     const v = this.value;
     v.name = this.task;
+    v.active = this.modelService.isTaskActive(this.project, this.task);
     this.formGroup.setValue(v);
+    this.formGroup.markAsPristine();
   }
 
   save() {
     const v = this.value;
-    this.modelService.renameTask(this.project, this.task, v.name);
-    this.router.navigate(['projects', this.project, 'tasks', v.name]);
+    this.modelService.setTaskActive(this.project, this.task, v.active);
+    this.formGroup.markAsPristine();
+    if(this.task !== v.name) {
+      this.modelService.renameTask(this.project, this.task, v.name);
+      this.router.navigate(['projects', this.project, 'tasks', v.name]);
+    }
   }
 
   private onRouteChange(params: TaskRouteParams) {
@@ -72,6 +81,8 @@ export class TaskComponent implements OnDestroy {
     this.task = params.task;
     const v = this.value;
     v.name = params.task;
+    v.active = this.modelService.isTaskActive(params.project, params.task);
     this.formGroup.setValue(v);
+    this.formGroup.markAsPristine();
   }
 }

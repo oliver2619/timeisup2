@@ -1,0 +1,3 @@
+<button type="button" (click)="onClick()" [ngClass]="{active: isActive}" class="check yellow">
+  <span [ngClass]="{'fa-check': isActive, 'fa-xmark': !isActive}" class="fas"></span>
+</button>

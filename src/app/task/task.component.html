@@ -6,6 +6,9 @@
       <label for="task.name">Name</label>
       <input id="task.name" type="text" formControlName="name">
     </div>
+    <div class="form-group">
+      <label><input type="checkbox" formControlName="active">Active</label>
+    </div>
   </form>
   <div class="button-list">
     <button type="button" (click)="save()" [disabled]="!canSave" class="button green">Save</button>

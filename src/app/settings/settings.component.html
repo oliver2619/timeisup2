@@ -12,7 +12,7 @@
     </div>
   </form>
   <div class="button-list">
-    <button type="button" (click)="save()" class="button green">Save</button>
-    <button type="button" (click)="reset()" class="button red">Reset</button>
+    <button type="button" (click)="save()" [disabled]="!canSave" class="button green">Save</button>
+    <button type="button" (click)="reset()" [disabled]="!canReset" class="button red">Reset</button>
   </div>
 </div>

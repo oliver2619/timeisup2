@@ -1,11 +1,11 @@
-import { Settings } from "./settings";
-import { Project } from "./project";
-import { Month } from "./month";
-import { ActiveJson, ModelJson } from "./model-json";
-import { ProjectJson } from "./project-json";
-import { ReadonlyRecord } from "./readonly-record";
-import { AggregatedRecordings } from "./aggregated-recordings";
-import { ReadonlyDay } from "./readonly-day";
+import {Settings} from "./settings";
+import {Project} from "./project";
+import {Month} from "./month";
+import {ActiveJson, ModelJson} from "./model-json";
+import {ProjectJson} from "./project-json";
+import {ReadonlyRecord} from "./readonly-record";
+import {AggregatedRecordings} from "./aggregated-recordings";
+import {ReadonlyDay} from "./readonly-day";
 
 export class Model {
 
@@ -58,6 +58,24 @@ export class Model {
     }
   }
 
+  get favoriteProject(): string | undefined {
+    return this._favoriteProject?.name;
+  }
+
+  set favoriteProject(name: string | undefined) {
+    if (name == undefined) {
+      this._favoriteProject = undefined;
+      this.selectFavoriteProject();
+    } else {
+      const p = this.getProject(name);
+      if (p.canBeUsed) {
+        this._favoriteProject = p;
+      } else {
+        throw new RangeError(`Project ${name} can not be used`);
+      }
+    }
+  }
+
   get hoursPerWeek(): number {
     return this.settings.hoursPerWeek;
   }
@@ -95,7 +113,15 @@ export class Model {
     return Array.from(ret);
   }
 
-  private constructor(private readonly _months: Month[], private activeMonth: Month | undefined, private readonly settings: Settings, private readonly projectsByName: Map<string, Project>, private _overtime: number) { }
+  private constructor(
+    private readonly _months: Month[],
+    private activeMonth: Month | undefined,
+    private readonly settings: Settings,
+    private readonly projectsByName: Map<string, Project>,
+    private _overtime: number,
+    private _favoriteProject: Project | undefined
+  ) {
+  }
 
   static load(json: ModelJson): Model {
     const settings = Settings.load(json.settings);
@@ -113,11 +139,12 @@ export class Model {
     if (activeMonth != undefined && json.active != undefined) {
       activeMonth.loadActiveDay(json.active);
     }
-    return new Model(months, activeMonth, settings, projects, json.overtime);
+    const favoriteProject = json.favoriteProject == undefined ? undefined : projects.get(json.favoriteProject);
+    return new Model(months, activeMonth, settings, projects, json.overtime, favoriteProject);
   }
 
   static newInstance(): Model {
-    return new Model([], undefined, Settings.newInstance(), new Map<string, Project>(), 0);
+    return new Model([], undefined, Settings.newInstance(), new Map<string, Project>(), 0, undefined);
   }
 
   addProject(name: string) {
@@ -125,10 +152,25 @@ export class Model {
       throw new RangeError(`Project ${name} already exists`);
     }
     this.projectsByName.set(name, Project.newInstance(name));
+    this.selectFavoriteProject();
   }
 
   addTask(project: string, task: string) {
     this.getProject(project).addTask(task);
+    this.selectFavoriteProject();
+  }
+
+  canUseProjectAsFavorite(project: string): boolean {
+    const p = this.projectsByName.get(project);
+    return p != undefined && p.canBeUsed;
+  }
+
+  canUseTaskAsFavorite(project: string, task: string): boolean {
+    const p = this.projectsByName.get(project);
+    if (p == undefined || !p.canBeUsed) {
+      return false;
+    }
+    return p.canUseTaskAsFavorite(task);
   }
 
   getDayAggregatedRecordings(year: number, month: number, day: number): AggregatedRecordings | undefined {
@@ -139,8 +181,8 @@ export class Model {
     return this._months.find(it => it.year === year && it.month === month)?.getDayRecords(day) ?? [];
   }
 
-  getProjectsWithTasks(): string[] {
-    return Array.from(this.projectsByName.values()).filter(it => it.hasTasks).map(it => it.name);
+  getFavoriteTask(project: string): string | undefined {
+    return this.projectsByName.get(project)?.favoriteTask;
   }
 
   getRecordedDays(year: number, month: number): number[] {
@@ -161,6 +203,14 @@ export class Model {
     return this.projectsByName.get(project)?.tasks.map(it => it.name) ?? [];
   }
 
+  getUsableProjects(): string[] {
+    return Array.from(this.projectsByName.values()).filter(it => it.canBeUsed).map(it => it.name);
+  }
+
+  getUsableTasksForProject(project: string): string[] {
+    return this.projectsByName.get(project)?.usableTasks.map(it => it.name) ?? [];
+  }
+
   getWorkedHours(year: number, month: number, day: number): number {
     return this._months.find(it => it.year === year && it.month === month)?.getWorkedHours(day) ?? 0;
   }
@@ -177,8 +227,17 @@ export class Model {
     return this.projectsByName.get(project)?.hasTask(task) ?? false;
   }
 
+  isProjectActive(name: string): boolean {
+    return this.projectsByName.get(name)?.active ?? false;
+  }
+
   isProjectInUse(name: string): boolean {
     return this._months.some(it => it.isProjectInUse(name)) || (this.activeMonth?.isProjectInUse(name) ?? false);
+  }
+
+  isTaskActive(project: string, task: string): boolean {
+    const p = this.projectsByName.get(project);
+    return p != undefined && p.active && p.isTaskActive(task);
   }
 
   isTaskInUse(project: string, task: string): boolean {
@@ -217,6 +276,7 @@ export class Model {
       throw new RangeError(`Project ${name} is still in use`);
     }
     this.projectsByName.delete(name);
+    this.selectFavoriteProject();
   }
 
   removeTask(project: string, task: string) {
@@ -224,6 +284,7 @@ export class Model {
       throw new RangeError(`Task ${task} of project ${project} is still in use`);
     }
     this.getProject(project).removeTask(task);
+    this.selectFavoriteProject();
   }
 
   renameProject(oldName: string, newName: string) {
@@ -251,7 +312,8 @@ export class Model {
       version: 1,
       settings: this.settings.save(),
       projects,
-      active
+      active,
+      favoriteProject: this._favoriteProject?.name
     };
   }
 
@@ -261,6 +323,20 @@ export class Model {
       throw new Error('Day ${year}-${month}-${day} not found');
     }
     m.setDayRecord(day, index, start, end, this.getProject(project).getTask(task));
+  }
+
+  setFavoriteTask(project: string, task: string) {
+    this.getProject(project).favoriteTask = task;
+  }
+
+  setProjectActive(project: string, active: boolean) {
+    const p = this.getProject(project);
+    p.active = active;
+    this.selectFavoriteProject();
+  }
+
+  setTaskActive(project: string, task: string, active: boolean) {
+    this.getProject(project).setTaskActive(task, active);
   }
 
   startTask(project: string, task: string) {
@@ -316,6 +392,18 @@ export class Model {
       this._months.splice(found, 1);
       if (this.activeMonth === month) {
         this.activeMonth = undefined;
+      }
+    }
+  }
+
+  private selectFavoriteProject() {
+    if (this._favoriteProject != undefined && (!this._favoriteProject.canBeUsed || !this.projectsByName.has(this._favoriteProject.name))) {
+      this._favoriteProject = undefined;
+    }
+    if (this._favoriteProject == undefined) {
+      const activeProjects = Array.from(this.projectsByName.values()).filter(it => it.canBeUsed);
+      if (activeProjects.length > 0) {
+        this._favoriteProject = activeProjects[0];
       }
     }
   }

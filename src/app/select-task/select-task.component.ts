@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ModelService } from '../model.service';
 import { FormControl } from '@angular/forms';
@@ -12,7 +19,7 @@ import { Subscription } from 'rxjs';
   styleUrl: './select-task.component.scss',
   changeDetection: ChangeDetectionStrategy.Default
 })
-export class SelectTaskComponent implements AfterViewInit, OnChanges, OnDestroy {
+export class SelectTaskComponent implements OnChanges, OnDestroy {
 
   @Input('project-control')
   projectControl: FormControl<string> | undefined;
@@ -20,8 +27,7 @@ export class SelectTaskComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input('task-control')
   taskControl: FormControl<string> | undefined;
 
-  @ViewChild('select')
-  element: ElementRef<HTMLSelectElement> | undefined;
+  favorite: string = '';
 
   tasks: string[] = [];
 
@@ -31,13 +37,11 @@ export class SelectTaskComponent implements AfterViewInit, OnChanges, OnDestroy 
     return this.tasks.length === 0;
   }
 
-  constructor(private readonly modelService: ModelService) { }
-
-  ngAfterViewInit(): void {
-    if (this.taskControl != undefined && this.element != undefined) {
-      this.element.nativeElement.value = this.taskControl.value;
-    }
+  get value(): string {
+    return this.taskControl == undefined ? '' : this.taskControl.value;
   }
+
+  constructor(private readonly modelService: ModelService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['projectControl'] != undefined) {
@@ -47,12 +51,14 @@ export class SelectTaskComponent implements AfterViewInit, OnChanges, OnDestroy 
       }
       if (this.projectControl != undefined) {
         this.subscription = this.projectControl.valueChanges.subscribe({
-          next: value => this.updateTasks(value)
+          next: value => this.updateTasks(value, true)
         });
-        this.updateTasks(this.projectControl.value);
+        this.updateTasks(this.projectControl.value, false);
       } else {
         this.tasks = [];
-        this.checkSelectedTask();
+        if (this.taskControl != undefined) {
+          this.taskControl.setValue('');
+        }
       }
     }
   }
@@ -69,18 +75,11 @@ export class SelectTaskComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
   }
 
-  private updateTasks(project: string) {
-    this.tasks = this.modelService.getTasksForProject(project).sort((t1, t2) => t1.localeCompare(t2));
-    this.checkSelectedTask();
-  }
-
-  private checkSelectedTask() {
-    if (this.taskControl != undefined && this.tasks.indexOf(this.taskControl.value) < 0) {
-      if (this.tasks.length > 0) {
-        this.taskControl.setValue(this.tasks[0]);
-      } else {
-        this.taskControl.setValue('');
-      }
+  private updateTasks(project: string, setFavorite: boolean) {
+    this.tasks = this.modelService.getUsableTasksForProject(project).sort((t1, t2) => t1.localeCompare(t2));
+    this.favorite = this.modelService.getFavoriteTask(project) ?? '';
+    if (this.taskControl != undefined && setFavorite) {
+      this.taskControl.setValue(this.favorite);
     }
   }
 }

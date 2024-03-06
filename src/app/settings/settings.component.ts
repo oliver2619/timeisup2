@@ -21,6 +21,14 @@ export class SettingsComponent {
 
   readonly formGroup: FormGroup;
 
+  get canReset(): boolean {
+    return this.formGroup.dirty;
+  }
+
+  get canSave(): boolean {
+    return this.formGroup.valid && this.formGroup.dirty;
+  }
+
   private get value(): SettingsFormValue {
     return this.formGroup.value as SettingsFormValue;
   }
@@ -36,11 +44,12 @@ export class SettingsComponent {
     v.maxHoursPerDay = this.modelService.maxHoursPerDay;
     v.hoursPerWeek = this.modelService.hoursPerWeek;
     this.formGroup.setValue(v);
+    this.formGroup.markAsPristine();
   }
 
   save() {
     this.modelService.maxHoursPerDay = this.value.maxHoursPerDay;
     this.modelService.hoursPerWeek = this.value.hoursPerWeek;
+    this.formGroup.markAsPristine();
   }
-
 }

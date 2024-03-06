@@ -1,0 +1,5 @@
+@import "../../../style/shared";
+
+:host {
+  @include input-group;
+}

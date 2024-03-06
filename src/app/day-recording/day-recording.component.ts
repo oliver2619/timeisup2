@@ -50,6 +50,10 @@ export class DayRecordingComponent implements OnDestroy {
     return this.modelService.isRecording;
   }
 
+  get isRecording(): boolean {
+    return this.modelService.isRecording;
+  }
+
   get projectControl(): FormControl<string> {
     return this.formGroup.controls['project'] as FormControl<string>;
   }
@@ -64,8 +68,10 @@ export class DayRecordingComponent implements OnDestroy {
 
   constructor(private readonly modelService: ModelService, formBuilder: FormBuilder, changeDetectorRef: ChangeDetectorRef) {
     this.formGroup = formBuilder.group({});
-    this.formGroup.addControl('project', formBuilder.control('', [Validators.required]));
-    this.formGroup.addControl('task', formBuilder.control('', [Validators.required]));
+    const proj = this.modelService.favoriteProject ?? '';
+    const task = proj === '' ? '' : this.modelService.getFavoriteTask(proj);
+    this.formGroup.addControl('project', formBuilder.control(proj, [Validators.required]));
+    this.formGroup.addControl('task', formBuilder.control(task, [Validators.required]));
     this.formGroup.addControl('comment', formBuilder.control(this.modelService.comment, []));
     this.timer = setInterval(() => {
       this.update();

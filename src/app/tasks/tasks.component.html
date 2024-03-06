@@ -8,9 +8,15 @@
 <table>
   @for(task of tasks; track task) {
     <tr>
-      <td>{{task}}</td>
-      <td><button type="button" (click)="editTask(task)" class="button yellow"><span class="fas fa-pen-to-square"></span></button></td>
-      <td><button type="button" (click)="removeTask(task)" [disabled]="!canRemoveTask(task)" class="button red"><span class="fas fa-trash-can"></span></button></td>
+      <td class="single-line">{{task}}</td>
+      <td class="single-line right">
+        <div class="button-list inline">
+          <tiu-favorite-button (change-favorite)="setFavorite(task)"  [enabled]="canUseAsFavorite(task)" [favorite]="isFavorite(task)"></tiu-favorite-button>
+          <tiu-active-button (change-active)="setActive(task, $event)" [active]="isActive(task)"></tiu-active-button>
+          <button type="button" (click)="editTask(task)" class="button yellow"><span class="fas fa-pen-to-square"></span></button>
+          <button type="button" (click)="removeTask(task)" [disabled]="!canRemoveTask(task)" class="button red"><span class="fas fa-trash-can"></span></button>
+        </div>
+      </td>
     </tr>
   }
 </table>

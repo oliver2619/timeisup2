@@ -13,6 +13,7 @@ export interface ProjectRouteParams {
 
 interface ProjectFormValue {
   name: string;
+  active: boolean;
 }
 
 @Component({
@@ -32,11 +33,12 @@ export class ProjectComponent implements OnDestroy {
   private readonly subscription: Subscription;
 
   get canReset(): boolean {
-    return this.value.name !== this.project;
+    return this.formGroup.dirty;
   }
 
   get canSave(): boolean {
-    return this.formGroup.valid && !this.modelService.hasProject(this.value.name);
+    const v = this.value;
+    return this.formGroup.dirty && this.formGroup.valid && (!this.modelService.hasProject(v.name) || v.name === this.project);
   }
 
   private get value(): ProjectFormValue {
@@ -46,6 +48,7 @@ export class ProjectComponent implements OnDestroy {
   constructor(private readonly modelService: ModelService, private readonly router: Router, route: ActivatedRoute, formBuilder: FormBuilder) {
     this.formGroup = formBuilder.group({});
     this.formGroup.addControl('name', formBuilder.control('', Validators.required));
+    this.formGroup.addControl('active', formBuilder.control(true));
     this.subscription = route.params.subscribe({next: value => this.onRouteChange(value as ProjectRouteParams)});
   }
 
@@ -56,19 +59,27 @@ export class ProjectComponent implements OnDestroy {
   reset() {
     const v = this.value;
     v.name = this.project;
+    v.active = this.modelService.isProjectActive(this.project);
     this.formGroup.setValue(v);
+    this.formGroup.markAsPristine();
   }
 
   save() {
     const v = this.value;
-    this.modelService.renameProject(this.project, v.name);
-    this.router.navigate(['projects', v.name]);
+    this.modelService.setProjectActive(this.project, v.active);
+    this.formGroup.markAsPristine();
+    if(v.name !== this.project) {
+      this.modelService.renameProject(this.project, v.name);
+      this.router.navigate(['projects', v.name]);
+    }
   }
 
   private onRouteChange(params: ProjectRouteParams) {
     this.project = params.name;
     const v = this.value;
     v.name = params.name;
+    v.active = this.modelService.isProjectActive(params.name);
     this.formGroup.setValue(v);
+    this.formGroup.markAsPristine();
   }
 }

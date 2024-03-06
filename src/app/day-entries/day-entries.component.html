@@ -8,19 +8,23 @@
     </thead>
     <tbody>
         @for(item of items; track item.index) {
-            <tr [ngClass]="{yellow: item.isActive}" class="small">
-                <td>{{item.project}}<br>{{item.task}}</td>
-                <td>
+            <tr [ngClass]="{blink: item.isActive}" class="small">
+                <td class="single-line"><b>{{item.project}}</b><br>{{item.task}}</td>
+                <td class="single-line">
                     <span [ngClass]="{invalid: !item.startValid}">{{item.start | date:'HH:mm'}}</span>
                     <br>
                     <span [ngClass]="{invalid: !item.endValid}">{{item.end | date:'HH:mm'}}</span>
                 </td>
-                <td [ngClass]="{invalid: !item.durationValid}">{{item.durationTime | date:'HH:mm':'GMT'}}<br>{{item.durationHours | number:'1.1-1'}}h</td>
-                <td>
-                    <button type="button" (click)="edit(item.index)" class="button yellow"><span class="fas fa-pen-to-square"></span></button>
+                <td class="single-line" [ngClass]="{invalid: !item.durationValid}">
+                    <span>{{item.durationTime | date:'HH:mm':'GMT'}}</span>
+                    <br>
+                    <span>{{item.durationHours | number:'1.1-1'}}h</span>
                 </td>
-                <td>
-                    <button type="button" (click)="remove(item.index)" class="button red"><span class="fas fa-trash-can"></span></button>
+                <td class="single-line right">
+                    <div class="button-list inline">
+                        <button type="button" (click)="edit(item.index)" class="button yellow"><span class="fas fa-pen-to-square"></span></button>
+                        <button type="button" (click)="remove(item.index)" class="button red"><span class="fas fa-trash-can"></span></button>
+                    </div>
                 </td>
             </tr>
         }

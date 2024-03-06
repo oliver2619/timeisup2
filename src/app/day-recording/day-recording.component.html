@@ -6,7 +6,7 @@
             <tiu-select-task [project-control]="projectControl" [task-control]="taskControl"></tiu-select-task>
         </div>
         <div class="button-list center">
-            <button type="button" (click)="start()" [disabled]="!canStart" class="button large green"><span class="fas fa-play"></span></button>
+            <button type="button" (click)="start()" [disabled]="!canStart" class="button large green" [ngClass]="{blink: isRecording}"><span class="fas fa-play"></span></button>
             <button type="button" (click)="stop()" [disabled]="!canStop" class="button large red"><span class="fas fa-stop"></span></button>
         </div>
         <div class="form-group">

@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MenuComponent } from "../menu/menu.component";
-import { ModelService } from "../model.service";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
-import { MessageBoxService } from '../message-box.service';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {MenuComponent} from "../menu/menu.component";
+import {ModelService} from "../model.service";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {Router} from "@angular/router";
+import {MessageBoxService} from '../message-box.service';
+import {FavoriteButtonComponent} from "../elements/favorite-button/favorite-button.component";
+import {ActiveButtonComponent} from "../elements/active-button/active-button.component";
 
 interface ProjectsFormValue {
   name: string;
@@ -13,7 +15,7 @@ interface ProjectsFormValue {
 @Component({
   selector: 'tiu-projects',
   standalone: true,
-  imports: [CommonModule, MenuComponent, ReactiveFormsModule],
+  imports: [CommonModule, MenuComponent, ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent],
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.scss',
   changeDetection: ChangeDetectionStrategy.Default
@@ -47,12 +49,24 @@ export class ProjectsComponent {
     this.formGroup.setValue(v);
   }
 
+  canUseAsFavorite(name: string): boolean {
+    return this.modelService.canUseProjectAsFavorite(name);
+  }
+
   canRemoveProject(name: string): boolean {
     return !this.modelService.isProjectInUse(name);
   }
 
   editProject(name: string) {
     this.router.navigate(['projects', name]);
+  }
+
+  isActive(name: string): boolean {
+    return this.modelService.isProjectActive(name);
+  }
+
+  isFavorite(name: string): boolean {
+    return this.modelService.favoriteProject === name;
   }
 
   removeProject(name: string) {
@@ -64,6 +78,14 @@ export class ProjectsComponent {
         }
       }
     });
+  }
+
+  setActive(name: string, active: boolean) {
+    this.modelService.setProjectActive(name, active);
+  }
+
+  setFavorite(name: string) {
+    this.modelService.favoriteProject = name;
   }
 
   private updateProjects() {

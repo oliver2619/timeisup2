@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { AggregatedRecordings } from '../model/aggregated-recordings';
-import { Model } from "../model/model";
-import { ReadonlyDay } from '../model/readonly-day';
-import { ReadonlyRecord } from '../model/readonly-record';
+import {Injectable} from '@angular/core';
+import {AggregatedRecordings} from '../model/aggregated-recordings';
+import {Model} from "../model/model";
+import {ReadonlyDay} from '../model/readonly-day';
+import {ReadonlyRecord} from '../model/readonly-record';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +31,15 @@ export class ModelService {
 
   set comment(comment: string) {
     this.model.comment = comment;
+    this.save();
+  }
+
+  get favoriteProject(): string | undefined {
+    return this.model.favoriteProject;
+  }
+
+  set favoriteProject(name: string | undefined) {
+    this.model.favoriteProject = name;
     this.save();
   }
 
@@ -83,6 +92,14 @@ export class ModelService {
     this.save();
   }
 
+  canUseProjectAsFavorite(project: string): boolean {
+    return this.model.canUseProjectAsFavorite(project);
+  }
+
+  canUseTaskAsFavorite(project: string, task: string): boolean {
+    return this.model.canUseTaskAsFavorite(project, task);
+  }
+
   getDayAggregatedRecordings(year: number, month: number, day: number): AggregatedRecordings | undefined {
     return this.model.getDayAggregatedRecordings(year, month, day);
   }
@@ -90,9 +107,9 @@ export class ModelService {
   getDayRecords(year: number, month: number, day: number): ReadonlyRecord[] {
     return this.model.getDayRecords(year, month, day);
   }
-  
-  getProjectsWithTasks(): string[] {
-    return this.model.getProjectsWithTasks();
+
+  getFavoriteTask(project: string): string | undefined {
+    return this.model.getFavoriteTask(project);
   }
 
   getRecordedDays(year: number, month: number): number[] {
@@ -105,6 +122,14 @@ export class ModelService {
 
   getTasksForProject(project: string): string[] {
     return this.model.getTasksForProject(project);
+  }
+
+  getUsableProjects(): string[] {
+    return this.model.getUsableProjects();
+  }
+
+  getUsableTasksForProject(project: string): string[] {
+    return this.model.getUsableTasksForProject(project);
   }
 
   getWorkedHours(year: number, month: number, day: number): number {
@@ -123,8 +148,16 @@ export class ModelService {
     return this.model.hasTask(project, task);
   }
 
+  isProjectActive(name: string): boolean {
+    return this.model.isProjectActive(name);
+  }
+
   isProjectInUse(name: string): boolean {
     return this.model.isProjectInUse(name);
+  }
+
+  isTaskActive(project: string, task: string): boolean {
+    return this.model.isTaskActive(project, task);
   }
 
   isTaskInUse(project: string, task: string): boolean {
@@ -168,6 +201,21 @@ export class ModelService {
 
   setDayRecord(year: number, month: number, day: number, index: number, start: Date, end: Date | undefined, project: string, task: string) {
     this.model.setDayRecord(year, month, day, index, start, end, project, task);
+    this.save();
+  }
+
+  setFavoriteTask(project: string, task: string) {
+    this.model.setFavoriteTask(project, task);
+    this.save();
+  }
+
+  setProjectActive(project: string, active: boolean) {
+    this.model.setProjectActive(project, active);
+    this.save();
+  }
+
+  setTaskActive(project: string, task: string, active: boolean) {
+    this.model.setTaskActive(project, task, active);
     this.save();
   }
 

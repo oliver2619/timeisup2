@@ -1,12 +1,14 @@
-import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MenuComponent } from "../menu/menu.component";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Subscription } from "rxjs";
-import { ModelService } from "../model.service";
-import { ProjectRouteParams } from "../project/project.component";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { MessageBoxService } from '../message-box.service';
+import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {MenuComponent} from "../menu/menu.component";
+import {ActivatedRoute, Router} from "@angular/router";
+import {Subscription} from "rxjs";
+import {ModelService} from "../model.service";
+import {ProjectRouteParams} from "../project/project.component";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {MessageBoxService} from '../message-box.service';
+import {FavoriteButtonComponent} from "../elements/favorite-button/favorite-button.component";
+import {ActiveButtonComponent} from "../elements/active-button/active-button.component";
 
 interface TasksFormValue {
   name: string;
@@ -15,7 +17,7 @@ interface TasksFormValue {
 @Component({
   selector: 'tiu-tasks',
   standalone: true,
-  imports: [CommonModule, MenuComponent, ReactiveFormsModule],
+  imports: [CommonModule, MenuComponent, ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.scss',
   changeDetection: ChangeDetectionStrategy.Default
@@ -40,7 +42,7 @@ export class TasksComponent implements OnDestroy {
   constructor(private readonly modelService: ModelService, private readonly router: Router, private readonly messageBoxService: MessageBoxService, route: ActivatedRoute, formBuilder: FormBuilder) {
     this.formGroup = formBuilder.group({});
     this.formGroup.addControl('name', formBuilder.control('', [Validators.required]));
-    this.subscription = route.params.subscribe({ next: value => this.onRouteChange(value as ProjectRouteParams) });
+    this.subscription = route.params.subscribe({next: value => this.onRouteChange(value as ProjectRouteParams)});
   }
 
   ngOnDestroy(): void {
@@ -59,8 +61,20 @@ export class TasksComponent implements OnDestroy {
     return !this.modelService.isTaskInUse(this.project, task);
   }
 
+  canUseAsFavorite(task: string): boolean {
+    return this.modelService.canUseTaskAsFavorite(this.project, task);
+  }
+
   editTask(task: string) {
     this.router.navigate(['projects', this.project, 'tasks', task]);
+  }
+
+  isActive(task: string): boolean {
+    return this.modelService.isTaskActive(this.project, task);
+  }
+
+  isFavorite(task: string): boolean {
+    return this.modelService.getFavoriteTask(this.project) === task;
   }
 
   removeTask(task: string) {
@@ -72,6 +86,14 @@ export class TasksComponent implements OnDestroy {
         }
       }
     });
+  }
+
+  setActive(task: string, active: boolean) {
+    this.modelService.setTaskActive(this.project, task, active);
+  }
+
+  setFavorite(task: string) {
+    this.modelService.setFavoriteTask(this.project, task);
   }
 
   private onRouteChange(params: ProjectRouteParams) {

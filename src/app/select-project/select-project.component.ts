@@ -1,7 +1,13 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ModelService } from '../model.service';
-import { FormControl } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ModelService} from '../model.service';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'tiu-select-project',
@@ -11,39 +17,30 @@ import { FormControl } from '@angular/forms';
   styleUrl: './select-project.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SelectProjectComponent implements AfterViewInit, OnChanges {
+export class SelectProjectComponent implements OnChanges {
 
   @Input('project-control')
   control: FormControl<string> | undefined;
 
-  @ViewChild('select')
-  element: ElementRef<HTMLSelectElement> | undefined;
-
   readonly projects: string[];
+  readonly favorite: string;
 
   get isEmpty(): boolean {
     return this.projects.length === 0;
   }
 
+  get value(): string {
+    return this.control == undefined ? '' : this.control.value;
+  }
+
   constructor(modelService: ModelService) {
-    this.projects = modelService.getProjectsWithTasks().sort((p1, p2) => p1.localeCompare(p2));
+    this.projects = modelService.getUsableProjects().sort((p1, p2) => p1.localeCompare(p2));
+    this.favorite = modelService.favoriteProject ?? '';
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['control'] != undefined && this.control != undefined) {
-      if (this.projects.indexOf(this.control.value) < 0) {
-        if (this.projects.length > 0) {
-          this.control.setValue(this.projects[0]);
-        } else {
-          this.control.setValue('');
-        }
-      }
-    }
-  }
-
-  ngAfterViewInit(): void {
-    if (this.control != undefined && this.element != undefined) {
-      this.element.nativeElement.value = this.control.value;
+    if (changes['control'] != undefined && this.control != undefined && this.control.value === '') {
+      this.control.setValue(this.favorite);
     }
   }
 
