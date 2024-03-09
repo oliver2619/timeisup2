@@ -3,6 +3,8 @@ import { Observable } from 'rxjs';
 
 export interface MessageBoxHandler {
 
+  information(message: string): void;
+
   question(message: string): Observable<boolean>;
 }
 
@@ -17,6 +19,13 @@ export class MessageBoxService {
 
   setHandler(handler: MessageBoxHandler | undefined) {
     this.handler = handler;
+  }
+
+  information(message: string) {
+    if (this.handler == undefined) {
+      throw new Error('No message box handler registered');
+    }
+    this.handler.information(message);
   }
 
   question(message: string): Observable<boolean> {

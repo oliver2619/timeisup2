@@ -138,18 +138,7 @@ button.menu-button {
 }
 
 .button-list {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: $spacing-2;
-
-  &.center {
-    align-self: center;
-  }
-
-  &.inline {
-    display: inline-flex;
-  }
+  @include button-list();
 }
 
 input[type=text], input[type=number] {
@@ -192,6 +181,7 @@ label {
   display: inline-flex;
   flex-direction: row;
   align-items: center;
+
 }
 
 optgroup {
@@ -315,7 +305,7 @@ tr {
 
 tr:nth-child(n + 2), tbody tr {
   td, th {
-    border-top: 1px solid $border-color-frame;
+    border-top: 1px dashed $border-color-frame;
   }
 }
 
@@ -330,4 +320,13 @@ p {
   &.small {
     @include font(0.7);
   }
+
+  &.error {
+    color: $color-error;
+  }
+  
+}
+
+a {
+  color: inherit;
 }

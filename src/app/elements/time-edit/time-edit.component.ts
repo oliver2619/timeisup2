@@ -1,11 +1,12 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
+import { ButtonErrorDirective } from '../button-error.directive';
 
 @Component({
   selector: 'tiu-time-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ButtonErrorDirective],
   templateUrl: './time-edit.component.html',
   styleUrl: './time-edit.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

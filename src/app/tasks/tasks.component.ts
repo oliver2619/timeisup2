@@ -9,6 +9,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {MessageBoxService} from '../message-box.service';
 import {FavoriteButtonComponent} from "../elements/favorite-button/favorite-button.component";
 import {ActiveButtonComponent} from "../elements/active-button/active-button.component";
+import { ButtonErrorDirective } from '../elements/button-error.directive';
 
 interface TasksFormValue {
   name: string;
@@ -17,7 +18,7 @@ interface TasksFormValue {
 @Component({
   selector: 'tiu-tasks',
   standalone: true,
-  imports: [CommonModule, MenuComponent, ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent],
+  imports: [CommonModule, MenuComponent, ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent, ButtonErrorDirective],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.scss',
   changeDetection: ChangeDetectionStrategy.Default

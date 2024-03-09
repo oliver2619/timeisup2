@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
 import {MessageBoxService} from '../message-box.service';
 import {FavoriteButtonComponent} from "../elements/favorite-button/favorite-button.component";
 import {ActiveButtonComponent} from "../elements/active-button/active-button.component";
+import { ButtonErrorDirective } from '../elements/button-error.directive';
 
 interface ProjectsFormValue {
   name: string;
@@ -15,7 +16,7 @@ interface ProjectsFormValue {
 @Component({
   selector: 'tiu-projects',
   standalone: true,
-  imports: [CommonModule, MenuComponent, ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent],
+  imports: [CommonModule, MenuComponent, ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent, ButtonErrorDirective],
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.scss',
   changeDetection: ChangeDetectionStrategy.Default

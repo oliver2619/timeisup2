@@ -7,6 +7,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ReactiveFormsModule } from '@angular/forms';
 import { ModelService } from '../model.service';
 import { DayEntriesComponent } from "../day-entries/day-entries.component";
+import { ButtonErrorDirective } from '../elements/button-error.directive';
+import { RouterModule } from '@angular/router';
 
 interface DayRecordingFormValue {
   project: string;
@@ -20,7 +22,7 @@ interface DayRecordingFormValue {
   templateUrl: './day-recording.component.html',
   styleUrl: './day-recording.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, MenuComponent, SelectProjectComponent, SelectTaskComponent, ReactiveFormsModule, DayEntriesComponent]
+  imports: [CommonModule, MenuComponent, SelectProjectComponent, SelectTaskComponent, ReactiveFormsModule, DayEntriesComponent, ButtonErrorDirective, RouterModule]
 })
 export class DayRecordingComponent implements OnDestroy {
 

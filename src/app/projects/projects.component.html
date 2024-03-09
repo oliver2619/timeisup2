@@ -13,10 +13,10 @@
         <td class="single-line">{{p}}</td>
         <td class="single-line right">
           <div class="button-list inline">
-            <tiu-favorite-button (change-favorite)="setFavorite(p)" [enabled]="canUseAsFavorite(p)" [favorite]="isFavorite(p)"></tiu-favorite-button>
+            <tiu-favorite-button (change-favorite)="setFavorite(p)" [enabled]="canUseAsFavorite(p)" [favorite]="isFavorite(p)" error="Only active projects with tasks can be favored."></tiu-favorite-button>
             <tiu-active-button (change-active)="setActive(p, $event)" [active]="isActive(p)"></tiu-active-button>
             <button type="button" (click)="editProject(p)" class="button yellow"><span class="fas fa-pen-to-square"></span></button>
-            <button type="button" (click)="removeProject(p)" [disabled]="!canRemoveProject(p)" class="button red"><span class="fas fa-trash-can"></span></button>
+            <button type="button" (click)="removeProject(p)" [disabled]="!canRemoveProject(p)" tiuButtonError="Project is in use and cannot be deleted." class="button red"><span class="fas fa-trash-can"></span></button>
           </div>
         </td>
       </tr>

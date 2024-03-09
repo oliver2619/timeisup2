@@ -18,6 +18,8 @@ $spacing-4: 2em;
 $spacing-5: 4em;
 
 $color-1: #000000;
+$color-error: #e00000;
+$color-green-3: #009000;
 
 $input-color: #0080e0;
 
@@ -106,7 +108,7 @@ $box-shadow-frame: 0 0 $spacing-2 $bg-color-2;
   &[disabled],
   &.disabled {
     cursor: default;
-    opacity: 0.66;
+    opacity: 0.5;
 
     * {
       filter: blur(1.66px);
@@ -126,11 +128,26 @@ $box-shadow-frame: 0 0 $spacing-2 $bg-color-2;
   background-color: transparent;
 
   &.active .fas {
-    color: #009000;
+    color: $color-green-3;
   }
 
   &.red {
     color: #c00000;
+  }
+}
+
+@mixin button-list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: $spacing-2;
+
+  &.center {
+    align-self: center;
+  }
+
+  &.inline {
+    display: inline-flex;
   }
 }
 
@@ -183,6 +200,7 @@ $box-shadow-frame: 0 0 $spacing-2 $bg-color-2;
   input, select {
     flex-grow: 1;
     flex-shrink: 1;
+    min-width: 0;
   }
 
   &>label, &>span, &>button {
@@ -192,6 +210,7 @@ $box-shadow-frame: 0 0 $spacing-2 $bg-color-2;
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     background-color: $bg-color-4;
 
     &.red {
@@ -207,7 +226,7 @@ $box-shadow-frame: 0 0 $spacing-2 $bg-color-2;
     }
   }
 
-  &>button {
-    min-width: 1em;
+  & > button {
+    min-width: 2em;
   }
 }

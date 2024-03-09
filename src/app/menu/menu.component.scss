@@ -45,5 +45,9 @@
     &:hover {
       background-color: $bg-color-4;
     }
+
+    &.active {
+      color: $color-green-3;
+    }
   }
 }

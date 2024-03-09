@@ -13,7 +13,9 @@ import { Observable, Subject } from 'rxjs';
 })
 export class MessageBoxComponent implements OnDestroy {
 
-  question: string = '';
+  title = '';
+  question = '';
+  cancelVisible = true;
 
   private subject: Subject<boolean> | undefined;
 
@@ -27,6 +29,7 @@ export class MessageBoxComponent implements OnDestroy {
 
   constructor(private readonly messageBoxService: MessageBoxService, private readonly element: ElementRef<HTMLElement>) {
     messageBoxService.setHandler({
+      information: message => this.doInformation(message),
       question: message => this.doQuestion(message)
     });
   }
@@ -49,8 +52,17 @@ export class MessageBoxComponent implements OnDestroy {
     s?.next(false);
   }
 
-  private doQuestion(message: string): Observable<boolean> {
+  private doInformation(message: string) {
+    this.title = 'Information';
     this.question = message;
+    this.cancelVisible = false;
+    this.visible = true;
+  }
+
+  private doQuestion(message: string): Observable<boolean> {
+    this.title = 'Question';
+    this.question = message;
+    this.cancelVisible = true;
     this.visible = true;
     this.subject = new Subject();
     return this.subject;
