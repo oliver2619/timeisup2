@@ -1,7 +1,7 @@
-import { Project } from "./project";
-import { ReadonlyRecord } from "./readonly-record";
-import { RecordJson } from "./record-json";
-import { Task } from "./task";
+import {Project} from "./project";
+import {ReadonlyRecord} from "./readonly-record";
+import {RecordJson} from "./record-json";
+import {Task} from "./task";
 
 export class Record {
 
@@ -44,7 +44,8 @@ export class Record {
     this.task = task;
   }
 
-  private constructor(public start: Date, public end: Date | undefined, public task: Task) { }
+  private constructor(public start: Date, public end: Date | undefined, public task: Task) {
+  }
 
   static load(json: RecordJson, projectsByName: (project: string) => Project): Record {
     const project = projectsByName(json.project);
@@ -75,9 +76,10 @@ export class Record {
     };
   }
 
-  stop(time: Date) {
+  stop(time: Date, onStopTask: (task: Task) => void) {
     if (this.end == undefined) {
       this.end = time;
+      onStopTask(this.task);
     }
   }
 }

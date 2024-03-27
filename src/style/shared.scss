@@ -22,12 +22,13 @@ $color-error: #e00000;
 $color-green-3: #009000;
 
 $input-color: #0080e0;
+$input-bg-color: #ffffff;
 
 $bg-color-1: #808080;
 $bg-color-2: #c0c0c0;
 $bg-color-3: #e0e0e0;
 $bg-color-4: #f0f0f0;
-$bg-color-5: #ffffff;
+$bg-color-5: #fcfcfc;
 
 $bg-color-red: #ff8080;
 $bg-color-yellow: #ffe080;
@@ -154,6 +155,7 @@ $box-shadow-frame: 0 0 $spacing-2 $bg-color-2;
 @mixin input {
   @include font(1);
   outline: none;
+  background-color: $input-bg-color;
 }
 
 @mixin form {

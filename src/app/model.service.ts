@@ -3,6 +3,8 @@ import {AggregatedRecordings} from '../model/aggregated-recordings';
 import {Model} from "../model/model";
 import {ReadonlyDay} from '../model/readonly-day';
 import {ReadonlyRecord} from '../model/readonly-record';
+import {ToastService} from "./toast.service";
+import {Task} from "../model/task";
 
 @Injectable({
   providedIn: 'root'
@@ -73,7 +75,7 @@ export class ModelService {
     return this.model.recordedYears;
   }
 
-  constructor() {
+  constructor(private toastService: ToastService) {
     const json = localStorage.getItem(ModelService.LOCAL_STORAGE_KEY);
     if (json == null) {
       this.model = Model.newInstance();
@@ -220,16 +222,21 @@ export class ModelService {
   }
 
   startTask(project: string, task: string) {
-    this.model.startTask(project, task);
+    this.model.startTask(project, task, t => this.onStopTask(t));
+    this.toastService.info(`Started task ${task} for project ${project}`);
     this.save();
   }
 
   stop() {
-    this.model.stop();
+    this.model.stop(task => this.onStopTask(task));
     this.save();
   }
 
   private save() {
     localStorage.setItem(ModelService.LOCAL_STORAGE_KEY, JSON.stringify(this.model.save()));
+  }
+
+  private onStopTask(task: Task) {
+    this.toastService.info(`Stopped task ${task.name} for project ${task.project.name}.`);
   }
 }

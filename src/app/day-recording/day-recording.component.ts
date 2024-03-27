@@ -9,6 +9,8 @@ import { ModelService } from '../model.service';
 import { DayEntriesComponent } from "../day-entries/day-entries.component";
 import { ButtonErrorDirective } from '../elements/button-error.directive';
 import { RouterModule } from '@angular/router';
+import {TimePipe} from "../elements/time.pipe";
+import {HoursPipe} from "../elements/hours.pipe";
 
 interface DayRecordingFormValue {
   project: string;
@@ -22,7 +24,7 @@ interface DayRecordingFormValue {
   templateUrl: './day-recording.component.html',
   styleUrl: './day-recording.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, MenuComponent, SelectProjectComponent, SelectTaskComponent, ReactiveFormsModule, DayEntriesComponent, ButtonErrorDirective, RouterModule]
+  imports: [CommonModule, MenuComponent, SelectProjectComponent, SelectTaskComponent, ReactiveFormsModule, DayEntriesComponent, ButtonErrorDirective, RouterModule, TimePipe, HoursPipe]
 })
 export class DayRecordingComponent implements OnDestroy {
 

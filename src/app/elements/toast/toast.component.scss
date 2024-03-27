@@ -1,0 +1,21 @@
+@import "../../../style/shared";
+
+:host {
+  @include font(0.8);
+  border: 4px solid black;
+  border-radius: $border-radius-3;
+  box-shadow: $box-shadow-frame;
+  padding: $spacing-3;
+  color: $color-1;
+  background-color: $bg-color-5;
+  text-align: justify;
+  pointer-events: all;
+
+  &.error {
+    border-color: $bg-color-red;
+  }
+
+  &.info {
+    border-color: $bg-color-green;
+  }
+}

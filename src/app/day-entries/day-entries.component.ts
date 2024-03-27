@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ModelService } from '../model.service';
 import { Router } from '@angular/router';
 import { MessageBoxService } from '../message-box.service';
+import {TimePipe} from "../elements/time.pipe";
+import {HoursPipe} from "../elements/hours.pipe";
 
 interface Item {
   readonly project: string;
@@ -21,7 +23,7 @@ interface Item {
 @Component({
   selector: 'tiu-day-entries',
   standalone: true,
-  imports: [CommonModule, DatePipe, DecimalPipe],
+  imports: [CommonModule, TimePipe, HoursPipe],
   templateUrl: './day-entries.component.html',
   styleUrl: './day-entries.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

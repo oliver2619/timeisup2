@@ -68,13 +68,13 @@ export class Workingday {
     r.setRecord(start, end, task);
   }
 
-  start(time: Date, task: Task) {
-    this.records.forEach(it => it.stop(time));
+  start(time: Date, task: Task, onStopTask: (task: Task) => void) {
+    this.records.forEach(it => it.stop(time, onStopTask));
     this.records.push(Record.newInstance(time, task));
   }
 
-  stop() {
+  stop(onStopTask: (task: Task) => void) {
     const time = new Date();
-    this.records.forEach(it => it.stop(time));
+    this.records.forEach(it => it.stop(time, onStopTask));
   }
 }

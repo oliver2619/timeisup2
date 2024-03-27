@@ -6,6 +6,7 @@ import {ProjectJson} from "./project-json";
 import {ReadonlyRecord} from "./readonly-record";
 import {AggregatedRecordings} from "./aggregated-recordings";
 import {ReadonlyDay} from "./readonly-day";
+import {Task} from "./task";
 
 export class Model {
 
@@ -339,15 +340,15 @@ export class Model {
     this.getProject(project).setTaskActive(task, active);
   }
 
-  startTask(project: string, task: string) {
+  startTask(project: string, task: string, onStopTask: (task: Task) => void) {
     const today = new Date();
     today.setSeconds(0);
     today.setMilliseconds(0);
-    this.getOrCreateActiveMonth(today).startTask(today, this.getProject(project).getTask(task));
+    this.getOrCreateActiveMonth(today).startTask(today, this.getProject(project).getTask(task), onStopTask);
   }
 
-  stop() {
-    this.activeMonth?.stop();
+  stop(onStopTask: (task: Task) => void) {
+    this.activeMonth?.stop(onStopTask);
     this.activeMonth = undefined;
   }
 

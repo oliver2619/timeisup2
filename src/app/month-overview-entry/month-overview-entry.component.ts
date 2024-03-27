@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MenuComponent } from '../menu/menu.component';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DayRouteParams } from '../day-route-params';
 import { ModelService } from '../model.service';
 import { AggregatedProjectRecordings } from '../../model/aggregated-recordings';
+import {TimePipe} from "../elements/time.pipe";
+import {HoursPipe} from "../elements/hours.pipe";
 
 interface TaskRecording {
   task: string;
@@ -22,7 +24,7 @@ interface ProjectRecording {
 @Component({
   selector: 'tiu-month-overview-entry',
   standalone: true,
-  imports: [CommonModule, RouterModule, MenuComponent, DatePipe, DecimalPipe],
+  imports: [CommonModule, RouterModule, MenuComponent, DatePipe, TimePipe, HoursPipe],
   templateUrl: './month-overview-entry.component.html',
   styleUrl: './month-overview-entry.component.scss',
   changeDetection: ChangeDetectionStrategy.Default

@@ -1,0 +1,12 @@
+@import "../../../style/shared";
+
+:host {
+  position: absolute;
+  right: $spacing-1;
+  bottom: $spacing-1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  pointer-events: none;
+  row-gap: $spacing-1;
+}

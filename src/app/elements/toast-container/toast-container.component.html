@@ -1,0 +1,3 @@
+@for(toast of toasts(); track toast.from) {
+  <tiu-toast [toast]="toast" (finish)="remove($event)" [ngClass]="toast.type"></tiu-toast>
+}

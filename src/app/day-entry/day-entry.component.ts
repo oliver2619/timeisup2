@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {CommonModule, DatePipe, DecimalPipe} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {MenuComponent} from "../menu/menu.component";
 import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -7,6 +7,8 @@ import {ModelService} from '../model.service';
 import {SelectProjectComponent} from "../select-project/select-project.component";
 import {SelectTaskComponent} from "../select-task/select-task.component";
 import {TimeEditComponent} from "../elements/time-edit/time-edit.component";
+import {TimePipe} from "../elements/time.pipe";
+import {HoursPipe} from "../elements/hours.pipe";
 
 export interface DayEntryRouteParams {
   readonly year: string;
@@ -30,7 +32,7 @@ interface DayEntryFormValue {
   templateUrl: './day-entry.component.html',
   styleUrl: './day-entry.component.scss',
   changeDetection: ChangeDetectionStrategy.Default,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, MenuComponent, SelectProjectComponent, SelectTaskComponent, DecimalPipe, DatePipe, TimeEditComponent]
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, MenuComponent, SelectProjectComponent, SelectTaskComponent, TimePipe, HoursPipe, TimeEditComponent]
 })
 export class DayEntryComponent {
 

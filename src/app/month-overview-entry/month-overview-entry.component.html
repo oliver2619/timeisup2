@@ -9,26 +9,26 @@
         </tr>
         <tr class="green">
             <th colspan="2">Total working time</th>
-            <td class="number">{{totalWorkingTime | date:'HH:mm':'GMT'}}</td>
-            <td class="number">{{totalWorkingHours | number:'1.1-1'}}h</td>
+            <td class="number">{{totalWorkingTime | tiuTime}}</td>
+            <td class="number">{{totalWorkingHours | tiuHours}}</td>
         </tr>
         <tr>
             <th colspan="2">Total pause time</th>
-            <td class="number">{{totalPauseTime | date:'HH:mm':'GMT'}}</td>
-            <td class="number">{{totalPauseHours | number:'1.1-1'}}h</td>
+            <td class="number">{{totalPauseTime | tiuTime}}</td>
+            <td class="number">{{totalPauseHours | tiuHours}}</td>
         </tr>
         @for(p of projects; track p.project) {
             <tr>
                 <th colspan="2">{{p.project}}</th>
-                <td class="number">{{p.totalTime | date:'HH:mm':'GMT'}}</td>
-                <td class="number">{{p.totalHours | number:'1.1-1'}}h</td>
+                <td class="number">{{p.totalTime | tiuTime}}</td>
+                <td class="number">{{p.totalHours | tiuHours}}</td>
             </tr>
             @for(t of p.tasks; track t.task) {
                 <tr>
                     <th>&nbsp;</th>
                     <th>{{t.task}}</th>
-                    <td class="number">{{t.totalTime | date:'HH:mm':'GMT'}}</td>
-                    <td class="number">{{t.totalHours | number:'1.1-1'}}h</td>
+                    <td class="number">{{t.totalTime | tiuTime}}</td>
+                    <td class="number">{{t.totalHours | tiuHours}}</td>
                 </tr>
             }
         }

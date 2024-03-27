@@ -132,12 +132,12 @@ export class Month {
     }
   }
 
-  startTask(time: Date, task: Task) {
-    this.getOrCreateActiveDay(time).start(time, task);
+  startTask(time: Date, task: Task, onStopTask: (task: Task) => void) {
+    this.getOrCreateActiveDay(time).start(time, task, onStopTask);
   }
 
-  stop() {
-    this._activeDay?.stop();
+  stop(onStopTask: (task: Task) => void) {
+    this._activeDay?.stop(onStopTask);
     this._activeDay = undefined;
   }
 
