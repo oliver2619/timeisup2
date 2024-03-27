@@ -9,7 +9,7 @@ import { AggregatedRecordingsBuilder } from "./aggregated-recordings-builder";
 export class Workingday {
 
   get isEmpty(): boolean {
-    return this.records.length === 0 && this.comment === '';
+    return this.records.length === 0 && this.comment === '' && this.holiday <= 0;
   }
 
   get readonlyRecords(): ReadonlyRecord[] {
@@ -26,18 +26,18 @@ export class Workingday {
     return ret;
   }
 
-  private constructor(public day: number, public comment: string, public readonly records: Record[]) { }
+  private constructor(public day: number, public comment: string, public readonly records: Record[], public holiday: number) { }
 
   static load(json: WorkingdayJson, projectsByName: (project: string) => Project): Workingday {
     const records = json.records.map(it => Record.load(it, projectsByName));
-    return new Workingday(json.day, json.comment ?? '', records);
+    return new Workingday(json.day, json.comment ?? '', records, json.holiday??0);
   }
 
   static newInstance(day: number): Workingday {
-    return new Workingday(day, '', []);
+    return new Workingday(day, '', [], 0);
   }
 
-  getDayAggregatedRecordings(): AggregatedRecordings {
+  getDayAggregatedRecordings(): AggregatedRecordings | undefined {
     const builder = new AggregatedRecordingsBuilder(this.comment);
     this.records.forEach(it => builder.add(it));
     return builder.result;
@@ -59,7 +59,8 @@ export class Workingday {
     return {
       day: this.day,
       comment: this.comment.length === 0 ? undefined : this.comment,
-      records: this.records.map(it => it.save())
+      records: this.records.map(it => it.save()),
+      holiday: this.holiday
     };
   }
 

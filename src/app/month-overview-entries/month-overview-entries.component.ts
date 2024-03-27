@@ -9,8 +9,10 @@ import {TimePipe} from "../elements/time.pipe";
 interface Item {
   readonly day: number;
   readonly date: Date;
+  readonly worked: boolean;
   readonly workedHours: number;
   readonly workedTime: Date;
+  readonly holiday: boolean;
 }
 
 @Component({
@@ -42,6 +44,11 @@ export class MonthOverviewEntriesComponent implements OnChanges {
     this.router.navigate(['month', this.year!, this.month!, day, 'edit']);
   }
 
+  setHoliday(day: number) {
+    this.modelService.setDayHoliday(this.year!, this.month!, day, 1);
+    this.edit(day);
+  }
+
   remove(day: number) {
     const date = new Date();
     date.setTime(0);
@@ -67,7 +74,7 @@ export class MonthOverviewEntriesComponent implements OnChanges {
       this.items = [];
       return;
     }
-    this.items = this.modelService.getRecordedDays(this.year, this.month).map(it => {
+    const booked = this.modelService.getRecordedDays(this.year, this.month).map(it => {
       const date = new Date();
       date.setTime(0);
       date.setFullYear(this.year!);
@@ -79,10 +86,32 @@ export class MonthOverviewEntriesComponent implements OnChanges {
       const ret: Item = {
         date,
         day: it,
+        worked: true,
         workedHours,
-        workedTime
+        workedTime,
+        holiday: this.modelService.getDayHoliday(this.year!, this.month!, it) > 0
       };
       return ret;
     });
+    const unbooked = this.modelService.getUnrecordedDays(this.year, this.month).map(it => {
+      const date = new Date();
+      date.setTime(0);
+      date.setFullYear(this.year!);
+      date.setMonth(this.month!);
+      date.setDate(it);
+      const workedTime = new Date();
+      workedTime.setTime(0);
+      const ret: Item = {
+        date,
+        day: it,
+        worked: false,
+        workedHours: 0,
+        workedTime,
+        holiday: false
+      };
+      return ret;
+    });
+    this.items = [...booked, ...unbooked];
+    this.items.sort((e1, e2) => e1.day - e2.day);
   }
 }

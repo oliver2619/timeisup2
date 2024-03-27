@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
-import { MenuComponent } from '../menu/menu.component';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { DayRouteParams } from '../day-route-params';
-import { ModelService } from '../model.service';
-import { AggregatedProjectRecordings } from '../../model/aggregated-recordings';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {CommonModule, DatePipe} from '@angular/common';
+import {MenuComponent} from '../menu/menu.component';
+import {ActivatedRoute, Router, RouterModule} from '@angular/router';
+import {DayRouteParams} from '../day-route-params';
+import {ModelService} from '../model.service';
+import {AggregatedProjectRecordings} from '../../model/aggregated-recordings';
 import {TimePipe} from "../elements/time.pipe";
 import {HoursPipe} from "../elements/hours.pipe";
 
@@ -32,14 +32,15 @@ interface ProjectRecording {
 export class MonthOverviewEntryComponent {
 
   date = new Date();
-  start = new Date();
-  end = new Date();
+  start: Date | undefined;
+  end: Date | undefined;
   comment = '';
   totalWorkingHours = 0;
   totalWorkingTime = new Date();
   totalPauseHours = 0;
   totalPauseTime = new Date();
   projects: ProjectRecording[] = [];
+  holiday = 0;
 
   get hasComment(): boolean {
     return this.comment.length > 0;
@@ -47,6 +48,10 @@ export class MonthOverviewEntryComponent {
 
   get hasPrevious(): boolean {
     return this.allDaysOfMonth.some(it => it < this.date.getDate());
+  }
+
+  get hasWorked(): boolean {
+    return this.start != undefined;
   }
 
   get hasNext(): boolean {
@@ -82,6 +87,7 @@ export class MonthOverviewEntryComponent {
     this.date.setFullYear(year);
     this.date.setMonth(month);
     this.date.setDate(day);
+    this.holiday = this.modelService.getDayHoliday(year, month, day);
     const recordings = this.modelService.getDayAggregatedRecordings(year, month, day);
     if (recordings != undefined) {
       this.start = new Date();
@@ -96,10 +102,23 @@ export class MonthOverviewEntryComponent {
       this.totalPauseTime = new Date();
       this.totalPauseTime.setTime(this.totalPauseHours * 3600_000);
       this.projects = this.hoursByProjectAndTaskToProjectRecordings(recordings.hoursByProjectAndTask);
+    } else {
+      this.start = undefined;
+      this.end = undefined;
+      this.comment = this.modelService.getDayComment(year, month, day);
+      this.totalWorkingHours = 0;
+      this.totalPauseHours = 0;
+      this.totalWorkingTime = new Date();
+      this.totalWorkingTime.setTime(0);
+      this.totalPauseTime = new Date();
+      this.totalPauseTime.setTime(0);
+      this.projects = [];
     }
   }
 
-  private hoursByProjectAndTaskToProjectRecordings(input: { [key: string]: AggregatedProjectRecordings }): ProjectRecording[] {
+  private hoursByProjectAndTaskToProjectRecordings(input: {
+    [key: string]: AggregatedProjectRecordings
+  }): ProjectRecording[] {
     return Object.entries(input).map(it => {
       const totalTime = new Date();
       totalTime.setTime(it[1].totalWorkingHours * 3600_000);

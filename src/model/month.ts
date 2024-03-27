@@ -1,10 +1,11 @@
-import { AggregatedRecordings } from "./aggregated-recordings";
-import { ActiveJson } from "./model-json";
-import { MonthJson } from "./month-json";
-import { Project } from "./project";
-import { ReadonlyRecord } from "./readonly-record";
-import { Task } from "./task";
-import { Workingday } from "./workingday";
+import {AggregatedRecordings} from "./aggregated-recordings";
+import {ActiveJson} from "./model-json";
+import {MonthJson} from "./month-json";
+import {Project} from "./project";
+import {ReadonlyRecord} from "./readonly-record";
+import {Task} from "./task";
+import {Workingday} from "./workingday";
+import {DayOfWeek} from "./dayofweek";
 
 export class Month {
 
@@ -19,12 +20,12 @@ export class Month {
   }
 
   get activeDayAggregatedRecordings(): AggregatedRecordings | undefined {
-    const day = this._activeDay == undefined ? this.getDay(new Date()) : this._activeDay;
+    const day = this._activeDay == undefined ? this.getDayByDate(new Date()) : this._activeDay;
     return day?.getDayAggregatedRecordings();
   }
 
   get activeDayRecords(): ReadonlyRecord[] {
-    const day = this._activeDay == undefined ? this.getDay(new Date()) : this._activeDay;
+    const day = this._activeDay == undefined ? this.getDayByDate(new Date()) : this._activeDay;
     return day?.readonlyRecords ?? [];
   }
 
@@ -36,7 +37,8 @@ export class Month {
     return this._days.length === 0;
   }
 
-  private constructor(public month: number, public year: number, private readonly _days: Workingday[]) { }
+  private constructor(public month: number, public year: number, private readonly _days: Workingday[]) {
+  }
 
   static load(json: MonthJson, projectsByName: (project: string) => Project): Month {
     const days = json.days.map(it => Workingday.load(it, projectsByName));
@@ -47,28 +49,50 @@ export class Month {
     return new Month(month, year, []);
   }
 
-  getComment(time: Date): string {
+  getComment(day: number): string {
+    return this.getDay(day)?.comment ?? '';
+  }
+
+  getCommentByDate(time: Date): string {
     if (this._activeDay == undefined) {
-      return this.getDay(time)?.comment ?? '';
+      return this.getDayByDate(time)?.comment ?? '';
     } else {
       return this._activeDay.comment;
     }
   }
 
   getDayAggregatedRecordings(day: number): AggregatedRecordings | undefined {
-    return this._days.find(it => it.day === day)?.getDayAggregatedRecordings();
+    return this.getDay(day)?.getDayAggregatedRecordings();
+  }
+
+  getDayHoliday(day: number): number {
+    return this.getDay(day)?.holiday ?? 0;
   }
 
   getDayRecords(day: number): ReadonlyRecord[] {
-    return this._days.find(it => it.day === day)?.readonlyRecords ?? [];
+    return this.getDay(day)?.readonlyRecords ?? [];
+  }
+
+  getUnrecordedDays(daysOfWeek: Set<DayOfWeek>): number[] {
+    const date = new Date();
+    date.setTime(0);
+    date.setFullYear(this.year, this.month, 1);
+    const ret: number[] = [];
+    while (date.getMonth() == this.month) {
+      if (!this.hasRecordings(date.getDate()) && daysOfWeek.has(date.getDay())) {
+        ret.push(date.getDate());
+      }
+      date.setDate(date.getDate() + 1);
+    }
+    return ret;
   }
 
   getWorkedHours(day: number): number {
-    return this._days.find(it => it.day === day)?.workedHours ?? 0;
+    return this.getDay(day)?.workedHours ?? 0;
   }
 
   hasRecordings(day: number): boolean {
-    return this._days.find(it => it.day === day) != undefined;
+    return this.getDay(day) != undefined;
   }
 
   isProjectInUse(name: string): boolean {
@@ -80,11 +104,15 @@ export class Month {
   }
 
   loadActiveDay(json: ActiveJson) {
-    this._activeDay = this._days.find(it => it.day === json.day);
+    this._activeDay = this.getDay(json.day);
+  }
+
+  markDayAsHoliday(day: number, holiday: number) {
+    this.getOrCreateDay(day).holiday = holiday;
   }
 
   removeDayRecord(day: number, index: number) {
-    const d = this._days.find(it => it.day === day);
+    const d = this.getDay(day);
     if (d != undefined) {
       d.removeRecord(index);
       if (d.isEmpty) {
@@ -94,9 +122,19 @@ export class Month {
   }
 
   removeDayRecords(day: number) {
-    const d = this._days.find(it => it.day === day);
+    const d = this.getDay(day);
     if (d != undefined) {
       this.removeDay(d);
+    }
+  }
+
+  removeHoliday(day: number) {
+    const found = this.getDay(day);
+    if (found != undefined) {
+      found.holiday = 0;
+      if (found.isEmpty) {
+        this.removeDay(found);
+      }
     }
   }
 
@@ -116,17 +154,25 @@ export class Month {
     };
   }
 
-  setDayRecord(day: number, index: number, start: Date, end: Date | undefined, task: Task) {
-    const d = this._days.find(it => it.day === day);
+  setDayComment(day: number, comment: string) {
+    const d = this.getDay(day);
     if (d == undefined) {
-      throw new Error('No active day found');
+      throw new Error(`Day ${day} not found`);
+    }
+    d.comment = comment;
+  }
+
+  setDayRecord(day: number, index: number, start: Date, end: Date | undefined, task: Task) {
+    const d = this.getDay(day);
+    if (d == undefined) {
+      throw new Error(`Day ${day} not found`);
     }
     d.setRecord(index, start, end, task);
   }
 
   setComment(time: Date, comment: string) {
     if (this._activeDay == undefined) {
-      this.getOrCreateDay(time).comment = comment;
+      this.getOrCreateDayByDate(time).comment = comment;
     } else {
       this._activeDay.comment = comment;
     }
@@ -145,14 +191,13 @@ export class Month {
     if (this._activeDay != undefined) {
       return this._activeDay;
     }
-    const day = this.getOrCreateDay(time);
+    const day = this.getOrCreateDayByDate(time);
     this._activeDay = day;
     return day;
   }
 
-  private getOrCreateDay(time: Date): Workingday {
-    const day = time.getDate();
-    const found = this._days.find(it => it.day === day);
+  private getOrCreateDay(day: number): Workingday {
+    const found = this.getDay(day);
     if (found != undefined) {
       return found;
     }
@@ -161,9 +206,16 @@ export class Month {
     return newDay;
   }
 
-  private getDay(time: Date): Workingday | undefined {
-    const day = time.getDate();
+  private getOrCreateDayByDate(time: Date): Workingday {
+    return this.getOrCreateDay(time.getDate());
+  }
+
+  private getDay(day: number): Workingday | undefined {
     return this._days.find(it => it.day === day);
+  }
+
+  private getDayByDate(time: Date): Workingday | undefined {
+    return this.getDay(time.getDate());
   }
 
   private removeDay(day: Workingday) {

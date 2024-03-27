@@ -5,6 +5,7 @@ import {ReadonlyDay} from '../model/readonly-day';
 import {ReadonlyRecord} from '../model/readonly-record';
 import {ToastService} from "./toast.service";
 import {Task} from "../model/task";
+import {DayOfWeek} from "../model/dayofweek";
 
 @Injectable({
   providedIn: 'root'
@@ -67,6 +68,15 @@ export class ModelService {
     this.save();
   }
 
+  get pensum(): number {
+    return this.model.pensum;
+  }
+
+  set pensum(p: number) {
+    this.model.pensum = p;
+    this.save();
+  }
+
   get projects(): string[] {
     return this.model.projects;
   }
@@ -106,6 +116,14 @@ export class ModelService {
     return this.model.getDayAggregatedRecordings(year, month, day);
   }
 
+  getDayComment(year: number, month: number, day: number): string {
+    return this.model.getDayComment(year, month, day);
+  }
+
+  getDayHoliday(year: number, month: number, day: number): number {
+    return this.model.getDayHoliday(year, month, day);
+  }
+
   getDayRecords(year: number, month: number, day: number): ReadonlyRecord[] {
     return this.model.getDayRecords(year, month, day);
   }
@@ -124,6 +142,10 @@ export class ModelService {
 
   getTasksForProject(project: string): string[] {
     return this.model.getTasksForProject(project);
+  }
+
+  getUnrecordedDays(year: number, month: number): number[] {
+    return this.model.getUnrecordedDays(year, month);
   }
 
   getUsableProjects(): string[] {
@@ -148,6 +170,10 @@ export class ModelService {
 
   hasTask(project: string, task: string): boolean {
     return this.model.hasTask(project, task);
+  }
+
+  isDayOfWeekActive(day: DayOfWeek): boolean {
+    return this.model.isDayOfWeekActive(day);
   }
 
   isProjectActive(name: string): boolean {
@@ -198,6 +224,21 @@ export class ModelService {
 
   renameTask(project: string, oldName: string, newName: string) {
     this.model.renameTask(project, oldName, newName);
+    this.save();
+  }
+
+  setDayComment(year: number, month: number, day: number, comment: string) {
+    this.model.setDayComment(year, month, day, comment);
+    this.save();
+  }
+
+  setDayHoliday(year: number, month: number, day: number, holiday: number) {
+    this.model.setDayHoliday(year, month, day, holiday);
+    this.save();
+  }
+
+  setDayOfWeekActive(day: DayOfWeek, active: boolean) {
+    this.model.setDayOfWeekActive(day, active);
     this.save();
   }
 

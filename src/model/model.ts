@@ -7,6 +7,7 @@ import {ReadonlyRecord} from "./readonly-record";
 import {AggregatedRecordings} from "./aggregated-recordings";
 import {ReadonlyDay} from "./readonly-day";
 import {Task} from "./task";
+import {DayOfWeek} from "./dayofweek";
 
 export class Model {
 
@@ -28,7 +29,7 @@ export class Model {
   }
 
   get activeDayAggregatedRecordings(): AggregatedRecordings {
-    const month = this.activeMonth == undefined ? this.getMonth(new Date()) : this.activeMonth;
+    const month = this.activeMonth == undefined ? this.getMonthByDate(new Date()) : this.activeMonth;
     const ret = month?.activeDayAggregatedRecordings;
     if (ret == undefined) {
       throw new Error('No active day recordings found');
@@ -37,23 +38,23 @@ export class Model {
   }
 
   get activeDayRecords(): ReadonlyRecord[] {
-    const month = this.activeMonth == undefined ? this.getMonth(new Date()) : this.activeMonth;
+    const month = this.activeMonth == undefined ? this.getMonthByDate(new Date()) : this.activeMonth;
     return month?.activeDayRecords ?? [];
   }
 
   get comment(): string {
     const today = new Date();
     if (this.activeMonth == undefined) {
-      return this.getMonth(today)?.getComment(today) ?? '';
+      return this.getMonthByDate(today)?.getCommentByDate(today) ?? '';
     } else {
-      return this.activeMonth.getComment(today);
+      return this.activeMonth.getCommentByDate(today);
     }
   }
 
   set comment(comment: string) {
     const today = new Date();
     if (this.activeMonth == undefined) {
-      this.getOrCreateMonth(today).setComment(today, comment);
+      this.getOrCreateMonthByDate(today).setComment(today, comment);
     } else {
       this.activeMonth.setComment(today, comment);
     }
@@ -102,6 +103,14 @@ export class Model {
     const year = today.getFullYear();
     const month = today.getMonth();
     return this._months.filter(it => it.year === year || (it.year === year - 1 && it.month > month)).map(it => it.month);
+  }
+
+  get pensum(): number {
+    return this.settings.pensum;
+  }
+
+  set pensum(p: number) {
+    this.settings.pensum = p;
   }
 
   get projects(): string[] {
@@ -175,11 +184,19 @@ export class Model {
   }
 
   getDayAggregatedRecordings(year: number, month: number, day: number): AggregatedRecordings | undefined {
-    return this._months.find(it => it.year === year && it.month === month)?.getDayAggregatedRecordings(day);
+    return this.getMonth(year, month)?.getDayAggregatedRecordings(day);
+  }
+
+  getDayComment(year: number, month: number, day: number): string {
+    return this.getMonth(year, month)?.getComment(day) ?? '';
+  }
+
+  getDayHoliday(year: number, month: number, day: number): number {
+    return this.getMonth(year, month)?.getDayHoliday(day) ?? 0;
   }
 
   getDayRecords(year: number, month: number, day: number): ReadonlyRecord[] {
-    return this._months.find(it => it.year === year && it.month === month)?.getDayRecords(day) ?? [];
+    return this.getMonth(year, month)?.getDayRecords(day) ?? [];
   }
 
   getFavoriteTask(project: string): string | undefined {
@@ -187,7 +204,7 @@ export class Model {
   }
 
   getRecordedDays(year: number, month: number): number[] {
-    const m = this._months.find(it => it.year === year && it.month === month);
+    const m = this.getMonth(year, month);
     if (m == undefined) {
       return [];
     }
@@ -204,6 +221,14 @@ export class Model {
     return this.projectsByName.get(project)?.tasks.map(it => it.name) ?? [];
   }
 
+  getUnrecordedDays(year: number, month: number): number[] {
+    const m = this.getMonth(year, month);
+    if (m == undefined) {
+      return [];
+    }
+    return m.getUnrecordedDays(this.settings.daysOfWeek);
+  }
+
   getUsableProjects(): string[] {
     return Array.from(this.projectsByName.values()).filter(it => it.canBeUsed).map(it => it.name);
   }
@@ -213,7 +238,7 @@ export class Model {
   }
 
   getWorkedHours(year: number, month: number, day: number): number {
-    return this._months.find(it => it.year === year && it.month === month)?.getWorkedHours(day) ?? 0;
+    return this.getMonth(year, month)?.getWorkedHours(day) ?? 0;
   }
 
   hasProject(name: string): boolean {
@@ -221,11 +246,15 @@ export class Model {
   }
 
   hasRecordings(year: number, month: number, day: number): boolean {
-    return this._months.find(it => it.year === year && it.month === month)?.hasRecordings(day) ?? false;
+    return this.getMonth(year, month)?.hasRecordings(day) ?? false;
   }
 
   hasTask(project: string, task: string): boolean {
     return this.projectsByName.get(project)?.hasTask(task) ?? false;
+  }
+
+  isDayOfWeekActive(day: DayOfWeek): boolean {
+    return this.settings.isDayOfWeekActive(day);
   }
 
   isProjectActive(name: string): boolean {
@@ -246,7 +275,7 @@ export class Model {
   }
 
   removeDayRecord(year: number, month: number, day: number, index: number) {
-    const m = this._months.find(it => it.year === year && it.month === month);
+    const m = this.getMonth(year, month);
     if (m != undefined) {
       m.removeDayRecord(day, index);
       if (m.isEmpty) {
@@ -256,7 +285,7 @@ export class Model {
   }
 
   removeDayRecords(year: number, month: number, day: number) {
-    const m = this._months.find(it => it.year === year && it.month === month);
+    const m = this.getMonth(year, month);
     if (m != undefined) {
       m.removeDayRecords(day);
       if (m.isEmpty) {
@@ -266,7 +295,7 @@ export class Model {
   }
 
   removeMonthRecords(year: number, month: number) {
-    const found = this._months.find(it => it.year === year && it.month === month);
+    const found = this.getMonth(year, month);
     if (found != undefined) {
       this.removeMonth(found);
     }
@@ -318,8 +347,28 @@ export class Model {
     };
   }
 
+  setDayComment(year: number, month: number, day: number, comment: string) {
+    const m = this.getMonth(year, month);
+    if (m == undefined) {
+      throw new Error('Day ${year}-${month}-${day} not found');
+    }
+    m.setDayComment(day, comment);
+  }
+
+  setDayHoliday(year: number, month: number, day: number, holiday: number) {
+    if (holiday > 0) {
+      this.markDayAsHoliday(year, month, day, holiday);
+    } else {
+      this.removeHoliday(year, month, day);
+    }
+  }
+
+  setDayOfWeekActive(day: DayOfWeek, active: boolean) {
+    this.settings.setDayOfWeekActive(day, active);
+  }
+
   setDayRecord(year: number, month: number, day: number, index: number, start: Date, end: Date | undefined, project: string, task: string) {
-    const m = this._months.find(it => it.year === year && it.month === month);
+    const m = this.getMonth(year, month);
     if (m == undefined) {
       throw new Error('Day ${year}-${month}-${day} not found');
     }
@@ -356,15 +405,13 @@ export class Model {
     if (this.activeMonth != undefined) {
       return this.activeMonth;
     }
-    const month = this.getOrCreateMonth(today);
+    const month = this.getOrCreateMonthByDate(today);
     this.activeMonth = month;
     return month;
   }
 
-  private getOrCreateMonth(today: Date): Month {
-    const year = today.getFullYear();
-    const month = today.getMonth();
-    const found = this._months.find(it => it.year === year && it.month === month);
+  private getOrCreateMonth(year: number, month: number): Month {
+    const found = this.getMonth(year, month);
     if (found != undefined) {
       return found;
     }
@@ -373,10 +420,16 @@ export class Model {
     return newMonth;
   }
 
-  private getMonth(today: Date): Month | undefined {
-    const year = today.getFullYear();
-    const month = today.getMonth();
+  private getOrCreateMonthByDate(today: Date): Month {
+    return this.getOrCreateMonth(today.getFullYear(), today.getMonth());
+  }
+
+  private getMonth(year: number, month: number): Month | undefined {
     return this._months.find(it => it.year === year && it.month === month);
+  }
+
+  private getMonthByDate(today: Date): Month | undefined {
+    return this.getMonth(today.getFullYear(), today.getMonth());
   }
 
   private getProject(name: string): Project {
@@ -385,6 +438,21 @@ export class Model {
       throw new RangeError(`Project ${name} does not exist`);
     }
     return p;
+  }
+
+  private markDayAsHoliday(year: number, month: number, day: number, holiday: number) {
+    const found = this.getOrCreateMonth(year, month);
+    found.markDayAsHoliday(day, holiday);
+  }
+
+  private removeHoliday(year: number, month: number, day: number) {
+    const found = this.getMonth(year, month);
+    if (found != undefined) {
+      found.removeHoliday(day);
+      if (found.isEmpty) {
+        this.removeMonth(found);
+      }
+    }
   }
 
   private removeMonth(month: Month) {

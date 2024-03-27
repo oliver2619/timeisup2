@@ -10,6 +10,18 @@
       <label for="settings.hoursPerWeek">Hours per week</label>
       <input id="settings.hoursPerWeek" type="number" formControlName="hoursPerWeek" min="1" max="168">
     </div>
+    <div class="form-group">
+      <label for="settings.pensum">Pensum</label>
+      <input id="settings.pensum" type="number" formControlName="pensum" min="1" max="100">
+    </div>
+    <div class="form-group">
+      <label>Working days</label>
+      <div class="button-list">
+        @for(day of daysOfWeek; let i = $index; track i) {
+          <tiu-check-button [active]="isDayOfWeekActive(i)" (change-active)="setDayOfWeekActive(i, $event)">{{day}}</tiu-check-button>
+        }
+      </div>
+    </div>
   </form>
   <div class="button-list">
     <button type="button" (click)="save()" [disabled]="!canSave" class="button green">Save</button>

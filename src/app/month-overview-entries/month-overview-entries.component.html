@@ -8,17 +8,27 @@
     </thead>
     <tbody>
         @for(item of items; track item.day) {
-            <tr>
+            <tr [ngClass]="{green: item.holiday}">
                 <td class="single-line">
-                  <button type="button" (click)="view(item.day)" class="button blue">{{item.date | date:'EEE d'}}</button>
+                  @if(item.worked) {
+                    <button type="button" (click)="view(item.day)" class="button blue">{{item.date | date:'EEE d'}}</button>
+                  } @else {
+                    {{item.date | date:'EEE d'}}
+                  }
                 </td>
-                <td class="single-line">{{item.workedTime | tiuTime}} / {{item.workedHours | tiuHours}}</td>
-                <td class="single-line right">
+                @if(item.worked) {
+                  <td class="single-line">{{item.workedTime | tiuTime}} / {{item.workedHours | tiuHours}}</td>
+                  <td class="single-line right">
                     <div class="button-list inline">
-                        <button type="button" (click)="edit(item.day)" class="button yellow"><span class="fas fa-pen-to-square"></span></button>
-                        <button type="button" (click)="remove(item.day)" class="button red"><span class="fas fa-trash-can"></span></button>
+                      <button type="button" (click)="edit(item.day)" class="button yellow"><span class="fas fa-pen-to-square"></span></button>
+                      <button type="button" (click)="remove(item.day)" class="button red"><span class="fas fa-trash-can"></span></button>
                     </div>
-                </td>
+                  </td>
+                } @else {
+                  <td colspan="2" class="single-line right">
+                    <button type="button" (click)="setHoliday(item.day)" class="button yellow">Holiday</button>
+                  </td>
+                }
             </tr>
         }
     </tbody>

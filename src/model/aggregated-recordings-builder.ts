@@ -12,9 +12,9 @@ export class AggregatedRecordingsBuilder {
 
     constructor(private readonly comment: string) { }
 
-    get result(): AggregatedRecordings {
+    get result(): AggregatedRecordings | undefined {
         if (this.minDate == undefined || this.maxDate == undefined) {
-            throw new Error('No recordings have been added');
+            return undefined;
         }
         const start = new Date();
         start.setTime(this.minDate.getTime());

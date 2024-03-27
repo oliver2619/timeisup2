@@ -2,40 +2,48 @@
 <div>
     <h1>{{date | date:'EEE, MMM d'}}</h1>
     <table>
-        <tr>
+        @if(hasWorked) {
+          <tr>
             <th colspan="2">Start - end</th>
             <td class="number">{{start | date:'HH:mm'}}</td>
             <td class="number">{{end | date:'HH:mm'}}</td>
-        </tr>
-        <tr class="green">
+          </tr>
+          <tr class="green">
             <th colspan="2">Total working time</th>
             <td class="number">{{totalWorkingTime | tiuTime}}</td>
             <td class="number">{{totalWorkingHours | tiuHours}}</td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <th colspan="2">Total pause time</th>
             <td class="number">{{totalPauseTime | tiuTime}}</td>
             <td class="number">{{totalPauseHours | tiuHours}}</td>
-        </tr>
-        @for(p of projects; track p.project) {
+          </tr>
+          @for(p of projects; track p.project) {
             <tr>
-                <th colspan="2">{{p.project}}</th>
-                <td class="number">{{p.totalTime | tiuTime}}</td>
-                <td class="number">{{p.totalHours | tiuHours}}</td>
+              <th colspan="2">{{p.project}}</th>
+              <td class="number">{{p.totalTime | tiuTime}}</td>
+              <td class="number">{{p.totalHours | tiuHours}}</td>
             </tr>
             @for(t of p.tasks; track t.task) {
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>{{t.task}}</th>
-                    <td class="number">{{t.totalTime | tiuTime}}</td>
-                    <td class="number">{{t.totalHours | tiuHours}}</td>
-                </tr>
+              <tr>
+                <th>&nbsp;</th>
+                <th>{{t.task}}</th>
+                <td class="number">{{t.totalTime | tiuTime}}</td>
+                <td class="number">{{t.totalHours | tiuHours}}</td>
+              </tr>
             }
+          }
         }
         @if(hasComment) {
             <tr>
                 <th colspan="2">Comment</th>
                 <td colspan="2">{{comment}}</td>
+            </tr>
+        }
+        @if(holiday > 0) {
+            <tr>
+                <th colspan="3">Holiday</th>
+                <td class="number">{{holiday | number:'1.0-1'}} d</td>
             </tr>
         }
     </table>

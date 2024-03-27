@@ -5,4 +5,5 @@ export interface WorkingdayJson {
     readonly day: number;
     readonly records: RecordJson[];
     readonly comment: string | undefined;
+    readonly holiday?: number;
 }
