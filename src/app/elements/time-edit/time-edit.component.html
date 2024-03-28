@@ -1,10 +1,10 @@
-<button type="button" (click)="onChangeHourBy(-1)" class="yellow">-</button>
+<button type="button" tiuButtonCounter (counter)="onChangeHourBy(-1)" class="yellow"><span class="fas fa-minus"></span></button>
 <input #hour type="number" min="0" max="23" size="1" [value]="hourValue" (change)="onChangeHour(hour.value)">
-<button type="button" (click)="onChangeHourBy(1)" class="yellow">+</button>
+<button type="button" tiuButtonCounter (counter)="onChangeHourBy(1)" class="yellow"><span class="fas fa-plus"></span></button>
 <span>:</span>
-<button type="button" (click)="onChangeMinuteBy(-1)" class="yellow">-</button>
+<button type="button" tiuButtonCounter (counter)="onChangeMinuteBy(-1)" class="yellow"><span class="fas fa-minus"></span></button>
 <input #minute type="number" min="0" max="59" size="1" [value]="minuteValue" (change)="onChangeMinute(minute.value)">
-<button type="button" (click)="onChangeMinuteBy(1)" class="yellow">+</button>
+<button type="button" tiuButtonCounter (counter)="onChangeMinuteBy(1)" class="yellow"><span class="fas fa-plus"></span></button>
 <button type="button" (click)="onAlign()" [disabled]="!alignEnabled" tiuButtonError="There is no {{forwards ? 'next' : 'previous'}} task to align to." class="yellow">
   <span class="fas fa-backward-step" [ngClass]="{'fa-backward-step': !forwards, 'fa-forward-step': forwards}"></span>
 </button>

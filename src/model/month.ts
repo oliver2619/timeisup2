@@ -1,11 +1,11 @@
-import {AggregatedRecordings} from "./aggregated-recordings";
-import {ActiveJson} from "./model-json";
-import {MonthJson} from "./month-json";
-import {Project} from "./project";
-import {ReadonlyRecord} from "./readonly-record";
-import {Task} from "./task";
-import {Workingday} from "./workingday";
-import {DayOfWeek} from "./dayofweek";
+import { AggregatedRecordings } from "./aggregated-recordings";
+import { ActiveJson } from "./model-json";
+import { MonthJson } from "./month-json";
+import { Project } from "./project";
+import { ReadonlyRecord } from "./readonly-record";
+import { Task } from "./task";
+import { Workingday } from "./workingday";
+import { DayOfWeek } from "./dayofweek";
 
 export class Month {
 
@@ -31,6 +31,11 @@ export class Month {
 
   get days(): number[] {
     return this._days.map(it => it.day);
+  }
+
+  get isCurrent(): boolean {
+    const today = new Date();
+    return this.year === today.getFullYear() && this.month === today.getMonth();
   }
 
   get isEmpty(): boolean {
@@ -73,12 +78,27 @@ export class Month {
     return this.getDay(day)?.readonlyRecords ?? [];
   }
 
-  getUnrecordedDays(daysOfWeek: Set<DayOfWeek>): number[] {
+  getOverhoursOfMonth(daysOfWeek: Set<DayOfWeek>, hoursPerDay: number): number {
+    const regularDays = this._days.filter(day => {
+      const date = new Date();
+      date.setTime(0);
+      date.setFullYear(this.year, this.month, day.day);
+      return daysOfWeek.has(date.getDay());
+    });
+    const worked = this._days.map(day => day.workedHours).reduce((prev, cur) => cur + prev, 0);
+    const holidays = regularDays.map(day => day.holiday).reduce((prev, cur) => cur + prev, 0) * hoursPerDay;
+    const mustHaveWorked = (regularDays.length + this.getUnrecordedDays(daysOfWeek, false).length) * hoursPerDay;
+    return worked + holidays - mustHaveWorked;
+  }
+
+  getUnrecordedDays(daysOfWeek: Set<DayOfWeek>, includeFuture: boolean): number[] {
     const date = new Date();
+    const currentDay = date.getDate();
     date.setTime(0);
     date.setFullYear(this.year, this.month, 1);
     const ret: number[] = [];
-    while (date.getMonth() == this.month) {
+    const current = this.isCurrent;
+    while (date.getMonth() == this.month && (!current || date.getDate() <= currentDay || includeFuture)) {
       if (!this.hasRecordings(date.getDate()) && daysOfWeek.has(date.getDay())) {
         ret.push(date.getDate());
       }

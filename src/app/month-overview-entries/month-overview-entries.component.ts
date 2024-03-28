@@ -46,7 +46,7 @@ export class MonthOverviewEntriesComponent implements OnChanges {
 
   setHoliday(day: number) {
     this.modelService.setDayHoliday(this.year!, this.month!, day, 1);
-    this.edit(day);
+    this.update();
   }
 
   remove(day: number) {

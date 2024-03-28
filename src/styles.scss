@@ -12,6 +12,7 @@ body {
   flex-direction: column;
   align-items: stretch;
   background-color: $bg-color-5;
+  user-select: none;
 }
 
 button {
@@ -39,7 +40,7 @@ button {
 button.button {
   border: 2px solid $bg-color-3;
   border-radius: $border-radius-2;
-  padding: $spacing-2;
+  padding: $spacing-1 $spacing-2;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -87,7 +88,7 @@ button.button {
 button.check {
   border: 2px solid $color-1;
   border-radius: $border-radius-2;
-  padding: $spacing-2;
+  padding: $spacing-1 $spacing-2;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -148,7 +149,8 @@ button.menu-button {
   @include button-list();
 }
 
-input[type=text], input[type=number] {
+input[type="text"],
+input[type="number"] {
   @include input();
   border: 1px solid $border-color-frame;
   border-radius: $border-radius-2;
@@ -166,14 +168,60 @@ input[type=text], input[type=number] {
   }
 }
 
-input[type=number], input.number {
+input[type="number"],
+input.number {
   text-align: end;
+  appearance: textfield;
+
+  &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
+    appearance: none;
+  }
 }
 
-input[type=checkbox], input[type=radio] {
+input[type="checkbox"],
+input[type="radio"] {
   cursor: pointer;
   margin: 0;
   margin-right: $spacing-2;
+}
+
+input[type="checkbox"] {
+  @include font(0.8);
+  appearance: none;
+  width: 1.5em;
+  border: 2px solid $color-1;
+  border-radius: $border-radius-2;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-family: "Font Awesome 6 Free";
+  background-color: $bg-color-5;
+  color: $color-1;
+
+  &:checked {
+    color: $bg-color-5;
+    background-color: $color-1;
+  }
+
+  &::after {
+    content: "\f00d";
+  }
+
+  &:checked::after {
+    content: "\f00c";
+  }
+
+  &.yellow {
+    border-color: $bg-color-yellow;
+    color: $bg-color-yellow;
+
+    &:checked {
+      color: $color-1;
+      background-color: $bg-color-yellow;
+    }
+  }
 }
 
 select {
@@ -189,7 +237,6 @@ label {
   display: inline-flex;
   flex-direction: row;
   align-items: center;
-
 }
 
 optgroup {
@@ -208,7 +255,8 @@ option {
   @include input-group;
 }
 
-form, .form {
+form,
+.form {
   @include form();
 }
 
@@ -217,7 +265,9 @@ form, .form {
   flex-direction: column;
   align-items: flex-start;
 
-  input, select, .input-group {
+  input,
+  select,
+  .input-group {
     align-self: stretch;
   }
 }
@@ -255,11 +305,15 @@ th {
   font-weight: 500;
 }
 
-th.number, td.number, th.right, td.right {
+th.number,
+td.number,
+th.right,
+td.right {
   text-align: right;
 }
 
-th, td {
+th,
+td {
   padding: $spacing-2 $spacing-2;
   vertical-align: top;
 
@@ -297,7 +351,6 @@ th, td {
 tr {
   &.yellow {
     background-color: $bg-color-yellow-4;
-
   }
 
   &.green {
@@ -311,13 +364,19 @@ tr {
   }
 }
 
-tr:nth-child(n + 2), tbody tr {
-  td, th {
+tr:nth-child(n + 2),
+tbody tr {
+  td,
+  th {
     border-top: 1px dashed $border-color-frame;
   }
 }
 
-tr.small td, tr.small th, td.small, th.small, button.small {
+tr.small td,
+tr.small th,
+td.small,
+th.small,
+button.small {
   @include font(0.7);
 }
 
@@ -332,7 +391,6 @@ p {
   &.error {
     color: $color-error;
   }
-
 }
 
 a {

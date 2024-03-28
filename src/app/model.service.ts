@@ -132,6 +132,10 @@ export class ModelService {
     return this.model.getFavoriteTask(project);
   }
 
+  getOverhoursOfMonth(year: number, month: number): number {
+    return this.model.getOverhoursOfMonth(year, month);
+  }
+
   getRecordedDays(year: number, month: number): number[] {
     return this.model.getRecordedDays(year, month);
   }

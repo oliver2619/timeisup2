@@ -3,7 +3,7 @@
   <h1>{{ date | date:'longDate' }}</h1>
   <form [formGroup]="formGroup">
     <div class="form-group">
-      <label>Holiday</label>
+      <label>Absence</label>
       <div class="button-list">
         <tiu-check-button [active]="holiday == 0" (change-active)="holiday = 0">0</tiu-check-button>
         <tiu-check-button [active]="holiday == 0.5" (change-active)="holiday = 0.5">&#x00bd;</tiu-check-button>

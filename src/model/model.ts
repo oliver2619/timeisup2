@@ -1,13 +1,13 @@
-import {Settings} from "./settings";
-import {Project} from "./project";
-import {Month} from "./month";
-import {ActiveJson, ModelJson} from "./model-json";
-import {ProjectJson} from "./project-json";
-import {ReadonlyRecord} from "./readonly-record";
-import {AggregatedRecordings} from "./aggregated-recordings";
-import {ReadonlyDay} from "./readonly-day";
-import {Task} from "./task";
-import {DayOfWeek} from "./dayofweek";
+import { Settings } from "./settings";
+import { Project } from "./project";
+import { Month } from "./month";
+import { ActiveJson, ModelJson } from "./model-json";
+import { ProjectJson } from "./project-json";
+import { ReadonlyRecord } from "./readonly-record";
+import { AggregatedRecordings } from "./aggregated-recordings";
+import { ReadonlyDay } from "./readonly-day";
+import { Task } from "./task";
+import { DayOfWeek } from "./dayofweek";
 
 export class Model {
 
@@ -76,6 +76,10 @@ export class Model {
         throw new RangeError(`Project ${name} can not be used`);
       }
     }
+  }
+
+  get hoursPerDay(): number {
+    return this.settings.hoursPerWeek * this.settings.pensum / (100 * this.settings.daysOfWeek.size);
   }
 
   get hoursPerWeek(): number {
@@ -203,6 +207,11 @@ export class Model {
     return this.projectsByName.get(project)?.favoriteTask;
   }
 
+  getOverhoursOfMonth(year: number, month: number): number {
+    const hoursPerDay = this.hoursPerDay;
+    return this.getMonth(year, month)?.getOverhoursOfMonth(this.settings.daysOfWeek, hoursPerDay) ?? 0;
+  }
+
   getRecordedDays(year: number, month: number): number[] {
     const m = this.getMonth(year, month);
     if (m == undefined) {
@@ -226,7 +235,7 @@ export class Model {
     if (m == undefined) {
       return [];
     }
-    return m.getUnrecordedDays(this.settings.daysOfWeek);
+    return m.getUnrecordedDays(this.settings.daysOfWeek, true);
   }
 
   getUsableProjects(): string[] {

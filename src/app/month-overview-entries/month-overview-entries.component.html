@@ -17,7 +17,7 @@
                   }
                 </td>
                 @if(item.worked) {
-                  <td class="single-line">{{item.workedTime | tiuTime}} / {{item.workedHours | tiuHours}}</td>
+                  <td class="single-line">@if(item.workedHours > 0) { {{item.workedTime | tiuTime}} / {{item.workedHours | tiuHours}} }</td>
                   <td class="single-line right">
                     <div class="button-list inline">
                       <button type="button" (click)="edit(item.day)" class="button yellow"><span class="fas fa-pen-to-square"></span></button>
@@ -26,7 +26,7 @@
                   </td>
                 } @else {
                   <td colspan="2" class="single-line right">
-                    <button type="button" (click)="setHoliday(item.day)" class="button yellow">Holiday</button>
+                    <button type="button" (click)="setHoliday(item.day)" class="button yellow">Absence</button>
                   </td>
                 }
             </tr>

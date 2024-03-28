@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MonthOverviewEntriesComponent } from '../month-overview-entries/month-overview-entries.component';
 import { MessageBoxService } from '../message-box.service';
+import { HoursPipe } from '../elements/hours.pipe';
 
 interface MonthOption {
   readonly key: string;
@@ -19,7 +20,7 @@ interface MonthOverviewFormValue {
 @Component({
   selector: 'tiu-month-overview',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MenuComponent, MonthOverviewEntriesComponent],
+  imports: [CommonModule, ReactiveFormsModule, MenuComponent, MonthOverviewEntriesComponent, HoursPipe],
   templateUrl: './month-overview.component.html',
   styleUrl: './month-overview.component.scss',
   changeDetection: ChangeDetectionStrategy.Default
@@ -31,6 +32,10 @@ export class MonthOverviewComponent {
   readonly formGroup: FormGroup;
 
   years: number[] = [];
+
+  get overhours(): number {
+    return this.selectedYear != undefined && this.selectedMonth != undefined ? this.modelService.getOverhoursOfMonth(this.selectedYear, this.selectedMonth) : 0;
+  }
 
   get selectedMonth(): number | undefined {
     const month = this.value.month;
@@ -51,7 +56,7 @@ export class MonthOverviewComponent {
   }
 
   constructor(private readonly modelService: ModelService, private readonly messageBoxService: MessageBoxService, formBuilder: FormBuilder) {
-    this.update();
+    this.updateYears();
     let selectedMonth = '';
     if (this.years.length > 0) {
       const options = this.getMonthsOfYear(this.years[this.years.length - 1]);
@@ -79,13 +84,14 @@ export class MonthOverviewComponent {
       next: result => {
         if (result) {
           this.modelService.removeMonthRecords(this.selectedYear!, this.selectedMonth!);
-          this.update();
+          this.updateYears();
         }
       }
     });
   }
 
-  private update() {
+  private updateYears() {
     this.years = this.modelService.recorededYears.sort((y1, y2) => y1 - y2);
   }
+
 }
