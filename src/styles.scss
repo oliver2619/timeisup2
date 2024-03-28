@@ -357,6 +357,10 @@ tr {
     background-color: $bg-color-green-4;
   }
 
+  &.red {
+    background-color: $bg-color-red-4;
+  }
+
   &.blink {
     animation-name: row-active-blink;
     animation-duration: 1s;

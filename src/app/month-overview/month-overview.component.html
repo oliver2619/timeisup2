@@ -16,8 +16,8 @@
             <span>{{selectedYear}}</span>
         </div>
         <div class="form-group">
-            <label for="monthOverview.overhours">Overhours</label>
-            <input id="monthOverview.overhours" type="text" readonly="readonly" value="{{overhours | tiuHours}}" class="number">
+            <label for="monthOverview.overtime">Overtime</label>
+            <input id="monthOverview.overtime" type="text" readonly="readonly" value="{{overhours | tiuHours}}" class="number">
         </div>
     </form>
     <tiu-month-overview-entries [month]="selectedMonth" [year]="selectedYear"></tiu-month-overview-entries>

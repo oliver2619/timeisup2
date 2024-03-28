@@ -8,7 +8,7 @@
     </thead>
     <tbody>
         @for(item of items; track item.index) {
-            <tr [ngClass]="{blink: item.isActive}" class="small">
+            <tr [ngClass]="{blink: item.isActive, green: item.valid && !item.isActive, red: !item.valid && !item.isActive}" class="small">
                 <td class="single-line">
                   <button type="button" (click)="edit(item.index)" class="button yellow small multiline">
                     <b>{{item.project}}</b>

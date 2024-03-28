@@ -18,6 +18,7 @@ interface Item {
   startValid: boolean;
   endValid: boolean;
   durationValid: boolean;
+  valid: boolean;
 }
 
 @Component({
@@ -98,6 +99,7 @@ export class DayEntriesComponent implements OnChanges, OnDestroy {
           startValid: true,
           endValid: true,
           durationValid: true,
+          valid: true,
           isActive: it.end == undefined
         };
         return ret;
@@ -109,6 +111,7 @@ export class DayEntriesComponent implements OnChanges, OnDestroy {
       it.startValid = i === 0 || items[i - 1].end.getTime() <= it.start.getTime();
       it.endValid = i === items.length - 1 || items[i + 1].start.getTime() >= it.end.getTime();
       it.durationValid = it.end.getTime() >= it.start.getTime();
+      it.valid = it.startValid && it.endValid && it.durationValid;
     });
   }
 }
