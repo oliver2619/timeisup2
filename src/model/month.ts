@@ -124,6 +124,10 @@ export class Month {
     return this.getDay(day) != undefined;
   }
 
+  isDayComplete(day: number): boolean {
+    return this.getDay(day)?.isDayComplete ?? false;
+  }
+
   isProjectInUse(name: string): boolean {
     return this._days.some(it => it.isProjectInUse(name)) || (this._activeDay?.isProjectInUse(name) ?? false);
   }

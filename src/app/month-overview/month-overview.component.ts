@@ -8,6 +8,8 @@ import { MonthOverviewEntriesComponent } from '../month-overview-entries/month-o
 import { MessageBoxService, YesNoCancelResult } from '../message-box.service';
 import { HoursPipe } from '../elements/hours.pipe';
 import { RouterModule } from '@angular/router';
+import { HelpButtonDirective } from '../elements/help-button.directive';
+import { DurationPipe } from '../elements/duration.pipe';
 
 interface MonthOption {
   readonly key: string;
@@ -21,7 +23,7 @@ interface MonthOverviewFormValue {
 @Component({
   selector: 'tiu-month-overview',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MenuComponent, MonthOverviewEntriesComponent, HoursPipe, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, MenuComponent, MonthOverviewEntriesComponent, HoursPipe, DurationPipe, RouterModule, HelpButtonDirective],
   templateUrl: './month-overview.component.html',
   styleUrl: './month-overview.component.scss',
   changeDetection: ChangeDetectionStrategy.Default

@@ -1,4 +1,6 @@
-<tiu-menu></tiu-menu>
+<tiu-menu>
+  <button tiuHelpButton="/help/day-edit"></button>
+</tiu-menu>
 <div>
   <h1>{{ date | date:'longDate' }}</h1>
   <form [formGroup]="formGroup">
@@ -8,6 +10,7 @@
         <tiu-check-button [active]="holiday == 0" (change-active)="holiday = 0">0</tiu-check-button>
         <tiu-check-button [active]="holiday == 0.5" (change-active)="holiday = 0.5">&#x00bd;</tiu-check-button>
         <tiu-check-button [active]="holiday == 1" (change-active)="holiday = 1">1</tiu-check-button>
+        <input type="text" readonly="readonly" value="{{absenceHours | tiuDuration}} / {{absenceHours | tiuHours}}" class="number" size="10">
       </div>
     </div>
     <div class="form-group">

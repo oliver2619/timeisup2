@@ -10,14 +10,22 @@
         @for(item of items; track item.day) {
             <tr [ngClass]="{green: item.holiday}">
                 <td class="single-line">
-                  @if(item.worked) {
+                  @if(item.booked) {
                     <button type="button" (click)="view(item.day)" class="button blue">{{item.date | date:'EEE d'}}</button>
                   } @else {
                     {{item.date | date:'EEE d'}}
                   }
                 </td>
-                @if(item.worked) {
-                  <td class="single-line">@if(item.workedHours > 0) { {{item.workedTime | tiuTime}} / {{item.workedHours | tiuHours}} }</td>
+                @if(item.booked) {
+                  <td class="single-line">
+                    @if(item.complete) {
+                      @if(item.workedHours > 0) {
+                        {{item.workedHours | tiuDuration}} / {{item.workedHours | tiuHours}}
+                      }
+                    } @else {
+                      In progress...
+                    }
+                  </td>
                   <td class="single-line right">
                     <div class="button-list inline">
                       <button type="button" (click)="edit(item.day)" class="button yellow"><span class="fas fa-pen-to-square"></span></button>

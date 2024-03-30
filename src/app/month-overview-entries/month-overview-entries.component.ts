@@ -4,21 +4,21 @@ import {ModelService} from '../model.service';
 import {Router} from '@angular/router';
 import {MessageBoxService} from '../message-box.service';
 import {HoursPipe} from "../elements/hours.pipe";
-import {TimePipe} from "../elements/time.pipe";
+import { DurationPipe } from '../elements/duration.pipe';
 
 interface Item {
   readonly day: number;
   readonly date: Date;
-  readonly worked: boolean;
+  readonly booked: boolean;
   readonly workedHours: number;
-  readonly workedTime: Date;
   readonly holiday: boolean;
+  readonly complete: boolean;
 }
 
 @Component({
   selector: 'tiu-month-overview-entries',
   standalone: true,
-  imports: [CommonModule, TimePipe, HoursPipe],
+  imports: [CommonModule, DurationPipe, HoursPipe],
   templateUrl: './month-overview-entries.component.html',
   styleUrl: './month-overview-entries.component.scss',
   changeDetection: ChangeDetectionStrategy.Default
@@ -79,17 +79,14 @@ export class MonthOverviewEntriesComponent implements OnChanges {
       date.setTime(0);
       date.setFullYear(this.year!);
       date.setMonth(this.month!);
-      date.setDate(it);
-      const workedHours = this.modelService.getWorkedHours(this.year!, this.month!, it);
-      const workedTime = new Date();
-      workedTime.setTime(workedHours * 3600_000);
+      date.setDate(it);      
       const ret: Item = {
         date,
         day: it,
-        worked: true,
-        workedHours,
-        workedTime,
-        holiday: this.modelService.getDayHoliday(this.year!, this.month!, it) > 0
+        booked: true,
+        workedHours: this.modelService.getWorkedHours(this.year!, this.month!, it),
+        holiday: this.modelService.getDayHoliday(this.year!, this.month!, it) > 0,
+        complete: this.modelService.isDayComplete(this.year!, this.month!, it)
       };
       return ret;
     });
@@ -99,15 +96,13 @@ export class MonthOverviewEntriesComponent implements OnChanges {
       date.setFullYear(this.year!);
       date.setMonth(this.month!);
       date.setDate(it);
-      const workedTime = new Date();
-      workedTime.setTime(0);
       const ret: Item = {
         date,
         day: it,
-        worked: false,
+        booked: false,
         workedHours: 0,
-        workedTime,
-        holiday: false
+        holiday: false,
+        complete: false
       };
       return ret;
     });

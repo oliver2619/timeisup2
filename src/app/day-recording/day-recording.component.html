@@ -1,5 +1,5 @@
 <tiu-menu>
-    <button type="button" routerLink="/day-help" class="menu-button" routerLinkActive="active"><span class="fas fa-circle-question"></span></button>
+    <button tiuHelpButton="/help/day"></button>
 </tiu-menu>
 <div>
     <form [formGroup]="formGroup">
@@ -37,11 +37,11 @@
         <div class="form-2-columns">
             <div class="form-group">
                 <label>Worked</label>
-                <input type="text" readonly="readonly" value="{{workingTime | tiuTime}} / {{workingHours | tiuHours}}" size="8" class="number">
+                <input type="text" readonly="readonly" value="{{workingHours | tiuDuration}} / {{workingHours | tiuHours}}" size="8" class="number">
             </div>
             <div class="form-group">
                 <label>Paused</label>
-                <input type="text" readonly="readonly" value="{{pauseTime | tiuTime}} / {{pauseHours | tiuHours}}" size="8" class="number">
+                <input type="text" readonly="readonly" value="{{pauseHours | tiuDuration}} / {{pauseHours | tiuHours}}" size="8" class="number">
             </div>
         </div>
     </div>

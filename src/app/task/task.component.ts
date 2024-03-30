@@ -6,6 +6,7 @@ import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {TasksComponent} from "../tasks/tasks.component";
 import {Subscription} from "rxjs";
 import {ModelService} from "../model.service";
+import { BackButtonDirective } from '../elements/back-button.directive';
 
 export interface TaskRouteParams {
   project: string;
@@ -20,7 +21,7 @@ interface TaskFormValue {
 @Component({
   selector: 'tiu-task',
   standalone: true,
-  imports: [CommonModule, MenuComponent, ReactiveFormsModule, RouterLink, TasksComponent],
+  imports: [CommonModule, MenuComponent, ReactiveFormsModule, RouterLink, TasksComponent, BackButtonDirective],
   templateUrl: './task.component.html',
   styleUrl: './task.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

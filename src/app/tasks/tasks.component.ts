@@ -67,7 +67,7 @@ export class TasksComponent implements OnDestroy {
   }
 
   editTask(task: string) {
-    this.router.navigate(['projects', 'settings', this.project, 'tasks', 'settings', task]);
+    this.router.navigate(['projects', this.project, 'tasks', task]);
   }
 
   isActive(task: string): boolean {

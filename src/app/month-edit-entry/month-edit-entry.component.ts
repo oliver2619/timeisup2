@@ -7,6 +7,9 @@ import {DayEntriesComponent} from "../day-entries/day-entries.component";
 import {CheckButtonComponent} from "../elements/check-button/check-button.component";
 import {ModelService} from "../model.service";
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import { HelpButtonDirective } from '../elements/help-button.directive';
+import { HoursPipe } from '../elements/hours.pipe';
+import { DurationPipe } from '../elements/duration.pipe';
 
 interface MonthEditEntryFormValue {
   comment: string;
@@ -18,7 +21,7 @@ interface MonthEditEntryFormValue {
   templateUrl: './month-edit-entry.component.html',
   styleUrl: './month-edit-entry.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, RouterModule, MenuComponent, DayEntriesComponent, DatePipe, CheckButtonComponent, ReactiveFormsModule]
+  imports: [CommonModule, RouterModule, MenuComponent, DayEntriesComponent, DatePipe, CheckButtonComponent, ReactiveFormsModule, HelpButtonDirective, DurationPipe, HoursPipe]
 })
 export class MonthEditEntryComponent {
 
@@ -42,6 +45,10 @@ export class MonthEditEntryComponent {
   set holiday(h: number) {
     this._holiday = h;
     this.modelService.setDayHoliday(this.year, this.month, this.day, h);
+  }
+
+  get absenceHours(): number {
+    return this.modelService.hoursPerDay * this._holiday;
   }
 
   constructor(private readonly modelService: ModelService, formBuilder: FormBuilder, activatedRoute: ActivatedRoute) {

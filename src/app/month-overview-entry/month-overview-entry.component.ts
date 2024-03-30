@@ -1,30 +1,28 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {CommonModule, DatePipe} from '@angular/common';
-import {MenuComponent} from '../menu/menu.component';
-import {ActivatedRoute, Router, RouterModule} from '@angular/router';
-import {DayRouteParams} from '../day-route-params';
-import {ModelService} from '../model.service';
-import {AggregatedProjectRecordings} from '../../model/aggregated-recordings';
-import {TimePipe} from "../elements/time.pipe";
-import {HoursPipe} from "../elements/hours.pipe";
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MenuComponent } from '../menu/menu.component';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { DayRouteParams } from '../day-route-params';
+import { ModelService } from '../model.service';
+import { AggregatedProjectRecordings } from '../../model/aggregated-recordings';
+import { HoursPipe } from "../elements/hours.pipe";
+import { DurationPipe } from '../elements/duration.pipe';
 
 interface TaskRecording {
   task: string;
   readonly totalHours: number;
-  readonly totalTime: Date;
 }
 
 interface ProjectRecording {
   readonly project: string;
   readonly totalHours: number;
-  readonly totalTime: Date;
   readonly tasks: TaskRecording[];
 }
 
 @Component({
   selector: 'tiu-month-overview-entry',
   standalone: true,
-  imports: [CommonModule, RouterModule, MenuComponent, DatePipe, TimePipe, HoursPipe],
+  imports: [CommonModule, RouterModule, MenuComponent, DurationPipe, HoursPipe],
   templateUrl: './month-overview-entry.component.html',
   styleUrl: './month-overview-entry.component.scss',
   changeDetection: ChangeDetectionStrategy.Default
@@ -36,11 +34,9 @@ export class MonthOverviewEntryComponent {
   end: Date | undefined;
   comment = '';
   totalWorkingHours = 0;
-  totalWorkingTime = new Date();
   totalPauseHours = 0;
-  totalPauseTime = new Date();
   projects: ProjectRecording[] = [];
-  holiday = 0;
+  absence = 0;
 
   get hasComment(): boolean {
     return this.comment.length > 0;
@@ -56,6 +52,14 @@ export class MonthOverviewEntryComponent {
 
   get hasNext(): boolean {
     return this.allDaysOfMonth.some(it => it > this.date.getDate());
+  }
+
+  get absenceHours(): number {
+    return this.absence * this.modelService.hoursPerDay;
+  }
+
+  get totalHours(): number {
+    return this.totalWorkingHours + this.absenceHours;
   }
 
   private get allDaysOfMonth(): number[] {
@@ -87,7 +91,7 @@ export class MonthOverviewEntryComponent {
     this.date.setFullYear(year);
     this.date.setMonth(month);
     this.date.setDate(day);
-    this.holiday = this.modelService.getDayHoliday(year, month, day);
+    this.absence = this.modelService.getDayHoliday(year, month, day);
     const recordings = this.modelService.getDayAggregatedRecordings(year, month, day);
     if (recordings != undefined) {
       this.start = new Date();
@@ -97,10 +101,6 @@ export class MonthOverviewEntryComponent {
       this.comment = recordings.comment;
       this.totalWorkingHours = recordings.totalWorkingHours
       this.totalPauseHours = recordings.totalPauseHours;
-      this.totalWorkingTime = new Date();
-      this.totalWorkingTime.setTime(this.totalWorkingHours * 3600_000);
-      this.totalPauseTime = new Date();
-      this.totalPauseTime.setTime(this.totalPauseHours * 3600_000);
       this.projects = this.hoursByProjectAndTaskToProjectRecordings(recordings.hoursByProjectAndTask);
     } else {
       this.start = undefined;
@@ -108,10 +108,6 @@ export class MonthOverviewEntryComponent {
       this.comment = this.modelService.getDayComment(year, month, day);
       this.totalWorkingHours = 0;
       this.totalPauseHours = 0;
-      this.totalWorkingTime = new Date();
-      this.totalWorkingTime.setTime(0);
-      this.totalPauseTime = new Date();
-      this.totalPauseTime.setTime(0);
       this.projects = [];
     }
   }
@@ -120,12 +116,9 @@ export class MonthOverviewEntryComponent {
     [key: string]: AggregatedProjectRecordings
   }): ProjectRecording[] {
     return Object.entries(input).map(it => {
-      const totalTime = new Date();
-      totalTime.setTime(it[1].totalWorkingHours * 3600_000);
       const ret: ProjectRecording = {
         project: it[0],
         totalHours: it[1].totalWorkingHours,
-        totalTime,
         tasks: this.workingHoursByTasksToTaskRecordings(it[1].workingHoursByTask)
       };
       return ret;
@@ -134,12 +127,9 @@ export class MonthOverviewEntryComponent {
 
   private workingHoursByTasksToTaskRecordings(input: { [key: string]: number }): TaskRecording[] {
     return Object.entries(input).map(ta => {
-      const totalTime = new Date();
-      totalTime.setTime(ta[1] * 3600_000);
       const ret: TaskRecording = {
         task: ta[0],
-        totalHours: ta[1],
-        totalTime
+        totalHours: ta[1]
       };
       return ret;
     });

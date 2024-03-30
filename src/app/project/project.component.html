@@ -1,5 +1,5 @@
 <tiu-menu>
-  <button type="button" routerLink="help" class="menu-button" routerLinkActive="active"><span class="fas fa-circle-question"></span></button>
+  <button tiuHelpButton="/help/tasks"></button>
 </tiu-menu>
 <div>
   <h1>{{project}}</h1>
@@ -15,7 +15,7 @@
   <div class="button-list">
     <button type="button" (click)="save()" [disabled]="!canSave" class="button green">Save</button>
     <button type="button" (click)="reset()" [disabled]="!canReset" class="button red">Reset</button>
-    <button type="button" routerLink=".." class="button">Back</button>
+    <button tiuBackButton=".."></button>
   </div>
   <tiu-tasks></tiu-tasks>
 </div>

@@ -1,14 +1,15 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {MenuComponent} from "../menu/menu.component";
-import {ActivatedRoute, Router, RouterModule} from '@angular/router';
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ModelService} from '../model.service';
-import {SelectProjectComponent} from "../select-project/select-project.component";
-import {SelectTaskComponent} from "../select-task/select-task.component";
-import {TimeEditComponent} from "../elements/time-edit/time-edit.component";
-import {TimePipe} from "../elements/time.pipe";
-import {HoursPipe} from "../elements/hours.pipe";
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MenuComponent } from "../menu/menu.component";
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ModelService } from '../model.service';
+import { SelectProjectComponent } from "../select-project/select-project.component";
+import { SelectTaskComponent } from "../select-task/select-task.component";
+import { TimeEditComponent } from "../elements/time-edit/time-edit.component";
+import { HoursPipe } from "../elements/hours.pipe";
+import { HelpButtonDirective } from '../elements/help-button.directive';
+import { DurationPipe } from '../elements/duration.pipe';
 
 export interface DayEntryRouteParams {
   readonly year: string;
@@ -32,7 +33,7 @@ interface DayEntryFormValue {
   templateUrl: './day-entry.component.html',
   styleUrl: './day-entry.component.scss',
   changeDetection: ChangeDetectionStrategy.Default,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, MenuComponent, SelectProjectComponent, SelectTaskComponent, TimePipe, HoursPipe, TimeEditComponent]
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, MenuComponent, SelectProjectComponent, SelectTaskComponent, HoursPipe, DurationPipe, TimeEditComponent, HelpButtonDirective]
 })
 export class DayEntryComponent {
 
@@ -81,12 +82,6 @@ export class DayEntryComponent {
     } else {
       return 0;
     }
-  }
-
-  get durationTime(): Date {
-    const ret = new Date();
-    ret.setTime(this.durationHours * 3600_000);
-    return ret;
   }
 
   get projectControl(): FormControl<string> {

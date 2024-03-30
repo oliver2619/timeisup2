@@ -13,6 +13,10 @@ export class Workingday {
     return incomplete.length > 0 ? incomplete[incomplete.length - 1].readonlyRecord : undefined;
   }
 
+  get isDayComplete(): boolean {
+    return this.records.every(it => it.isCompleted);
+  }
+
   get isEmpty(): boolean {
     return this.records.length === 0 && this.comment === '' && this.holiday <= 0;
   }

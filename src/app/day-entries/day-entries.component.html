@@ -21,7 +21,7 @@
                     <span [ngClass]="{invalid: !item.endValid}">{{item.end | date:'HH:mm'}}</span>
                 </td>
                 <td class="single-line" [ngClass]="{invalid: !item.durationValid}">
-                    <span>{{item.durationTime | tiuTime}}</span>
+                    <span>{{item.durationHours | tiuDuration}}</span>
                     <br>
                     <span>{{item.durationHours | tiuHours}}</span>
                 </td>

@@ -20,28 +20,54 @@ import { TasksHelpComponent } from './help/tasks-help/tasks-help.component';
 import { SettingsHelpComponent } from './help/settings-help/settings-help.component';
 import { DayRecordingHelpComponent } from './help/day-recording-help/day-recording-help.component';
 import { MonthOverviewHelpComponent } from './help/month-overview-help/month-overview-help.component';
+import { DayRecordHelpComponent } from './help/day-record-help/day-record-help.component';
+import { DayEditHelpComponent } from './help/day-edit-help/day-edit-help.component';
 
 export const routes: Routes = [{
   path: '',
   pathMatch: 'full',
   component: SplashComponent
 }, {
-  path: 'overview',
+  path: 'about',
   pathMatch: 'full',
-  component: OverviewComponent
+  component: AboutComponent
 }, {
   path: 'day',
   pathMatch: 'full',
   component: DayRecordingComponent
 }, {
-  path: 'day-help',
-  pathMatch: 'full',
-  component: DayRecordingHelpComponent
-}, {
   path: 'day/:year/:month/:day/:index',
   pathMatch: 'full',
   canActivate: [activeDayGuard],
   component: DayEntryComponent
+}, {
+  path: 'help/day',
+  pathMatch: 'full',
+  component: DayRecordingHelpComponent
+}, {
+  path: 'help/day-edit',
+  pathMatch: 'full',
+  component: DayEditHelpComponent
+}, {
+  path: 'help/day-record',
+  pathMatch: 'full',
+  component: DayRecordHelpComponent
+}, {
+  path: 'help/month',
+  pathMatch: 'full',
+  component: MonthOverviewHelpComponent
+}, {
+  path: 'help/projects',
+  pathMatch: 'full',
+  component: ProjectsHelpComponent
+}, {
+  path: 'help/settings',
+  pathMatch: 'full',
+  component: SettingsHelpComponent
+}, {
+  path: 'help/tasks',
+  pathMatch: 'full',
+  component: TasksHelpComponent
 }, {
   path: 'month',
   pathMatch: 'full',
@@ -62,49 +88,29 @@ export const routes: Routes = [{
   canActivate: [monthOverviewEntryGuard],
   component: MonthOverviewEntryComponent
 }, {
-  path: 'month-help',
+  path: 'overview',
   pathMatch: 'full',
-  component: MonthOverviewHelpComponent
-}, {
-  path: 'settings',
-  pathMatch: 'full',
-  component: SettingsComponent
-}, {
-  path: 'settings/help',
-  pathMatch: 'full',
-  component: SettingsHelpComponent
-}, {
-  path: 'about',
-  pathMatch: 'full',
-  component: AboutComponent
+  component: OverviewComponent
 }, {
   path: 'projects',
   pathMatch: 'full',
-  redirectTo: 'projects/settings'
-}, {
-  path: 'projects/settings',
-  pathMatch: 'full',
   component: ProjectsComponent
 }, {
-  path: 'projects/settings/:name',
+  path: 'projects/:name',
   pathMatch: 'full',
   component: ProjectComponent,
   canActivate: [projectGuard]
 }, {
-  path: 'projects/settings/:project/tasks',
+  path: 'projects/:project/tasks',
   pathMatch: 'full',
-  redirectTo: 'projects/settings/:project'
+  redirectTo: 'projects/:project'
 }, {
-  path: 'projects/settings/:project/tasks/settings/:task',
+  path: 'projects/:project/tasks/:task',
   pathMatch: 'full',
   component: TaskComponent,
   canActivate: [taskGuard]
 }, {
-  path: 'projects/help',
+  path: 'settings',
   pathMatch: 'full',
-  component: ProjectsHelpComponent
-}, {
-  path: 'projects/settings/:project/help',
-  pathMatch: 'full',
-  component: TasksHelpComponent
+  component: SettingsComponent
 }];

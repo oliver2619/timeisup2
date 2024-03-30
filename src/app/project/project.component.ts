@@ -6,6 +6,8 @@ import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {Subscription} from "rxjs";
 import {TasksComponent} from "../tasks/tasks.component";
 import {ModelService} from "../model.service";
+import { HelpButtonDirective } from '../elements/help-button.directive';
+import { BackButtonDirective } from '../elements/back-button.directive';
 
 export interface ProjectRouteParams {
   name: string;
@@ -19,7 +21,7 @@ interface ProjectFormValue {
 @Component({
   selector: 'tiu-project',
   standalone: true,
-  imports: [CommonModule, MenuComponent, ReactiveFormsModule, RouterLink, TasksComponent],
+  imports: [CommonModule, MenuComponent, ReactiveFormsModule, RouterLink, TasksComponent, HelpButtonDirective, BackButtonDirective],
   templateUrl: './project.component.html',
   styleUrl: './project.component.scss',
   changeDetection: ChangeDetectionStrategy.Default

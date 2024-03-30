@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DayRecordingContextMenu } from './day-recording-context-menu';
 import { MessageBoxService } from '../message-box.service';
@@ -30,6 +30,10 @@ export class DayRecordingContextMenuComponent implements DayRecordingContextMenu
   }
 
   constructor(private readonly element: ElementRef<HTMLElement>, private readonly messageBoxService: MessageBoxService, private readonly modelService: ModelService) { }
+
+  onClick()  {
+    this.hide();
+  }
 
   hide() {
     this.visible = false;

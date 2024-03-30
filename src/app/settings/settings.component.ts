@@ -6,6 +6,7 @@ import { ModelService } from "../model.service";
 import { CheckButtonComponent } from "../elements/check-button/check-button.component";
 import { DayOfWeek } from "../../model/dayofweek";
 import { RouterModule } from '@angular/router';
+import { HelpButtonDirective } from '../elements/help-button.directive';
 
 interface SettingsFormValue {
   maxHoursPerDay: number;
@@ -18,7 +19,7 @@ interface SettingsFormValue {
 @Component({
   selector: 'tiu-settings',
   standalone: true,
-  imports: [CommonModule, MenuComponent, ReactiveFormsModule, CheckButtonComponent, RouterModule],
+  imports: [CommonModule, MenuComponent, ReactiveFormsModule, CheckButtonComponent, RouterModule, HelpButtonDirective],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -15,41 +15,51 @@
           </tr>
           <tr class="green">
             <th colspan="2">Total working time</th>
-            <td class="number">{{totalWorkingTime | tiuTime}}</td>
+            <td class="number">{{totalWorkingHours | tiuDuration}}</td>
             <td class="number">{{totalWorkingHours | tiuHours}}</td>
           </tr>
           <tr>
             <th colspan="2">Total pause time</th>
-            <td class="number">{{totalPauseTime | tiuTime}}</td>
+            <td class="number">{{totalPauseHours | tiuDuration}}</td>
             <td class="number">{{totalPauseHours | tiuHours}}</td>
           </tr>
-          @for(p of projects; track p.project) {
-            <tr>
-              <th colspan="2">{{p.project}}</th>
-              <td class="number">{{p.totalTime | tiuTime}}</td>
-              <td class="number">{{p.totalHours | tiuHours}}</td>
-            </tr>
-            @for(t of p.tasks; track t.task) {
-              <tr>
-                <th>&nbsp;</th>
-                <th>{{t.task}}</th>
-                <td class="number">{{t.totalTime | tiuTime}}</td>
-                <td class="number">{{t.totalHours | tiuHours}}</td>
-              </tr>
-            }
-          }
         }
-        @if(hasComment) {
+        @if(absence > 0) {
+          <tr class="green">
+              <th>Absence</th>
+              <td>{{absence | number:'1.0-1'}} d</td>
+              <td class="number">{{absenceHours | tiuDuration}}</td>
+              <td class="number">{{absenceHours | tiuHours}}</td>
+          </tr>
+        }
+        @if(hasWorked) {
+          @if(absence > 0) {
+            <tr>
+              <th colspan="2">Work + absence</th>
+              <td class="number">{{totalHours | tiuDuration}}</td>
+              <td class="number">{{totalHours | tiuHours}}</td>
+            </tr>
+          }
+          @if(hasComment) {
             <tr>
                 <th colspan="2">Comment</th>
                 <td colspan="2">{{comment}}</td>
             </tr>
-        }
-        @if(holiday > 0) {
+          }
+          @for(p of projects; track p.project) {
             <tr>
-                <th colspan="3">Absence</th>
-                <td class="number">{{holiday | number:'1.0-1'}} d</td>
+              <th colspan="2">{{p.project}}</th>
+              <td class="number">{{p.totalHours | tiuDuration}}</td>
+              <td class="number">{{p.totalHours | tiuHours}}</td>
             </tr>
+            @for(t of p.tasks; track t.task) {
+              <tr>
+                <td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;{{t.task}}</td>
+                <td class="number">{{t.totalHours | tiuDuration}}</td>
+                <td class="number">{{t.totalHours | tiuHours}}</td>
+              </tr>
+            }
+          }
         }
     </table>
     <div class="button-list center">

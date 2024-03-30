@@ -274,6 +274,10 @@ export class Model {
     return this.projectsByName.get(project)?.hasTask(task) ?? false;
   }
 
+  isDayComplete(year: number, month: number, day: number): boolean {
+    return this.getMonth(year, month)?.isDayComplete(day) ?? false;
+  }
+
   isDayOfWeekActive(day: DayOfWeek): boolean {
     return this.settings.isDayOfWeekActive(day);
   }

@@ -9,8 +9,9 @@ import { ModelService } from '../model.service';
 import { DayEntriesComponent } from "../day-entries/day-entries.component";
 import { ButtonErrorDirective } from '../elements/button-error.directive';
 import { RouterModule } from '@angular/router';
-import {TimePipe} from "../elements/time.pipe";
-import {HoursPipe} from "../elements/hours.pipe";
+import { HoursPipe } from "../elements/hours.pipe";
+import { HelpButtonDirective } from '../elements/help-button.directive';
+import { DurationPipe } from '../elements/duration.pipe';
 
 interface DayRecordingFormValue {
   project: string;
@@ -24,18 +25,14 @@ interface DayRecordingFormValue {
   templateUrl: './day-recording.component.html',
   styleUrl: './day-recording.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, MenuComponent, SelectProjectComponent, SelectTaskComponent, ReactiveFormsModule, DayEntriesComponent, ButtonErrorDirective, RouterModule, TimePipe, HoursPipe]
+  imports: [CommonModule, MenuComponent, SelectProjectComponent, SelectTaskComponent, ReactiveFormsModule, DayEntriesComponent, ButtonErrorDirective, RouterModule, DurationPipe, HoursPipe, HelpButtonDirective]
 })
 export class DayRecordingComponent implements OnDestroy {
 
   readonly formGroup: FormGroup;
 
   workingHours = 0;
-  workingTime = new Date();
-
   pauseHours = 0;
-  pauseTime = new Date();
-
   year = 0;
   month = 0;
   day = 0;
@@ -116,9 +113,5 @@ export class DayRecordingComponent implements OnDestroy {
       this.workingHours = 0;
       this.pauseHours = 0;
     }
-    this.workingTime = new Date();
-    this.workingTime.setTime(this.workingHours * 3600_000);
-    this.pauseTime = new Date();
-    this.pauseTime.setTime(this.pauseHours * 3600_000);
   }
 }

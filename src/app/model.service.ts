@@ -192,6 +192,10 @@ export class ModelService {
     return this.model.hasTask(project, task);
   }
 
+  isDayComplete(year: number, month: number, day: number): boolean {
+    return this.model.isDayComplete(year, month, day);
+  }
+
   isDayOfWeekActive(day: DayOfWeek): boolean {
     return this.model.isDayOfWeekActive(day);
   }

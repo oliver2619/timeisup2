@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ModelService } from '../model.service';
 import { Router } from '@angular/router';
 import { MessageBoxService } from '../message-box.service';
-import { TimePipe } from "../elements/time.pipe";
 import { HoursPipe } from "../elements/hours.pipe";
 import { DayRecordingContextMenuComponent } from '../day-recording-context-menu/day-recording-context-menu.component';
 import { DayRecordingContextMenu } from '../day-recording-context-menu/day-recording-context-menu';
+import { DurationPipe } from '../elements/duration.pipe';
 
 interface Item {
   readonly project: string;
@@ -14,7 +14,6 @@ interface Item {
   readonly start: Date;
   readonly end: Date;
   readonly durationHours: number;
-  readonly durationTime: Date;
   readonly index: number;
   readonly isActive: boolean;
   startValid: boolean;
@@ -26,7 +25,7 @@ interface Item {
 @Component({
   selector: 'tiu-day-entries',
   standalone: true,
-  imports: [CommonModule, TimePipe, HoursPipe, DayRecordingContextMenuComponent],
+  imports: [CommonModule, HoursPipe, DurationPipe, DayRecordingContextMenuComponent],
   templateUrl: './day-entries.component.html',
   styleUrl: './day-entries.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -82,16 +81,12 @@ export class DayEntriesComponent implements OnChanges, OnDestroy {
     if (this.year != undefined && this.month != undefined && this.day != undefined) {
       this.items = this.modelService.getDayRecords(this.year, this.month, this.day).map((it, index) => {
         const end = it.end != undefined ? it.end : new Date();
-        const durationHours = (end.getTime() - it.start.getTime()) / 3600_000;
-        const durationTime = new Date();
-        durationTime.setTime(end.getTime() - it.start.getTime());
         const ret: Item = {
           start: it.start,
           end,
           project: it.project,
           task: it.task,
-          durationHours,
-          durationTime,
+          durationHours: (end.getTime() - it.start.getTime()) / 3600_000,
           index,
           startValid: true,
           endValid: true,
