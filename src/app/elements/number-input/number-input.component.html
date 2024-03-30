@@ -1,0 +1,9 @@
+@if(toggleSignEnabled) {
+    <button type="button" (click)="toggleSign()" class="yellow"><span class="fas fa-plus-minus"></span></button>
+}
+<button type="button" tiuButtonCounter (counter)="change(-1)" class="yellow"><span class="fas fa-minus"></span></button>
+<button type="button" tiuButtonCounter (counter)="change(1)" class="yellow"><span class="fas fa-plus"></span></button>
+<input #input type="number" [min]="min" [max]="max" [step]="step" (input)="onChangeInput()">
+@if(hasUnit) {
+    <span>{{unit}}</span>
+}

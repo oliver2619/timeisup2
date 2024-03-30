@@ -5,25 +5,16 @@
   <h1>Settings</h1>
   <form [formGroup]="formGroup">
     <div class="form-group">
-      <label for="settings.maxHoursPerDay">Maximum hours per day</label>
-      <div class="input-group">
-        <input id="settings.maxHoursPerDay" type="number" formControlName="maxHoursPerDay" min="1" max="24">
-        <span>h</span>
-      </div>
+      <label>Maximum hours per day</label>
+      <tiu-number-input [formGroup]="formGroup" name="maxHoursPerDay" [min]="1" [max]="24" unit="h"></tiu-number-input>
     </div>
     <div class="form-group">
-      <label for="settings.hoursPerWeek">Hours per week (100 %)</label>
-      <div class="input-group">
-        <input id="settings.hoursPerWeek" type="number" formControlName="hoursPerWeek" min="1" max="168">
-        <span>h</span>
-      </div>
+      <label>Hours per week (100 %)</label>
+      <tiu-number-input [formGroup]="formGroup" name="hoursPerWeek" [min]="1" [max]="168" unit="h"></tiu-number-input>
     </div>
     <div class="form-group">
-      <label for="settings.pensum">Pensum</label>
-      <div class="input-group">
-        <input id="settings.pensum" type="number" formControlName="pensum" min="1" max="100">
-        <span>%</span>
-      </div>
+      <label>Pensum</label>
+      <tiu-number-input [formGroup]="formGroup" name="pensum" [min]="1" [max]="100" [step]="10" unit="%"></tiu-number-input>
     </div>
     <div class="form-group">
       <label>Working days</label>
@@ -38,16 +29,14 @@
       <input id="settings.hoursPerDay" type="text" readonly="readonly" value="{{hoursPerDay | number:'1.0-2'}}" class="number">
     </div>
     <div class="form-group">
-      <label for="settings.currentOvertime">Current overtime</label>
-      <div class="input-group">
-        <input id="settings.currentOvertime" type="number" formControlName="currentOvertime">
-        <span>h</span>
-      </div>
+      <label>Current overtime</label>
+      <tiu-number-input [formGroup]="formGroup" name="currentOvertime" unit="h"></tiu-number-input>
     </div>
   </form>
   <p class="error">{{error}}</p>
   <div class="button-list">
     <button type="button" (click)="save()" [disabled]="!canSave" class="button green">Save</button>
     <button type="button" (click)="reset()" [disabled]="!canReset" class="button red">Reset</button>
+    <button tiuBackButton></button>
   </div>
 </div>
