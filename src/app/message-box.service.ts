@@ -1,11 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+export enum YesNoCancelResult {
+  YES, NO, CANCEL
+}
+
 export interface MessageBoxHandler {
 
   information(message: string): void;
 
   question(message: string): Observable<boolean>;
+
+  questionYesNoCancel(message: string): Observable<YesNoCancelResult>;
 }
 
 @Injectable({
@@ -33,5 +39,12 @@ export class MessageBoxService {
       throw new Error('No message box handler registered');
     }
     return this.handler.question(message);
+  }
+
+  questionYesNoCancel(message: string): Observable<YesNoCancelResult> {
+    if (this.handler == undefined) {
+      throw new Error('No message box handler registered');
+    }
+    return this.handler.questionYesNoCancel(message);
   }
 }

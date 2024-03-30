@@ -15,6 +15,6 @@ export interface ModelJson {
     readonly projects: { [key: string]: ProjectJson };
     readonly months: MonthJson[];
     readonly active: ActiveJson | undefined;
-    readonly overtime: number;
+    readonly overtime: number; // hours
     readonly favoriteProject: string | undefined;
 }

@@ -151,6 +151,47 @@ $box-shadow-frame: 0 0 $spacing-2 $bg-color-2;
   &.inline {
     display: inline-flex;
   }
+
+  &.vertical {
+    flex-direction: column;
+    align-items: stretch;
+    row-gap: $spacing-2;
+
+    button.button {
+      text-align: center;
+      justify-content: center;
+    }
+  }
+}
+
+@mixin modal-background {
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba($bg-color-4, 0.5);
+
+  &.visible {
+      visibility: visible;
+  }
+}
+
+@mixin modal-frame {
+  border: 1px solid border-color-frame;
+  border-radius: $border-radius-3;
+  box-shadow: $box-shadow-frame;
+  padding: $spacing-4 $spacing-3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: $spacing-4;
+  background-color: $bg-color-5;
 }
 
 @mixin input {

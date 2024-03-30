@@ -29,6 +29,11 @@ export class Month {
     return day?.readonlyRecords ?? [];
   }
 
+  get activeRecord(): ReadonlyRecord | undefined {
+    const day = this._activeDay == undefined ? this.getDayByDate(new Date()) : this._activeDay;
+    return day?.activeRecord;
+  }
+
   get days(): number[] {
     return this._days.map(it => it.day);
   }
@@ -52,6 +57,10 @@ export class Month {
 
   static newInstance(month: number, year: number): Month {
     return new Month(month, year, []);
+  }
+
+  canJoinDayRecordWithPrevious(day: number, index: number): boolean {
+    return this.getDay(day)?.canJoinDayRecordWithPrevious(index) ?? false;
   }
 
   getComment(day: number): string {
@@ -123,6 +132,10 @@ export class Month {
     return this._days.some(it => it.isTaskInUse(project, task)) || (this._activeDay?.isTaskInUse(project, task) ?? false);
   }
 
+  joinDayRecordWithPrevious(day: number, index: number) {
+    this.getDayOrThrowError(day).joinDayRecordWithPrevious(index);
+  }
+
   loadActiveDay(json: ActiveJson) {
     this._activeDay = this.getDay(json.day);
   }
@@ -183,11 +196,7 @@ export class Month {
   }
 
   setDayRecord(day: number, index: number, start: Date, end: Date | undefined, task: Task) {
-    const d = this.getDay(day);
-    if (d == undefined) {
-      throw new Error(`Day ${day} not found`);
-    }
-    d.setRecord(index, start, end, task);
+    this.getDayOrThrowError(day).setRecord(index, start, end, task);
   }
 
   setComment(time: Date, comment: string) {
@@ -196,6 +205,10 @@ export class Month {
     } else {
       this._activeDay.comment = comment;
     }
+  }
+
+  splitDayRecord(day: number, index: number) {
+    this.getDayOrThrowError(day).splitDayRecord(index);
   }
 
   startTask(time: Date, task: Task, onStopTask: (task: Task) => void) {
@@ -236,6 +249,14 @@ export class Month {
 
   private getDayByDate(time: Date): Workingday | undefined {
     return this.getDay(time.getDate());
+  }
+
+  getDayOrThrowError(day: number): Workingday {
+    const d = this.getDay(day);
+    if (d == undefined) {
+      throw new Error(`Day ${this.year}-${this.month}-${day} not found`);
+    }
+    return d;
   }
 
   private removeDay(day: Workingday) {

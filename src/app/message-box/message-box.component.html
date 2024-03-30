@@ -2,7 +2,15 @@
     <h1>{{title}}</h1>
     <p>{{question}}</p>
     <div class="button-list center">
-        <button type="button" (click)="ok()" class="button green">OK</button>
+        @if(okVisible) {
+            <button type="button" (click)="yes()" class="button green">OK</button>
+        }
+        @if(yesVisible) {
+            <button type="button" (click)="yes()" class="button green">Yes</button>
+        }
+        @if(noVisible) {
+            <button type="button" (click)="no()" class="button red">No</button>
+        }
         @if(cancelVisible) {
             <button type="button" (click)="cancel()" class="button">Cancel</button>
         }

@@ -5,8 +5,9 @@ import { ModelService } from '../model.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MonthOverviewEntriesComponent } from '../month-overview-entries/month-overview-entries.component';
-import { MessageBoxService } from '../message-box.service';
+import { MessageBoxService, YesNoCancelResult } from '../message-box.service';
 import { HoursPipe } from '../elements/hours.pipe';
+import { RouterModule } from '@angular/router';
 
 interface MonthOption {
   readonly key: string;
@@ -20,7 +21,7 @@ interface MonthOverviewFormValue {
 @Component({
   selector: 'tiu-month-overview',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MenuComponent, MonthOverviewEntriesComponent, HoursPipe],
+  imports: [CommonModule, ReactiveFormsModule, MenuComponent, MonthOverviewEntriesComponent, HoursPipe, RouterModule],
   templateUrl: './month-overview.component.html',
   styleUrl: './month-overview.component.scss',
   changeDetection: ChangeDetectionStrategy.Default
@@ -80,10 +81,10 @@ export class MonthOverviewComponent {
   }
 
   removeAll() {
-    this.messageBoxService.question('Do you want to remove all recordings for the entire month?').subscribe({
+    this.messageBoxService.questionYesNoCancel('All recordings for the entire month will be deleted. Do you want to save the month\'s overtime?').subscribe({
       next: result => {
-        if (result) {
-          this.modelService.removeMonthRecords(this.selectedYear!, this.selectedMonth!);
+        if (result !== YesNoCancelResult.CANCEL) {
+          this.modelService.removeMonthRecords(this.selectedYear!, this.selectedMonth!, result === YesNoCancelResult.YES);
           this.updateYears();
         }
       }

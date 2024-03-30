@@ -7,6 +7,10 @@ export class Settings {
     return new Set<DayOfWeek>(this._daysOfWeek);
   }
 
+  get hoursPerDay(): number{
+    return this.daysOfWeek.size > 0 ? this.hoursPerWeek * this.pensum / (100 * this.daysOfWeek.size) : 0;
+  }
+
   private constructor(public maxHoursPerDay: number, public hoursPerWeek: number, public pensum: number, private readonly _daysOfWeek: Set<DayOfWeek>) {
   }
 

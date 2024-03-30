@@ -1,32 +1,10 @@
 @import "../../style/shared";
 
 :host {
-    visibility: hidden;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba($bg-color-4, 0.5);
-
-    &.visible {
-        visibility: visible;
-    }
+    @include modal-background();
 }
 
 .msgbox-frame {
-    border: 1px solid border-color-frame;
-    border-radius: $border-radius-3;
-    box-shadow: $box-shadow-frame;
-    padding: $spacing-4 $spacing-3;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: $spacing-4;
-    background-color: $bg-color-5;
+    @include modal-frame();
 }
 

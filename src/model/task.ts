@@ -1,5 +1,5 @@
-import {Project} from "./project";
-import {TaskJson} from "./task-json";
+import { Project } from "./project";
+import { TaskJson } from "./task-json";
 
 export class Task {
 
@@ -16,6 +16,10 @@ export class Task {
 
   static newInstance(name: string, project: Project): Task {
     return new Task(name, project);
+  }
+
+  isSame(other: Task): boolean {
+    return this.name === other.name && this.project.isSame(other.project);
   }
 
   save(): TaskJson {

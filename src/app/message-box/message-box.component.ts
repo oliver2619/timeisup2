@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MessageBoxService } from '../message-box.service';
+import { MessageBoxService, YesNoCancelResult } from '../message-box.service';
 import { Observable, Subject } from 'rxjs';
 
 @Component({
@@ -15,9 +15,13 @@ export class MessageBoxComponent implements OnDestroy {
 
   title = '';
   question = '';
-  cancelVisible = true;
+  cancelVisible = false;
+  okVisible = false;
+  yesVisible = false;
+  noVisible = false;
 
-  private subject: Subject<boolean> | undefined;
+  private booleanSubject: Subject<boolean> | undefined;
+  private yesNoCancelSubject: Subject<YesNoCancelResult> | undefined;
 
   private set visible(v: boolean) {
     if (v) {
@@ -30,7 +34,8 @@ export class MessageBoxComponent implements OnDestroy {
   constructor(private readonly messageBoxService: MessageBoxService, private readonly element: ElementRef<HTMLElement>) {
     messageBoxService.setHandler({
       information: message => this.doInformation(message),
-      question: message => this.doQuestion(message)
+      question: message => this.doQuestion(message),
+      questionYesNoCancel: message => this.doQuestionYesNoCancel(message)
     });
   }
 
@@ -38,33 +43,65 @@ export class MessageBoxComponent implements OnDestroy {
     this.messageBoxService.setHandler(undefined);
   }
 
-  ok() {
+  yes() {
     this.visible = false;
-    const s = this.subject;
-    this.subject = undefined;
-    s?.next(true);
+    const bs = this.booleanSubject;
+    const yncs = this.yesNoCancelSubject;
+    this.booleanSubject = undefined;
+    this.yesNoCancelSubject = undefined;
+    bs?.next(true);
+    yncs?.next(YesNoCancelResult.YES);
+  }
+
+  no() {
+    this.visible = false;
+    const yncs = this.yesNoCancelSubject;
+    this.booleanSubject = undefined;
+    this.yesNoCancelSubject = undefined;
+    yncs?.next(YesNoCancelResult.NO);
   }
 
   cancel() {
     this.visible = false;
-    const s = this.subject;
-    this.subject = undefined;
-    s?.next(false);
+    const bs = this.booleanSubject;
+    const yncs = this.yesNoCancelSubject;
+    this.booleanSubject = undefined;
+    this.yesNoCancelSubject = undefined;
+    bs?.next(false);
+    yncs?.next(YesNoCancelResult.CANCEL);
   }
 
   private doInformation(message: string) {
     this.title = 'Information';
     this.question = message;
+    this.okVisible = true;
+    this.yesVisible = false;
     this.cancelVisible = false;
+    this.noVisible = false;
     this.visible = true;
   }
 
   private doQuestion(message: string): Observable<boolean> {
     this.title = 'Question';
     this.question = message;
+    this.okVisible = true;
+    this.yesVisible = false;
     this.cancelVisible = true;
+    this.noVisible = false;
     this.visible = true;
-    this.subject = new Subject();
-    return this.subject;
+    this.booleanSubject = new Subject();
+    return this.booleanSubject;
+  }
+
+  private doQuestionYesNoCancel(message: string): Observable<YesNoCancelResult> {
+    this.title = 'Question';
+    this.question = message;
+    this.okVisible = false;
+    this.yesVisible = true;
+    this.cancelVisible = true;
+    this.noVisible = true;
+    this.visible = true;
+    this.yesNoCancelSubject = new Subject();
+    return this.yesNoCancelSubject;
   }
 }

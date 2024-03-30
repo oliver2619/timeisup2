@@ -10,10 +10,10 @@
         @for(item of items; track item.index) {
             <tr [ngClass]="{blink: item.isActive, green: item.valid && !item.isActive, red: !item.valid && !item.isActive}" class="small">
                 <td class="single-line">
-                  <button type="button" (click)="edit(item.index)" class="button yellow small multiline">
-                    <b>{{item.project}}</b>
-                    <span>{{item.task}}</span>
-                  </button>
+                    <button type="button" (click)="edit(item.index)" class="button yellow small multiline">
+                        <b>{{item.project}}</b>
+                        <span>{{item.task}}</span>
+                    </button>
                 </td>
                 <td class="single-line">
                     <span [ngClass]="{invalid: !item.startValid}">{{item.start | date:'HH:mm'}}</span>
@@ -27,10 +27,13 @@
                 </td>
                 <td class="single-line right">
                     <div class="button-list inline">
-                        <button type="button" (click)="remove(item.index)" class="button red"><span class="fas fa-trash-can"></span></button>
+                        <button type="button" (click)="showContextMenu(item.index)" class="button yellow">
+                            <span class="fas fa-bars"></span>
+                        </button>
                     </div>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+<tiu-day-recording-context-menu></tiu-day-recording-context-menu>

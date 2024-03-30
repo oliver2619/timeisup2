@@ -1,5 +1,6 @@
 <tiu-menu>
     <button type="button" (click)="removeAll()" [disabled]="!canRemoveAll" class="menu-button red"><span class="fas fa-trash-can"></span></button>
+    <button type="button" routerLink="/month-help" class="menu-button" routerLinkActive="active"><span class="fas fa-circle-question"></span></button>
 </tiu-menu>
 <div>
     <form [formGroup]="formGroup">

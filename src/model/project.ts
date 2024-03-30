@@ -1,6 +1,6 @@
-import {ProjectJson} from "./project-json";
-import {Task} from "./task";
-import {TaskJson} from "./task-json";
+import { ProjectJson } from "./project-json";
+import { Task } from "./task";
+import { TaskJson } from "./task-json";
 
 export class Project {
 
@@ -78,6 +78,10 @@ export class Project {
 
   hasTask(name: string): boolean {
     return this.tasksByName.has(name);
+  }
+
+  isSame(other: Project): boolean {
+    return this.name === other.name;
   }
 
   isTaskActive(name: string): boolean {

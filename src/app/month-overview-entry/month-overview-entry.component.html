@@ -1,6 +1,11 @@
 <tiu-menu></tiu-menu>
 <div>
-    <h1>{{date | date:'EEE, MMM d'}}</h1>
+    <h1>Day overview</h1>
+    <div class="button-list center">
+      <button type="button" (click)="previous()" [disabled]="!hasPrevious" class="button"><span class="fas fa-caret-left"></span></button>
+      <span>{{date | date:'EEE, MMM d'}}</span>
+      <button type="button" (click)="next()" [disabled]="!hasNext" class="button"><span class="fas fa-caret-right"></span></button>
+    </div>
     <table>
         @if(hasWorked) {
           <tr>
@@ -48,8 +53,6 @@
         }
     </table>
     <div class="button-list center">
-        <button type="button" (click)="previous()" [disabled]="!hasPrevious" class="button"><span class="fas fa-caret-left"></span></button>
         <button type="button" routerLink="../../../.." class="button">Close</button>
-        <button type="button" (click)="next()" [disabled]="!hasNext" class="button"><span class="fas fa-caret-right"></span></button>
     </div>
 </div>

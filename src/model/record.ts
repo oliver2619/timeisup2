@@ -1,7 +1,7 @@
-import {Project} from "./project";
-import {ReadonlyRecord} from "./readonly-record";
-import {RecordJson} from "./record-json";
-import {Task} from "./task";
+import { Project } from "./project";
+import { ReadonlyRecord } from "./readonly-record";
+import { RecordJson } from "./record-json";
+import { Task } from "./task";
 
 export class Record {
 
@@ -34,16 +34,6 @@ export class Record {
     return ret;
   }
 
-  setRecord(start: Date, end: Date | undefined, task: Task) {
-    this.start = new Date();
-    this.start.setTime(start.getTime());
-    this.end = end == undefined ? undefined : new Date();
-    if (end != undefined) {
-      this.end?.setTime(end.getTime());
-    }
-    this.task = task;
-  }
-
   private constructor(public start: Date, public end: Date | undefined, public task: Task) {
   }
 
@@ -57,6 +47,10 @@ export class Record {
 
   static newInstance(start: Date, task: Task): Record {
     return new Record(start, undefined, task);
+  }
+
+  canJoinWith(record: Record): boolean {
+    return this.task.isSame(record.task);
   }
 
   isProjectInUse(name: string): boolean {
@@ -76,9 +70,32 @@ export class Record {
     };
   }
 
+  setRecord(start: Date, end: Date | undefined, task: Task) {
+    this.start = new Date();
+    this.start.setTime(start.getTime());
+    this.end = end == undefined ? undefined : new Date();
+    if (end != undefined) {
+      this.end?.setTime(end.getTime());
+    }
+    this.task = task;
+  }
+
+  split(): Record {
+    const newEnd = this.end;
+    const currentEnd = this.end == undefined ? new Date() : this.end;
+    const middle = new Date();
+    middle.setTime((this.start.getTime() + currentEnd.getTime()) / 2);
+    middle.setSeconds(0);
+    middle.setMilliseconds(0);
+    this.end = new Date();
+    this.end.setTime(middle.getTime());
+    return new Record(middle, newEnd, this.task);
+  }
+
   stop(time: Date, onStopTask: (task: Task) => void) {
     if (this.end == undefined) {
-      this.end = time;
+      this.end = new Date();
+      this.end.setTime(time.getTime());
       onStopTask(this.task);
     }
   }

@@ -1,0 +1,9 @@
+@import "../../style/shared";
+
+:host {
+    @include modal-background();
+}
+
+.frame {
+    @include modal-frame();
+}

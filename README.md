@@ -2,17 +2,13 @@
 
 ## TODO
 
-* join and split recordings
+* month overview show day in progress
 * animations for message box and toasts
-* help
-* overview current task
-* update global overhours
+* help recording, edit day, edit record
 * Splash
+* Input fields error highlighting
 * day entry component onPush using signals
 * day recording component use signals and remove changedetection ref in all components
 * move reused components (select project, select task and day-entries?) to elements folder
 
-## Bug
-
-* Start next task -> end-start time overlap and generate error in view
-
+## Bugs

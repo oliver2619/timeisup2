@@ -1,0 +1,24 @@
+<tiu-menu>
+    <button type="button" routerLink="." class="menu-button" routerLinkActive="active"><span class="fas fa-circle-question"></span></button>
+</tiu-menu>
+<div>
+    <h1>Settings help</h1>
+    <h2>Maximum hours per day</h2>
+    <p>This setting currently has no impact.</p>
+    <h2>Working days</h2>
+    <p>Select the weekdays from Sunday to Saturday, that you are supposed to work on.
+        This setting affects the calculation of hours per day as well as the overtime.
+        Absences during weekdays not configured as working days do not have any impact on the final accounting of the month.
+    </p>
+    <h2>Hours per day</h2>
+    <p>This value is calculated using the settings for 'hours per week', 'pensum' and the number of selected 'working days'.
+        Every full absence counts as the equivalent number of hours, that is displayed in this setting.
+    </p> 
+    <h2>Current overtime</h2>
+    <p>This number specifies all hours of overtime, that have been accumulated during all month, regardless wether they are already deleted or not.
+        Whenever a month is deleted, the calculated month's overhours can still be saved automatically.
+    </p>
+    <div class="button-list">
+        <button type="button" routerLink=".." class="button">Back</button>
+    </div>
+</div>

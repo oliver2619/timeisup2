@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {MenuComponent} from "../menu/menu.component";
 import {ModelService} from "../model.service";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {Router} from "@angular/router";
+import {Router, RouterModule} from "@angular/router";
 import {MessageBoxService} from '../message-box.service';
 import {FavoriteButtonComponent} from "../elements/favorite-button/favorite-button.component";
 import {ActiveButtonComponent} from "../elements/active-button/active-button.component";
@@ -16,7 +16,7 @@ interface ProjectsFormValue {
 @Component({
   selector: 'tiu-projects',
   standalone: true,
-  imports: [CommonModule, MenuComponent, ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent, ButtonErrorDirective],
+  imports: [CommonModule, MenuComponent, ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent, ButtonErrorDirective, RouterModule],
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.scss',
   changeDetection: ChangeDetectionStrategy.Default
@@ -59,7 +59,7 @@ export class ProjectsComponent {
   }
 
   editProject(name: string) {
-    this.router.navigate(['projects', name]);
+    this.router.navigate(['projects', 'settings', name]);
   }
 
   isActive(name: string): boolean {

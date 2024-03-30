@@ -1,0 +1,27 @@
+<tiu-menu>
+    <button type="button" routerLink="/month-help" class="menu-button" routerLinkActive="active"><span class="fas fa-circle-question"></span></button>
+</tiu-menu>
+<div>
+    <h1>Month overview help</h1>
+    <h2>Overtime</h2>
+    <p>This field shows the accumulated hours of overtime for this month. Days in the future are not taken into account for this calculation.</p>
+
+    <h2>View day</h2>
+    <p><button type="button" class="button blue"><i>&lt;Date&gt;</i></button></p>
+    <p>By pressing this button you navigate to the respective day overview.</p>
+    <h2>Absences</h2>
+    <p><button type="button" class="button yellow">Absence</button></p>
+    <p>By pressing this button you mark the specified day as a full day of absence. The degree of absence can be edited later or removed again.</p>
+    <h2>Edit day</h2>
+    <p><button type="button" class="button yellow"><span class="fas fa-pen-to-square"></span></button></p>
+    <p>By pressing this button you can edit the respective day.</p>
+    <h2>Delete day</h2>
+    <p><button type="button" class="button red"><span class="fas fa-trash-can"></span></button></p>
+    <p>By pressing this button next to a listed day you delete the entire recordings for the respective working day. Any degree of absence will also be reset.</p>
+    <h2>Delete entire month</h2>
+    <p><button type="button" class="menu-button red"><span class="fas fa-trash-can"></span></button></p>
+    <p>By pressing this button in the menu bar you delete the entire month. You will be asked, wether the calculated month's hours of overtime will be saved or not.</p>
+    <div class="button-list">
+        <button type="button" routerLink="/month" class="button">Back</button>
+    </div>
+</div>

@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ModelService } from '../model.service';
 import { Router } from '@angular/router';
 import { MessageBoxService } from '../message-box.service';
-import {TimePipe} from "../elements/time.pipe";
-import {HoursPipe} from "../elements/hours.pipe";
+import { TimePipe } from "../elements/time.pipe";
+import { HoursPipe } from "../elements/hours.pipe";
+import { DayRecordingContextMenuComponent } from '../day-recording-context-menu/day-recording-context-menu.component';
+import { DayRecordingContextMenu } from '../day-recording-context-menu/day-recording-context-menu';
 
 interface Item {
   readonly project: string;
@@ -24,7 +26,7 @@ interface Item {
 @Component({
   selector: 'tiu-day-entries',
   standalone: true,
-  imports: [CommonModule, TimePipe, HoursPipe],
+  imports: [CommonModule, TimePipe, HoursPipe, DayRecordingContextMenuComponent],
   templateUrl: './day-entries.component.html',
   styleUrl: './day-entries.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -39,6 +41,9 @@ export class DayEntriesComponent implements OnChanges, OnDestroy {
 
   @Input()
   day: number | undefined;
+
+  @ViewChild(DayRecordingContextMenuComponent)
+  dayRecordingContextMenu: DayRecordingContextMenu | undefined;
 
   items: Item[] = [];
 
@@ -62,23 +67,15 @@ export class DayEntriesComponent implements OnChanges, OnDestroy {
 
   edit(index: number) {
     const url = this.router.url;
-    if(url == '/day') {
+    if (url == '/day') {
       this.router.navigate(['day', this.year!, this.month!, this.day!, index]);
-    }else if(url.startsWith('/month/')) {
+    } else if (url.startsWith('/month/')) {
       this.router.navigate(['month', this.year!, this.month!, this.day!, 'edit', index]);
     }
-}
+  }
 
-  remove(index: number) {
-    this.messageBoxService.question('Do you want to remove this record?').subscribe({
-      next: result => {
-        if(result) {
-          this.modelService.removeDayRecord(this.year!, this.month!, this.day!, index);
-          this.updateItems();
-          this.changeDetectorRef.markForCheck();
-        }
-      }
-    });
+  showContextMenu(index: number) {
+    this.dayRecordingContextMenu?.show(this.year!, this.month!, this.day!, index);
   }
 
   private updateItems() {

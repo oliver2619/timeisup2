@@ -76,7 +76,7 @@ export class DayEntryComponent {
   get durationHours(): number {
     if (this.hasEnd) {
       const v = this.value;
-      const h = (v.endHour + v.endMinute / 60 - v.startHour - v.startMinute / 60);
+      const h = (v.endHour - v.startHour + (v.endMinute - v.startMinute) / 60);
       return h >= 0 ? h : h + 24;
     } else {
       return 0;

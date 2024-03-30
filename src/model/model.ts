@@ -42,6 +42,11 @@ export class Model {
     return month?.activeDayRecords ?? [];
   }
 
+  get activeRecord(): ReadonlyRecord | undefined {
+    const month = this.activeMonth == undefined ? this.getMonthByDate(new Date()) : this.activeMonth;
+    return month?.activeRecord;
+  }
+
   get comment(): string {
     const today = new Date();
     if (this.activeMonth == undefined) {
@@ -79,7 +84,7 @@ export class Model {
   }
 
   get hoursPerDay(): number {
-    return this.settings.hoursPerWeek * this.settings.pensum / (100 * this.settings.daysOfWeek.size);
+    return this.settings.hoursPerDay;
   }
 
   get hoursPerWeek(): number {
@@ -174,6 +179,10 @@ export class Model {
     this.selectFavoriteProject();
   }
 
+  canJoinDayRecordWithPrevious(year: number, month: number, day: number, index: number): boolean {
+    return this.getMonth(year, month)?.canJoinDayRecordWithPrevious(day, index) ?? false;
+  }
+
   canUseProjectAsFavorite(project: string): boolean {
     const p = this.projectsByName.get(project);
     return p != undefined && p.canBeUsed;
@@ -207,9 +216,12 @@ export class Model {
     return this.projectsByName.get(project)?.favoriteTask;
   }
 
+  getOverhours(): number {
+    return this.getRecordedMonthsOverhours() + this._overtime;
+  }
+
   getOverhoursOfMonth(year: number, month: number): number {
-    const hoursPerDay = this.hoursPerDay;
-    return this.getMonth(year, month)?.getOverhoursOfMonth(this.settings.daysOfWeek, hoursPerDay) ?? 0;
+    return this.getMonth(year, month)?.getOverhoursOfMonth(this.settings.daysOfWeek, this.settings.hoursPerDay) ?? 0;
   }
 
   getRecordedDays(year: number, month: number): number[] {
@@ -283,6 +295,10 @@ export class Model {
     return this._months.some(it => it.isTaskInUse(project, task)) || (this.activeMonth?.isTaskInUse(project, task) ?? false);
   }
 
+  joinDayRecordWithPrevious(year: number, month: number, day: number, index: number) {
+    this.getMonthOrThrowError(year, month).joinDayRecordWithPrevious(day, index);
+  }
+
   removeDayRecord(year: number, month: number, day: number, index: number) {
     const m = this.getMonth(year, month);
     if (m != undefined) {
@@ -303,9 +319,13 @@ export class Model {
     }
   }
 
-  removeMonthRecords(year: number, month: number) {
+  removeMonthRecords(year: number, month: number, keepOvertime: boolean) {
     const found = this.getMonth(year, month);
     if (found != undefined) {
+      if (keepOvertime) {
+        const overtime = found.getOverhoursOfMonth(this.settings.daysOfWeek, this.settings.hoursPerDay);
+        this._overtime += overtime;
+      }
       this.removeMonth(found);
     }
   }
@@ -357,11 +377,7 @@ export class Model {
   }
 
   setDayComment(year: number, month: number, day: number, comment: string) {
-    const m = this.getMonth(year, month);
-    if (m == undefined) {
-      throw new Error('Day ${year}-${month}-${day} not found');
-    }
-    m.setDayComment(day, comment);
+    this.getMonthOrThrowError(year, month).setDayComment(day, comment);
   }
 
   setDayHoliday(year: number, month: number, day: number, holiday: number) {
@@ -377,15 +393,15 @@ export class Model {
   }
 
   setDayRecord(year: number, month: number, day: number, index: number, start: Date, end: Date | undefined, project: string, task: string) {
-    const m = this.getMonth(year, month);
-    if (m == undefined) {
-      throw new Error('Day ${year}-${month}-${day} not found');
-    }
-    m.setDayRecord(day, index, start, end, this.getProject(project).getTask(task));
+    this.getMonthOrThrowError(year, month).setDayRecord(day, index, start, end, this.getProject(project).getTask(task));
   }
 
   setFavoriteTask(project: string, task: string) {
     this.getProject(project).favoriteTask = task;
+  }
+
+  setOverhours(hours: number) {
+    this._overtime = hours - this.getRecordedMonthsOverhours();
   }
 
   setProjectActive(project: string, active: boolean) {
@@ -396,6 +412,10 @@ export class Model {
 
   setTaskActive(project: string, task: string, active: boolean) {
     this.getProject(project).setTaskActive(task, active);
+  }
+
+  splitDayRecord(year: number, month: number, day: number, index: number) {
+    this.getMonthOrThrowError(year, month).splitDayRecord(day, index);
   }
 
   startTask(project: string, task: string, onStopTask: (task: Task) => void) {
@@ -441,6 +461,14 @@ export class Model {
     return this.getMonth(today.getFullYear(), today.getMonth());
   }
 
+  private getMonthOrThrowError(year: number, month: number): Month {
+    const m = this.getMonth(year, month);
+    if (m == undefined) {
+      throw new Error('Month ${year}-${month} not found');
+    }
+    return m;
+  }
+
   private getProject(name: string): Project {
     const p = this.projectsByName.get(name);
     if (p == undefined) {
@@ -449,6 +477,11 @@ export class Model {
     return p;
   }
 
+  private getRecordedMonthsOverhours(): number {
+    const hoursPerDay = this.settings.hoursPerDay;
+    return this._months.map(it => it.getOverhoursOfMonth(this.settings.daysOfWeek, hoursPerDay)).reduce((prev, cur) => cur + prev, 0);
+  }
+  
   private markDayAsHoliday(year: number, month: number, day: number, holiday: number) {
     const found = this.getOrCreateMonth(year, month);
     found.markDayAsHoliday(day, holiday);

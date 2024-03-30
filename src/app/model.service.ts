@@ -1,11 +1,11 @@
-import {Injectable} from '@angular/core';
-import {AggregatedRecordings} from '../model/aggregated-recordings';
-import {Model} from "../model/model";
-import {ReadonlyDay} from '../model/readonly-day';
-import {ReadonlyRecord} from '../model/readonly-record';
-import {ToastService} from "./toast.service";
-import {Task} from "../model/task";
-import {DayOfWeek} from "../model/dayofweek";
+import { Injectable } from '@angular/core';
+import { AggregatedRecordings } from '../model/aggregated-recordings';
+import { Model } from "../model/model";
+import { ReadonlyDay } from '../model/readonly-day';
+import { ReadonlyRecord } from '../model/readonly-record';
+import { ToastService } from "./toast.service";
+import { Task } from "../model/task";
+import { DayOfWeek } from "../model/dayofweek";
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +28,10 @@ export class ModelService {
     return this.model.activeDayRecords;
   }
 
+  get activeRecord(): ReadonlyRecord | undefined {
+    return this.model.activeRecord;
+  }
+
   get comment(): string {
     return this.model.comment;
   }
@@ -44,6 +48,10 @@ export class ModelService {
   set favoriteProject(name: string | undefined) {
     this.model.favoriteProject = name;
     this.save();
+  }
+
+  get hoursPerDay(): number {
+    return this.model.hoursPerDay;
   }
 
   get hoursPerWeek(): number {
@@ -104,6 +112,10 @@ export class ModelService {
     this.save();
   }
 
+  canJoinDayRecordWithPrevious(year: number, month: number, day: number, index: number): boolean {
+    return this.model.canJoinDayRecordWithPrevious(year, month, day, index);
+  }
+
   canUseProjectAsFavorite(project: string): boolean {
     return this.model.canUseProjectAsFavorite(project);
   }
@@ -130,6 +142,10 @@ export class ModelService {
 
   getFavoriteTask(project: string): string | undefined {
     return this.model.getFavoriteTask(project);
+  }
+
+  getOverhours(): number {
+    return this.model.getOverhours();
   }
 
   getOverhoursOfMonth(year: number, month: number): number {
@@ -196,6 +212,11 @@ export class ModelService {
     return this.model.isTaskInUse(project, task);
   }
 
+  joinDayRecordWithPrevious(year: number, month: number, day: number, index: number) {
+    this.model.joinDayRecordWithPrevious(year, month, day, index);
+    this.save();
+  }
+
   removeDayRecord(year: number, month: number, day: number, index: number) {
     this.model.removeDayRecord(year, month, day, index);
     this.save();
@@ -206,8 +227,8 @@ export class ModelService {
     this.save();
   }
 
-  removeMonthRecords(year: number, month: number) {
-    this.model.removeMonthRecords(year, month);
+  removeMonthRecords(year: number, month: number, keepOvertime: boolean) {
+    this.model.removeMonthRecords(year, month, keepOvertime);
     this.save();
   }
 
@@ -256,6 +277,11 @@ export class ModelService {
     this.save();
   }
 
+  setOverhours(hours: number) {
+    this.model.setOverhours(hours);
+    this.save();
+  }
+  
   setProjectActive(project: string, active: boolean) {
     this.model.setProjectActive(project, active);
     this.save();
@@ -263,6 +289,11 @@ export class ModelService {
 
   setTaskActive(project: string, task: string, active: boolean) {
     this.model.setTaskActive(project, task, active);
+    this.save();
+  }
+
+  splitDayRecord(year: number, month: number, day: number, index: number) {
+    this.model.splitDayRecord(year, month, day, index);
     this.save();
   }
 
