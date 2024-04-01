@@ -26,7 +26,7 @@
         <div class="form-group">
             <label for="dayRecording.comment">Comment</label>
             <div class="input-group">
-                <input id="dayRecording.comment" type="text" formControlName="comment">
+                <input id="dayRecording.comment" type="text" formControlName="comment" autocomplete="off">
                 <button type="button" (click)="saveComment()" [disabled]="!canSaveComment" class="green">
                     <span class="fas fa-check"></span>
                 </button>

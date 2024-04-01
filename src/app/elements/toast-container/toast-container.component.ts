@@ -16,7 +16,7 @@ export class ToastContainerComponent {
 
   readonly toasts = signal<Toast[]>([]);
 
-  constructor(private readonly toastService: ToastService) {
+  constructor(toastService: ToastService) {
     toastService.onToast.pipe(takeUntilDestroyed()).subscribe({
       next: toast => this.onToast(toast)
     });

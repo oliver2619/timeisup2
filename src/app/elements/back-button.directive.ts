@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, inject, Input } from '@angular/core';
+import { Directive, HostBinding, HostListener, inject, Input } from '@angular/core';
 import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 
 @Directive({
@@ -10,6 +10,15 @@ export class BackButtonDirective {
   @Input('tiuBackButton')
   url: string = '';
   
+  @HostBinding('textContent')
+  readonly backText = 'Back'
+
+  @HostBinding('class.button')
+  readonly styleAsButton = true;
+
+  @HostBinding('type')
+  readonly buttonType = 'button'
+
   private readonly router: Router;
   private readonly activatedRoute: ActivatedRoute;
 
@@ -17,15 +26,9 @@ export class BackButtonDirective {
     return this.router.createUrlTree([this.url], { relativeTo: this.activatedRoute });
   }
 
-  constructor(element: ElementRef<HTMLElement>) { 
+  constructor() { 
     this.router = inject(Router);
     this.activatedRoute = inject(ActivatedRoute);
-    const button = element.nativeElement;
-    if(button instanceof HTMLButtonElement) {
-      button.type = 'button';
-    }
-    button.classList.add('button');
-    button.textContent = 'Back';
   }
 
   @HostListener('click')

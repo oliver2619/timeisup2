@@ -1,10 +1,13 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
+  HostBinding,
   HostListener,
   Input,
   OnChanges,
+  OnInit,
   Output,
   SimpleChanges
 } from '@angular/core';
@@ -21,7 +24,7 @@ import {timer} from "rxjs";
   styleUrl: './toast.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ToastComponent implements OnChanges {
+export class ToastComponent implements OnChanges, OnInit {
 
   @Input()
   toast: Toast | undefined;
@@ -29,22 +32,44 @@ export class ToastComponent implements OnChanges {
   @Output('finish')
   readonly onFinish = new EventEmitter<Toast>();
 
+  @HostBinding('class.visible')
+  visible = false;
+
   private readonly untilDestroyed = takeUntilDestroyed<number>();
 
+  get message(): string {
+    return this.toast?.message ?? '';
+  }
+
+  constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
+
   ngOnChanges(changes: SimpleChanges) {
-    if(this.toast != undefined) {
+    if(changes['toast'] != undefined && this.toast != undefined) {
       timer(this.toast.until).pipe(this.untilDestroyed).subscribe({
-        next: () => this.onFinish.emit(this.toast)
+        next: () => {
+          this.visible = false;
+          this.changeDetectorRef.markForCheck();
+        }
       });
     }
   }
 
-  @HostListener('click')
-  onClick() {
-    this.onFinish.emit(this.toast);
+  ngOnInit(){
+    window.setTimeout(()=>{
+      this.visible = true;
+      this.changeDetectorRef.markForCheck();
+    }, 1);
   }
 
-  get message(): string {
-    return this.toast?.message ?? '';
+  @HostListener('click')
+  onClick() {
+    this.visible = false;
+  }
+
+  @HostListener('transitionend')
+  onAnimationEnd() {
+    if(!this.visible) {
+      this.onFinish.emit(this.toast);
+    }
   }
 }

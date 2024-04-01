@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, HostBinding, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MessageBoxService, YesNoCancelResult } from '../message-box.service';
+import { MessageBoxService, YesNoCancelResult } from '../../message-box.service';
 import { Observable, Subject } from 'rxjs';
 
 @Component({
@@ -20,18 +20,13 @@ export class MessageBoxComponent implements OnDestroy {
   yesVisible = false;
   noVisible = false;
 
+  @HostBinding('class.visible')
+  visible = false;
+
   private booleanSubject: Subject<boolean> | undefined;
   private yesNoCancelSubject: Subject<YesNoCancelResult> | undefined;
 
-  private set visible(v: boolean) {
-    if (v) {
-      this.element.nativeElement.classList.add('visible');
-    } else {
-      this.element.nativeElement.classList.remove('visible');
-    }
-  }
-
-  constructor(private readonly messageBoxService: MessageBoxService, private readonly element: ElementRef<HTMLElement>) {
+  constructor(private readonly messageBoxService: MessageBoxService) {
     messageBoxService.setHandler({
       information: message => this.doInformation(message),
       question: message => this.doQuestion(message),

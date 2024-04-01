@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuComponent } from "../menu/menu.component";
-import { SelectProjectComponent } from "../select-project/select-project.component";
-import { SelectTaskComponent } from "../select-task/select-task.component";
+import { SelectProjectComponent } from "../elements/select-project/select-project.component";
+import { SelectTaskComponent } from "../elements/select-task/select-task.component";
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ModelService } from '../model.service';

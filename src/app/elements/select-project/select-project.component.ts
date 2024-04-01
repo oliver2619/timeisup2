@@ -6,7 +6,7 @@ import {
   SimpleChanges
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {ModelService} from '../model.service';
+import {ModelService} from '../../model.service';
 import {FormControl} from '@angular/forms';
 
 @Component({
