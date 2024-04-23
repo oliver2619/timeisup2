@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {Toast, ToastService} from "../../toast.service";
+import {Toast, ToastService} from "../../service/toast.service";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {ToastComponent} from "../toast/toast.component";
 

@@ -1,5 +1,5 @@
 import { Directive, ElementRef, HostListener, Input } from '@angular/core';
-import { MessageBoxService } from '../message-box.service';
+import { MessageBoxService } from '../service/message-box.service';
 
 @Directive({
   selector: '[tiuButtonError]',

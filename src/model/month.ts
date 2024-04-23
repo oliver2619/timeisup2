@@ -1,11 +1,11 @@
 import { AggregatedRecordings } from "./aggregated-recordings";
-import { ActiveJson } from "./model-json";
 import { MonthJson } from "./month-json";
 import { Project } from "./project";
 import { ReadonlyRecord } from "./readonly-record";
 import { Task } from "./task";
 import { Workingday } from "./workingday";
 import { DayOfWeek } from "./dayofweek";
+import { DateJson } from "./date-json";
 
 export class Month {
 
@@ -87,12 +87,12 @@ export class Month {
     return this.getDay(day)?.readonlyRecords ?? [];
   }
 
-  getOverhoursOfMonth(daysOfWeek: Set<DayOfWeek>, hoursPerDay: number): number {
+  getOverhoursOfMonth(daysOfWeek: DayOfWeek[], hoursPerDay: number): number {
     const regularDays = this._days.filter(day => {
       const date = new Date();
       date.setTime(0);
       date.setFullYear(this.year, this.month, day.day);
-      return daysOfWeek.has(date.getDay());
+      return daysOfWeek.indexOf(date.getDay()) >= 0;
     });
     const worked = this._days.map(day => day.workedHours).reduce((prev, cur) => cur + prev, 0);
     const holidays = regularDays.map(day => day.holiday).reduce((prev, cur) => cur + prev, 0) * hoursPerDay;
@@ -100,7 +100,7 @@ export class Month {
     return worked + holidays - mustHaveWorked;
   }
 
-  getUnrecordedDays(daysOfWeek: Set<DayOfWeek>, includeFuture: boolean): number[] {
+  getUnrecordedDays(daysOfWeek: DayOfWeek[], includeFuture: boolean): number[] {
     const date = new Date();
     const currentDay = date.getDate();
     date.setTime(0);
@@ -108,7 +108,7 @@ export class Month {
     const ret: number[] = [];
     const current = this.isCurrent;
     while (date.getMonth() == this.month && (!current || date.getDate() <= currentDay || includeFuture)) {
-      if (!this.hasRecordings(date.getDate()) && daysOfWeek.has(date.getDay())) {
+      if (!this.hasRecordings(date.getDate()) && daysOfWeek.indexOf(date.getDay()) >= 0) {
         ret.push(date.getDate());
       }
       date.setDate(date.getDate() + 1);
@@ -140,7 +140,7 @@ export class Month {
     this.getDayOrThrowError(day).joinDayRecordWithPrevious(index);
   }
 
-  loadActiveDay(json: ActiveJson) {
+  loadActiveDay(json: DateJson) {
     this._activeDay = this.getDay(json.day);
   }
 
@@ -183,7 +183,7 @@ export class Month {
     };
   }
 
-  saveActiveDay(): ActiveJson | undefined {
+  saveActiveDay(): DateJson | undefined {
     return this._activeDay == undefined ? undefined : {
       day: this._activeDay.day,
       month: this.month,

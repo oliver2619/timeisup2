@@ -2,14 +2,17 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnChanges,
-  OnDestroy,
-  SimpleChanges
+  OnInit,
+  signal,
+  WritableSignal
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ModelService } from '../../model.service';
 import { FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { combineLatest, concat, map, merge, Observable, of } from 'rxjs';
+import { selectActiveTasksByProject, selectProjectSettings, TasksByProject } from '../../selector/project-settings-selectors';
+import { Store } from '@ngrx/store';
+import { TaskState } from '../../state/task-state';
+import { ProjectSettingsState } from '../../state/project-settings-state';
 
 @Component({
   selector: 'tiu-select-task',
@@ -17,9 +20,9 @@ import { Subscription } from 'rxjs';
   imports: [CommonModule],
   templateUrl: './select-task.component.html',
   styleUrl: './select-task.component.scss',
-  changeDetection: ChangeDetectionStrategy.Default
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SelectTaskComponent implements OnChanges, OnDestroy {
+export class SelectTaskComponent implements OnInit {
 
   @Input('project-control')
   projectControl: FormControl<string> | undefined;
@@ -27,59 +30,47 @@ export class SelectTaskComponent implements OnChanges, OnDestroy {
   @Input('task-control')
   taskControl: FormControl<string> | undefined;
 
-  favorite: string = '';
+  tasks$: Observable<ReadonlyArray<TaskState>> = of([]);
+  readonly isEnabled: WritableSignal<boolean> = signal(false);
 
-  tasks: string[] = [];
-
-  private subscription: Subscription | undefined;
-
-  get isEmpty(): boolean {
-    return this.tasks.length === 0;
-  }
+  private readonly tasksByProject$: Observable<TasksByProject>;
+  private readonly projectSettings$: Observable<ProjectSettingsState>;
+  private favorite: string | undefined;
 
   get value(): string {
     return this.taskControl == undefined ? '' : this.taskControl.value;
   }
 
-  constructor(private readonly modelService: ModelService) { }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['projectControl'] != undefined) {
-      if (this.subscription != undefined) {
-        this.subscription.unsubscribe();
-        this.subscription = undefined;
-      }
-      if (this.projectControl != undefined) {
-        this.subscription = this.projectControl.valueChanges.subscribe({
-          next: value => this.updateTasks(value, true)
-        });
-        this.updateTasks(this.projectControl.value, false);
-      } else {
-        this.tasks = [];
-        if (this.taskControl != undefined) {
-          this.taskControl.setValue('');
-        }
-      }
-    }
+  constructor(store: Store) {
+    this.tasksByProject$ = store.select(selectActiveTasksByProject);
+    this.projectSettings$ = store.select(selectProjectSettings);
   }
 
-  ngOnDestroy(): void {
-    if (this.subscription != undefined) {
-      this.subscription.unsubscribe();
+  ngOnInit() {
+    if (this.projectControl == undefined || this.taskControl == undefined) {
+      throw new RangeError('project-control and task-control must be set');
+    }
+    const project$ = concat(of(this.projectControl.value), this.projectControl.valueChanges);
+    this.tasks$ = combineLatest([this.tasksByProject$, project$]).pipe(
+      map(([tasksByProject, project]) => tasksByProject[project])
+    );
+    combineLatest([this.projectSettings$, project$]).pipe(
+      map(([settings, project]) => settings.projects[project].favoriteTask)
+    ).subscribe({
+      next: f => {
+        if (f !== undefined) {
+          this.favorite = f;
+          this.taskControl!!.setValue(f);
+        }
+      }
+    });
+    this.tasks$.subscribe({ next: p => this.isEnabled.set(p.length > 1) });
+    if (this.favorite != undefined) {
+      this.taskControl.setValue(this.favorite);
     }
   }
 
   onChange(value: string) {
-    if (this.taskControl != undefined) {
-      this.taskControl.setValue(value);
-    }
-  }
-
-  private updateTasks(project: string, setFavorite: boolean) {
-    this.tasks = this.modelService.getUsableTasksForProject(project).sort((t1, t2) => t1.localeCompare(t2));
-    this.favorite = this.modelService.getFavoriteTask(project) ?? '';
-    if (this.taskControl != undefined && setFavorite) {
-      this.taskControl.setValue(this.favorite);
-    }
+    this.taskControl!!.setValue(value);
   }
 }

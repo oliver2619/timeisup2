@@ -12,7 +12,7 @@ import {
   SimpleChanges
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {Toast} from "../../toast.service";
+import {Toast} from "../../service/toast.service";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {timer} from "rxjs";
 

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MenuComponent } from '../../menu/menu.component';
+import { MenuComponent } from '../../elements/menu/menu.component';
 import { BackButtonDirective } from '../../elements/back-button.directive';
 import { HelpButtonDirective } from '../../elements/help-button.directive';
 

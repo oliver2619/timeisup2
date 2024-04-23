@@ -21,10 +21,10 @@ export class TimeEditComponent {
   forwards = false;
 
   @Input('hour')
-  hourControl: FormControl<number> | undefined;
+  hourControl: FormControl<number | null> | undefined;
 
   @Input('minute')
-  minuteControl: FormControl<number> | undefined;
+  minuteControl: FormControl<number | null> | undefined;
 
   @Output('align')
   readonly alignEmitter = new EventEmitter<void>();
@@ -43,24 +43,24 @@ export class TimeEditComponent {
 
   onChangeHour(hour: string) {
     if (this.hourControl != undefined) {
-      this.hourControl.setValue(Number.parseInt(hour));
+      this.hourControl.setValue(hour === '' ? null : Number.parseInt(hour));
     }
   }
 
   onChangeHourBy(hour: number) {
-    if (this.hourControl != undefined) {
+    if (this.hourControl != undefined && this.hourControl.value != null) {
       this.hourControl.setValue((this.hourControl.value + hour + 24) % 24);
     }
   }
 
   onChangeMinute(minute: string) {
     if (this.minuteControl != undefined) {
-      this.minuteControl.setValue(Number.parseInt(minute));
+      this.minuteControl.setValue(minute === '' ? null : Number.parseInt(minute));
     }
   }
 
   onChangeMinuteBy(minute: number) {
-    if (this.minuteControl != undefined) {
+    if (this.minuteControl != undefined && this.minuteControl.value != null) {
       const newMinute = this.minuteControl.value + minute;
       if (newMinute < 0) {
         this.onChangeHourBy(-1);

@@ -1,0 +1,31 @@
+<tiu-menu>
+    <button type="button" (click)="removeAll()" [disabled]="!canRemoveAll" class="menu-button red"><span class="fas fa-trash-can"></span></button>
+    <button tiuHelpButton="/help/month"></button>
+</tiu-menu>
+<div>
+    <form [formGroup]="formGroup">
+        <div class="input-group">
+            <select formControlName="month">
+                @for(year of years$ | async; track year.year){
+                    <optgroup label="{{year.year}}">
+                        @for(month of year.months; track month) {
+                            <option value="{{year.year}}-{{month}}">{{MONTHS[month]}}</option>
+                        }
+                    </optgroup>
+                }
+            </select>
+            <span>{{selectedYear()}}</span>
+        </div>
+        @if(hasSelection()) {
+            <div class="form-group">
+                <label for="monthOverview.overtime">Overtime</label>
+                <input id="monthOverview.overtime" type="text" readonly="readonly" value="{{overhours() | tiuDuration}} / {{overhours() | tiuHours}}" class="number">
+            </div>
+        }
+    </form>
+    @if(hasSelection()) {
+        <tiu-month-overview-entries [month]="selectedMonth()" [year]="selectedYear()"></tiu-month-overview-entries>
+    } @else {
+        <p>No months found, that contain any accounted working days.</p>
+    }
+</div>

@@ -1,9 +1,0 @@
-@import "../../style/shared";
-
-:host {
-    @include spaced-content();
-}
-
-.invalid {
-    color: $color-error;
-}

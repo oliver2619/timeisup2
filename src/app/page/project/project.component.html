@@ -1,0 +1,21 @@
+<tiu-menu>
+  <button tiuHelpButton="/help/tasks"></button>
+</tiu-menu>
+<div>
+  <h1>{{projectName$ | async}}</h1>
+  <form [formGroup]="formGroup">
+    <div class="form-group">
+      <label for="project.name">Name</label>
+      <input id="project.name" type="text" formControlName="name" autocomplete="off">
+    </div>
+    <div class="form-group">
+      <label><input type="checkbox" formControlName="active" class="yellow">Active</label>
+    </div>
+  </form>
+  <div class="button-list">
+    <button type="button" (click)="save()" [disabled]="!canSave" class="button green">Save</button>
+    <button type="button" (click)="reset()" [disabled]="!canReset" class="button red">Reset</button>
+    <button tiuBackButton=".."></button>
+  </div>
+  <tiu-tasks></tiu-tasks>
+</div>

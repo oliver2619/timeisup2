@@ -1,17 +1,17 @@
 <div class="msgbox-frame">
-    <h1>{{title}}</h1>
-    <p>{{question}}</p>
+    <h1>{{title()}}</h1>
+    <p>{{question()}}</p>
     <div class="button-list center">
-        @if(okVisible) {
+        @if(okVisible()) {
             <button type="button" (click)="yes()" class="button green">OK</button>
         }
-        @if(yesVisible) {
+        @if(yesVisible()) {
             <button type="button" (click)="yes()" class="button green">Yes</button>
         }
-        @if(noVisible) {
+        @if(noVisible()) {
             <button type="button" (click)="no()" class="button red">No</button>
         }
-        @if(cancelVisible) {
+        @if(cancelVisible()) {
             <button type="button" (click)="cancel()" class="button">Cancel</button>
         }
     </div>

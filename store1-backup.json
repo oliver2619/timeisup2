@@ -1,0 +1,39 @@
+{
+  "months": [
+    {
+      "month": 3,
+      "year": 2024,
+      "days": [
+        {
+          "day": 1,
+          "records": [
+            {
+              "start": "2024-04-01T09:40:00.000Z",
+              "end": "2024-04-01T15:40:00.000Z",
+              "project": "Hello",
+              "task": "One"
+            }
+          ],
+          "holiday": 0
+        },
+        { "day": 2, "records": [], "holiday": 1 }
+      ]
+    }
+  ],
+  "overtime": 0.7200000000000006,
+  "version": 1,
+  "settings": {
+    "hoursPerWeek": 42,
+    "maxHoursPerDay": 12,
+    "pensum": 80,
+    "daysOfWeek": [2, 3, 4, 5, 1]
+  },
+  "projects": {
+    "Hello": {
+      "tasks": { "One": { "active": true } },
+      "active": true,
+      "favoriteTask": "One"
+    }
+  },
+  "favoriteProject": "Hello"
+}

@@ -1,0 +1,11 @@
+<tiu-menu></tiu-menu>
+<div>
+    <h1>Overview</h1>
+    @if(currentlyWorking()) {
+        <p>You are currently working on task <em>{{currentTask()}}</em> of project <em>{{currentProject()}}</em>.</p>
+    }
+    <p>You have got <em>{{overhours() | tiuHours}}</em> overtime in total (<a routerLink="/settings">settings</a>).</p>
+    <p><a routerLink="/day">Go to recording</a></p>
+    <p><a routerLink="/month">View the month overview</a></p>
+    <p><a routerLink="/projects">Configure a project</a></p>
+</div>

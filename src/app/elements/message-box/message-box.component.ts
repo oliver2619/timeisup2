@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, ElementRef, HostBinding, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MessageBoxService, YesNoCancelResult } from '../../message-box.service';
+import { MessageBoxService, YesNoCancelResult } from '../../service/message-box.service';
 import { Observable, Subject } from 'rxjs';
 
 @Component({
@@ -9,16 +9,16 @@ import { Observable, Subject } from 'rxjs';
   imports: [CommonModule],
   templateUrl: './message-box.component.html',
   styleUrl: './message-box.component.scss',
-  changeDetection: ChangeDetectionStrategy.Default
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MessageBoxComponent implements OnDestroy {
 
-  title = '';
-  question = '';
-  cancelVisible = false;
-  okVisible = false;
-  yesVisible = false;
-  noVisible = false;
+  readonly title = signal('');
+  readonly question = signal('');
+  readonly cancelVisible = signal(false);
+  readonly okVisible = signal(false);
+  readonly yesVisible = signal(false);
+  readonly noVisible = signal(false);
 
   @HostBinding('class.visible')
   visible = false;
@@ -67,34 +67,34 @@ export class MessageBoxComponent implements OnDestroy {
   }
 
   private doInformation(message: string) {
-    this.title = 'Information';
-    this.question = message;
-    this.okVisible = true;
-    this.yesVisible = false;
-    this.cancelVisible = false;
-    this.noVisible = false;
-    this.visible = true;
+    this.title.set('Information');
+    this.question.set(message);
+    this.okVisible.set(true);
+    this.yesVisible.set(false);
+    this.cancelVisible.set(false);
+    this.noVisible.set(false);
+    this.visible =true;
   }
 
   private doQuestion(message: string): Observable<boolean> {
-    this.title = 'Question';
-    this.question = message;
-    this.okVisible = true;
-    this.yesVisible = false;
-    this.cancelVisible = true;
-    this.noVisible = false;
+    this.title.set('Question');
+    this.question.set(message);
+    this.okVisible.set(true);
+    this.yesVisible.set(false);
+    this.cancelVisible.set(true);
+    this.noVisible.set(false);
     this.visible = true;
     this.booleanSubject = new Subject();
     return this.booleanSubject;
   }
 
   private doQuestionYesNoCancel(message: string): Observable<YesNoCancelResult> {
-    this.title = 'Question';
-    this.question = message;
-    this.okVisible = false;
-    this.yesVisible = true;
-    this.cancelVisible = true;
-    this.noVisible = true;
+    this.title.set('Question');
+    this.question.set(message);
+    this.okVisible.set(false);
+    this.yesVisible.set(true);
+    this.cancelVisible.set(true);
+    this.noVisible.set(true);
     this.visible = true;
     this.yesNoCancelSubject = new Subject();
     return this.yesNoCancelSubject;

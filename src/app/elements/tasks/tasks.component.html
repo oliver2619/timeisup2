@@ -1,0 +1,23 @@
+<h2>Tasks</h2>
+<form [formGroup]="formGroup">
+  <div class="input-group">
+    <input type="text" formControlName="name">
+    <button type="button" (click)="addTask()" [disabled]="!canAddTask" class="yellow"><span class="fas fa-plus"></span></button>
+  </div>
+</form>
+<table>
+  @for(task of tasks$ | async; track task.name) {
+    <tr>
+      <td class="single-line">
+        <button type="button" (click)="editTask(task.name)" class="button yellow multiline">{{task.name}}</button>
+      </td>
+      <td class="single-line right">
+        <div class="button-list inline">
+          <tiu-favorite-button (change-favorite)="setFavorite(task.name)" [favorite]="task.favorite"></tiu-favorite-button>
+          <tiu-active-button (change-active)="setActive(task.name, $event)" [active]="task.active"></tiu-active-button>
+          <button type="button" (click)="removeTask(task.name)" class="button red"><span class="fas fa-trash-can"></span></button>
+        </div>
+      </td>
+    </tr>
+  }
+</table>

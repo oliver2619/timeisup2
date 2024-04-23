@@ -1,0 +1,48 @@
+<table>
+    <thead>
+        <tr>
+            <th>Day</th>
+            <th>Worked</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for(item of items$ | async; track item.day) {
+            <tr [ngClass]="{green: item.accounted && item.complete, blink: !item.complete, yellow: !item.accounted && !item.future}">
+                <td class="single-line">
+                  @if(item.accounted) {
+                    <button type="button" (click)="view(item.day)" class="button blue">{{item.date | date:'EEE d'}}</button>
+                  } @else {
+                    {{item.date | date:'EEE d'}}
+                  }
+                </td>
+                @if(item.accounted) {
+                  <td class="single-line">
+                    @if(item.complete) {
+                      @if(item.workedHours > 0) {
+                        {{item.workedHours | tiuDuration}} / {{item.workedHours | tiuHours}}
+                      } @else if(item.absence) {
+                          Absence
+                      }
+                    } @else {
+                      In progress...
+                    }
+                  </td>
+                  <td class="single-line right">
+                    <div class="button-list inline">
+                      <button type="button" (click)="edit(item.day)" class="button yellow"><span class="fas fa-pen-to-square"></span></button>
+                      <button type="button" (click)="remove(item.day)" class="button red"><span class="fas fa-trash-can"></span></button>
+                    </div>
+                  </td>
+                } @else {
+                  <td colspan="2" class="single-line right">
+                    <div class="button-list inline">
+                      <button type="button" (click)="setAbsence(item.day)" class="button yellow">Absence</button>
+                      <button type="button" disabled class="button yellow"><span class="fas fa-plus"></span></button>
+                    </div>
+                  </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,20 +1,20 @@
 import { Routes } from '@angular/router';
-import { SplashComponent } from "./splash/splash.component";
-import { OverviewComponent } from "./overview/overview.component";
-import { DayRecordingComponent } from "./day-recording/day-recording.component";
-import { MonthOverviewComponent } from "./month-overview/month-overview.component";
-import { SettingsComponent } from "./settings/settings.component";
-import { AboutComponent } from "./about/about.component";
-import { ProjectsComponent } from "./projects/projects.component";
-import { ProjectComponent } from "./project/project.component";
-import { projectGuard } from "./project.guard";
-import { TaskComponent } from "./task/task.component";
-import { taskGuard } from "./task.guard";
-import { MonthOverviewEntryComponent } from './month-overview-entry/month-overview-entry.component';
-import { DayEntryComponent } from './day-entry/day-entry.component';
-import { monthOverviewEntryGuard } from './month-overview-entry.guard';
-import { activeDayGuard } from './active-day.guard';
-import { MonthEditEntryComponent } from './month-edit-entry/month-edit-entry.component';
+import { SplashComponent } from "./page/splash/splash.component";
+import { OverviewComponent } from "./page/overview/overview.component";
+import { DayRecordingComponent } from "./page/day-recording/day-recording.component";
+import { MonthOverviewComponent } from "./page/month-overview/month-overview.component";
+import { SettingsComponent } from "./page/settings/settings.component";
+import { AboutComponent } from "./page/about/about.component";
+import { ProjectsComponent } from "./page/projects/projects.component";
+import { ProjectComponent } from "./page/project/project.component";
+import { projectGuard } from "./guard/project.guard";
+import { TaskComponent } from "./page/task/task.component";
+import { taskGuard } from "./guard/task.guard";
+import { DayOverviewComponent } from './page/day-overview/day-overview.component';
+import { RecordEditComponent } from './page/record-edit/record-edit.component';
+import { dayOverviewGuard } from './guard/day-overview.guard';
+import { recordGuard } from './guard/record.guard';
+import { DayEditComponent } from './page/day-edit/day-edit.component';
 import { ProjectsHelpComponent } from './help/projects-help/projects-help.component';
 import { TasksHelpComponent } from './help/tasks-help/tasks-help.component';
 import { SettingsHelpComponent } from './help/settings-help/settings-help.component';
@@ -38,8 +38,8 @@ export const routes: Routes = [{
 }, {
   path: 'day/:year/:month/:day/:index',
   pathMatch: 'full',
-  canActivate: [activeDayGuard],
-  component: DayEntryComponent
+  canActivate: [recordGuard],
+  component: RecordEditComponent
 }, {
   path: 'help/day',
   pathMatch: 'full',
@@ -75,18 +75,18 @@ export const routes: Routes = [{
 }, {
   path: 'month/:year/:month/:day/edit',
   pathMatch: 'full',
-  canActivate: [monthOverviewEntryGuard],
-  component: MonthEditEntryComponent
+  canActivate: [dayOverviewGuard],
+  component: DayEditComponent
 }, {
   path: 'month/:year/:month/:day/edit/:index',
   pathMatch: 'full',
-  canActivate: [activeDayGuard],
-  component: DayEntryComponent
+  canActivate: [recordGuard],
+  component: RecordEditComponent
 }, {
   path: 'month/:year/:month/:day/view',
   pathMatch: 'full',
-  canActivate: [monthOverviewEntryGuard],
-  component: MonthOverviewEntryComponent
+  canActivate: [dayOverviewGuard],
+  component: DayOverviewComponent
 }, {
   path: 'overview',
   pathMatch: 'full',

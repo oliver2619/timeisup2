@@ -3,11 +3,16 @@ import {
   Component,
   Input,
   OnChanges,
+  Signal,
   SimpleChanges
 } from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {ModelService} from '../../model.service';
-import {FormControl} from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormControl } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { selectActiveProjects, selectProjectSettings } from '../../selector/project-settings-selectors';
+import { map, Observable } from 'rxjs';
+import { ProjectState } from '../../state/project-state';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tiu-select-project',
@@ -22,24 +27,24 @@ export class SelectProjectComponent implements OnChanges {
   @Input('project-control')
   control: FormControl<string> | undefined;
 
-  readonly projects: string[];
-  readonly favorite: string;
-
-  get isEmpty(): boolean {
-    return this.projects.length === 0;
-  }
+  readonly projects$: Observable<ProjectState[]>;
+  readonly isEnabled: Signal<boolean>;
+  private favorite: string | undefined;
 
   get value(): string {
     return this.control == undefined ? '' : this.control.value;
   }
 
-  constructor(modelService: ModelService) {
-    this.projects = modelService.getUsableProjects().sort((p1, p2) => p1.localeCompare(p2));
-    this.favorite = modelService.favoriteProject ?? '';
+  constructor(store: Store) {
+    this.projects$ = store.select(selectActiveProjects);
+    store.select(selectProjectSettings).pipe(map(it => it.favoriteProject)).subscribe({ 
+      next: p => this.favorite = p 
+    });
+    this.isEnabled = toSignal(this.projects$.pipe(map(it => it.length > 1))) as Signal<boolean>;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['control'] != undefined && this.control != undefined && this.control.value === '') {
+    if (changes['control'] != undefined && this.control != undefined && this.control.value === '' && this.favorite != undefined) {
       this.control.setValue(this.favorite);
     }
   }
