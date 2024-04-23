@@ -12,6 +12,10 @@ export class AccountedMonth {
         return this._activeDay;
     }
 
+    get isActive(): boolean {
+        return Array.from(this.days.values()).some(d => d.isActive);
+    }
+
     get isEmpty(): boolean {
         return this.days.size === 0;
     }
@@ -31,8 +35,9 @@ export class AccountedMonth {
         const d = this._getDay(day);
         d.deleteRecord(recordIndex);
         if (d.isEmpty) {
-            this.deleteDay(day);
+            this.days.delete(day);
         }
+        this.ensureActiveDayExists();
     }
 
     getDayStates(currentTime: Date, settings: Settings): DayState[] {
@@ -104,7 +109,7 @@ export class AccountedMonth {
         const d = this.getOrCreateDay(day);
         d.setAbsence(absence);
         if (d.isEmpty) {
-            this.deleteDay(day);
+            this.days.delete(day);
         }
     }
 
@@ -112,7 +117,7 @@ export class AccountedMonth {
         const d = this.getOrCreateDay(day);
         d.setComment(comment);
         if (d.isEmpty) {
-            this.deleteDay(day);
+            this.days.delete(day);
         }
     }
 
@@ -134,8 +139,11 @@ export class AccountedMonth {
     }
 
     private ensureActiveDayExists() {
-        if (this._activeDay != undefined && !this.days.has(this._activeDay.day)) {
-            this._activeDay = undefined;
+        if (this._activeDay != undefined) {
+            const day = this.days.get(this._activeDay.day);
+            if (day == undefined || !day.isActive) {
+                this._activeDay = undefined;
+            }
         }
     }
 

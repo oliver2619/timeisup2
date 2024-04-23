@@ -10,7 +10,6 @@ import { Settings } from '../model/settings';
 import { Task } from '../model/task';
 import { selectCurrentTask } from '../selector/accounting-selectors';
 import { selectSettings } from '../selector/settings-selectors';
-import { DayState } from '../state/day-state';
 
 const accountingJsonLocalStoreKey = `${modelJsonStorePrefix}accounting`;
 
@@ -38,7 +37,10 @@ export class AccountingService {
       }
     });
     store.select(selectSettings).subscribe({
-      next: s => { this.settings = new Settings(s.hoursPerWeek, s.pensumPercentage / 100, new Set(s.workingDays))}
+      next: s => {
+        this.settings = new Settings(s.hoursPerWeek, s.pensumPercentage / 100, new Set(s.workingDays));
+        this.store.dispatch(accountingActions.load(this.model.getState(this.settings)));
+      }
     });
   }
 

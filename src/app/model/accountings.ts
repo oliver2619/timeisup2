@@ -57,8 +57,9 @@ export class Accountings {
         const y = this._getYear(year);
         y.deleteDay(month, day);
         if (y.isEmpty) {
-            this.deleteYear(year);
+            this.years.delete(year);
         }
+        this.ensureActiveYearExists();
     }
 
     deleteMonth(year: number, month: number, keepOvertime: boolean, settings: Settings) {
@@ -68,16 +69,18 @@ export class Accountings {
         }
         y.deleteMonth(month);
         if (y.isEmpty) {
-            this.deleteYear(year);
+            this.years.delete(year);
         }
+        this.ensureActiveYearExists();
     }
 
     deleteRecord(year: number, month: number, day: number, recordIndex: number) {
         const y = this._getYear(year);
         y.deleteRecord(month, day, recordIndex);
         if (y.isEmpty) {
-            this.deleteYear(year);
+            this.years.delete(year);
         }
+        this.ensureActiveYearExists();
     }
 
     getState(settings: Settings): AccountingState {
@@ -133,7 +136,7 @@ export class Accountings {
         const y = this.getOrCreateYear(year);
         y.setAbsence(month, day, absence);
         if (y.isEmpty) {
-            this.deleteYear(year);
+            this.years.delete(year);
         }
     }
 
@@ -145,7 +148,7 @@ export class Accountings {
         const y = this.getOrCreateYear(this.currentTime.getFullYear());
         y.setCommentToDay(month, day, comment);
         if (y.isEmpty) {
-            this.deleteYear(year);
+            this.years.delete(year);
         }
     }
 
@@ -173,14 +176,12 @@ export class Accountings {
         this.activeYear = undefined;
     }
 
-    private deleteYear(year: number) {
-        this.years.delete(year);
-        this.ensureActiveYearExists();
-    }
-
     private ensureActiveYearExists() {
-        if (this.activeYear != undefined && !this.years.has(this.activeYear.year)) {
-            this.activeYear = undefined;
+        if (this.activeYear != undefined) {
+            const year = this.years.get(this.activeYear.year);
+            if (year == undefined || !year.isActive) {
+                this.activeYear = undefined;
+            }
         }
     }
 

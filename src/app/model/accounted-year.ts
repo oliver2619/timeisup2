@@ -10,6 +10,10 @@ export class AccountedYear {
         return this._activeMonth;
     }
 
+    get isActive(): boolean {
+        return Array.from(this.months.values()).some(m => m.isActive);
+    }
+
     get isEmpty(): boolean {
         return this.months.size === 0;
     }
@@ -24,8 +28,9 @@ export class AccountedYear {
         const m = this._getMonth(month);
         m.deleteDay(day);
         if (m.isEmpty) {
-            this.deleteMonth(month);
+            this.months.delete(month);
         }
+        this.ensureActiveMonthExists();
     }
 
     deleteMonth(month: number) {
@@ -37,8 +42,9 @@ export class AccountedYear {
         const m = this._getMonth(month);
         m.deleteRecord(day, recordIndex);
         if (m.isEmpty) {
-            this.deleteMonth(month);
+            this.months.delete(month);
         }
+        this.ensureActiveMonthExists();
     }
 
     getAllMonthOverhours(currentTime: Date, settings: Settings): number {
@@ -93,7 +99,7 @@ export class AccountedYear {
         const m = this.getOrCreateMonth(month);
         m.setAbsence(day, absence);
         if (m.isEmpty) {
-            this.deleteMonth(month);
+            this.months.delete(month);
         }
     }
 
@@ -101,7 +107,7 @@ export class AccountedYear {
         const m = this.getOrCreateMonth(month);
         m.setCommentToDay(day, comment);
         if (m.isEmpty) {
-            this.deleteMonth(month);
+            this.months.delete(month);
         }
     }
 
@@ -123,8 +129,11 @@ export class AccountedYear {
     }
 
     private ensureActiveMonthExists() {
-        if (this._activeMonth != undefined && !this.months.has(this._activeMonth.month)) {
-            this._activeMonth = undefined;
+        if (this._activeMonth != undefined) {
+            const m = this.months.get(this._activeMonth.month);
+            if (m == undefined || !m.isActive) {
+                this._activeMonth = undefined;
+            }
         }
     }
 

@@ -2,9 +2,9 @@
 
 ## Errors
 - Record edit does not show correct task initially
+- remove last record does not update view
 
 ## Bugs
-- delete record does not update view
 - routes month/y/m/d/edit, month/y/m/d/view, day/y/m/d/r are not stable deeplinks related guards do not work properly
 
 ## TODO
