@@ -1,7 +1,6 @@
 # Timeisup
 
 ## Errors
-- Record edit does not show correct task initially
 - remove last record does not update view
 
 ## Bugs

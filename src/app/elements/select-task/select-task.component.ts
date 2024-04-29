@@ -1,14 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-  signal,
-  WritableSignal
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, signal, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl } from '@angular/forms';
-import { combineLatest, concat, map, merge, Observable, of } from 'rxjs';
+import { combineLatest, concat, map, Observable, of } from 'rxjs';
 import { selectActiveTasksByProject, selectProjectSettings, TasksByProject } from '../../selector/project-settings-selectors';
 import { Store } from '@ngrx/store';
 import { TaskState } from '../../state/task-state';
@@ -30,16 +23,13 @@ export class SelectTaskComponent implements OnInit {
   @Input('task-control')
   taskControl: FormControl<string> | undefined;
 
-  tasks$: Observable<ReadonlyArray<TaskState>> = of([]);
+  readonly value = signal('');
   readonly isEnabled: WritableSignal<boolean> = signal(false);
+
+  tasks$: Observable<ReadonlyArray<TaskState>> = of([]);
 
   private readonly tasksByProject$: Observable<TasksByProject>;
   private readonly projectSettings$: Observable<ProjectSettingsState>;
-  private favorite: string | undefined;
-
-  get value(): string {
-    return this.taskControl == undefined ? '' : this.taskControl.value;
-  }
 
   constructor(store: Store) {
     this.tasksByProject$ = store.select(selectActiveTasksByProject);
@@ -58,16 +48,19 @@ export class SelectTaskComponent implements OnInit {
       map(([settings, project]) => settings.projects[project].favoriteTask)
     ).subscribe({
       next: f => {
-        if (f !== undefined) {
-          this.favorite = f;
-          this.taskControl!!.setValue(f);
+        if (f != undefined) {
+          if (this.taskControl!!.value === '' || this.taskControl!!.value == null) {
+            this.taskControl!!.setValue(f);
+          }
         }
       }
     });
     this.tasks$.subscribe({ next: p => this.isEnabled.set(p.length > 1) });
-    if (this.favorite != undefined) {
-      this.taskControl.setValue(this.favorite);
-    }
+    concat(of(this.taskControl.value), this.taskControl.valueChanges).subscribe({
+      next: v => {
+        this.value.set(v);
+      }
+    });
   }
 
   onChange(value: string) {

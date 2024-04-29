@@ -1,5 +1,5 @@
 <select #select [disabled]="!isEnabled()" (change)="onChange(select.value)">
     @for(task of tasks$ | async; track task.name) {
-        <option [value]="task.name" [selected]="task.name == value" [ngClass]="{favorite: task.favorite}">{{task.name}}</option>
+        <option [value]="task.name" [selected]="task.name == value()" [ngClass]="{favorite: task.favorite}">{{task.name}}</option>
     }
 </select>
