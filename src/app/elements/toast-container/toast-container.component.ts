@@ -5,12 +5,11 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {ToastComponent} from "../toast/toast.component";
 
 @Component({
-  selector: 'tiu-toast-container',
-  standalone: true,
-  imports: [CommonModule, ToastComponent],
-  templateUrl: './toast-container.component.html',
-  styleUrl: './toast-container.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-toast-container',
+    imports: [CommonModule, ToastComponent],
+    templateUrl: './toast-container.component.html',
+    styleUrl: './toast-container.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToastContainerComponent {
 

@@ -6,12 +6,11 @@ import { MenuComponent } from '../../elements/menu/menu.component';
 import { RecordsHelpComponent } from '../records-help/records-help.component';
 
 @Component({
-  selector: 'tiu-day-edit-help',
-  standalone: true,
-  imports: [CommonModule, MenuComponent, HelpButtonDirective, BackButtonDirective, RecordsHelpComponent],
-  templateUrl: './day-edit-help.component.html',
-  styleUrl: './day-edit-help.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-day-edit-help',
+    imports: [CommonModule, MenuComponent, HelpButtonDirective, BackButtonDirective, RecordsHelpComponent],
+    templateUrl: './day-edit-help.component.html',
+    styleUrl: './day-edit-help.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DayEditHelpComponent {
 

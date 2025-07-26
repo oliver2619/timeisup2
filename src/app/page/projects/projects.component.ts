@@ -19,12 +19,11 @@ interface ProjectsFormValue {
 }
 
 @Component({
-  selector: 'tiu-projects',
-  standalone: true,
-  imports: [CommonModule, MenuComponent, ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent, ButtonErrorDirective, HelpButtonDirective],
-  templateUrl: './projects.component.html',
-  styleUrl: './projects.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-projects',
+    imports: [CommonModule, MenuComponent, ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent, ButtonErrorDirective, HelpButtonDirective],
+    templateUrl: './projects.component.html',
+    styleUrl: './projects.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectsComponent {
 

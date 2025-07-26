@@ -7,12 +7,11 @@ import { Store } from '@ngrx/store';
 import { selectCurrentTask, selectOverhours } from '../../selector/accounting-selectors';
 
 @Component({
-  selector: 'tiu-overview',
-  standalone: true,
-  imports: [CommonModule, MenuComponent, RouterModule, HoursPipe],
-  templateUrl: './overview.component.html',
-  styleUrl: './overview.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-overview',
+    imports: [CommonModule, MenuComponent, RouterModule, HoursPipe],
+    templateUrl: './overview.component.html',
+    styleUrl: './overview.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OverviewComponent {
 

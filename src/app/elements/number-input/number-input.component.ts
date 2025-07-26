@@ -5,12 +5,11 @@ import { Subscription } from 'rxjs';
 import { ButtonCounterDirective } from '../button-counter.directive';
 
 @Component({
-  selector: 'tiu-number-input',
-  standalone: true,
-  imports: [CommonModule, ButtonCounterDirective],
-  templateUrl: './number-input.component.html',
-  styleUrl: './number-input.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-number-input',
+    imports: [CommonModule, ButtonCounterDirective],
+    templateUrl: './number-input.component.html',
+    styleUrl: './number-input.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NumberInputComponent implements OnChanges, OnDestroy, AfterViewInit {
 

@@ -5,12 +5,11 @@ import { ButtonErrorDirective } from '../button-error.directive';
 import { ButtonCounterDirective } from '../button-counter.directive';
 
 @Component({
-  selector: 'tiu-time-edit',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ButtonErrorDirective, ButtonCounterDirective],
-  templateUrl: './time-edit.component.html',
-  styleUrl: './time-edit.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-time-edit',
+    imports: [CommonModule, ReactiveFormsModule, ButtonErrorDirective, ButtonCounterDirective],
+    templateUrl: './time-edit.component.html',
+    styleUrl: './time-edit.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimeEditComponent {
 

@@ -4,12 +4,11 @@ import { MessageBoxService, YesNoCancelResult } from '../../service/message-box.
 import { Observable, Subject } from 'rxjs';
 
 @Component({
-  selector: 'tiu-message-box',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './message-box.component.html',
-  styleUrl: './message-box.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-message-box',
+    imports: [CommonModule],
+    templateUrl: './message-box.component.html',
+    styleUrl: './message-box.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MessageBoxComponent implements OnDestroy {
 

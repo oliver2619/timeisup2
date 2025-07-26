@@ -5,12 +5,11 @@ import { HelpButtonDirective } from '../../elements/help-button.directive';
 import { BackButtonDirective } from '../../elements/back-button.directive';
 
 @Component({
-  selector: 'tiu-month-overview-help',
-  standalone: true,
-  imports: [CommonModule, MenuComponent, HelpButtonDirective, BackButtonDirective],
-  templateUrl: './month-overview-help.component.html',
-  styleUrl: './month-overview-help.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-month-overview-help',
+    imports: [CommonModule, MenuComponent, HelpButtonDirective, BackButtonDirective],
+    templateUrl: './month-overview-help.component.html',
+    styleUrl: './month-overview-help.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MonthOverviewHelpComponent {
 

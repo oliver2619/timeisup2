@@ -23,12 +23,11 @@ interface DayRecordingFormValue {
 }
 
 @Component({
-  selector: 'tiu-day-recording',
-  standalone: true,
-  templateUrl: './day-recording.component.html',
-  styleUrl: './day-recording.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, MenuComponent, SelectProjectComponent, SelectTaskComponent, ReactiveFormsModule, RecordListComponent, ButtonErrorDirective, RouterModule, DurationPipe, HoursPipe, HelpButtonDirective]
+    selector: 'tiu-day-recording',
+    templateUrl: './day-recording.component.html',
+    styleUrl: './day-recording.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule, MenuComponent, SelectProjectComponent, SelectTaskComponent, ReactiveFormsModule, RecordListComponent, ButtonErrorDirective, RouterModule, DurationPipe, HoursPipe, HelpButtonDirective]
 })
 export class DayRecordingComponent {
 

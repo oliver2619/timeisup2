@@ -5,12 +5,11 @@ import { BackButtonDirective } from '../../elements/back-button.directive';
 import { MenuComponent } from '../../elements/menu/menu.component';
 
 @Component({
-  selector: 'tiu-tasks-help',
-  standalone: true,
-  imports: [CommonModule, MenuComponent, HelpButtonDirective, BackButtonDirective],
-  templateUrl: './tasks-help.component.html',
-  styleUrl: './tasks-help.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-tasks-help',
+    imports: [CommonModule, MenuComponent, HelpButtonDirective, BackButtonDirective],
+    templateUrl: './tasks-help.component.html',
+    styleUrl: './tasks-help.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TasksHelpComponent {
 

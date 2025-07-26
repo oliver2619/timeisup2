@@ -27,12 +27,11 @@ interface Item {
 }
 
 @Component({
-  selector: 'tiu-record-list',
-  standalone: true,
-  imports: [CommonModule, HoursPipe, DurationPipe, RecordListContextMenuComponent, TimePipe],
-  templateUrl: './record-list.component.html',
-  styleUrl: './record-list.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-record-list',
+    imports: [CommonModule, HoursPipe, DurationPipe, RecordListContextMenuComponent, TimePipe],
+    templateUrl: './record-list.component.html',
+    styleUrl: './record-list.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RecordListComponent implements OnChanges {
 

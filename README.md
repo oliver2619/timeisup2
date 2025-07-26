@@ -6,6 +6,7 @@
 
 ## Bugs
 - routes month/y/m/d/edit, month/y/m/d/view, day/y/m/d/r are not stable deeplinks related guards do not work properly
+- settings -> Back is useless. remove it
 
 ## TODO
 
@@ -15,7 +16,8 @@
 - indexDB
 - show 2 digits
 - unit tests
-- migrate Angular and use signals / selectSignal / inject / input.required
+- update Angular 20 and use signals / selectSignal / inject / input.required
+- turn on early failure again. disable buttons instead of throwing errors
 
 ## Maybe
 

@@ -21,12 +21,11 @@ interface Item {
 }
 
 @Component({
-  selector: 'tiu-month-overview-entries',
-  standalone: true,
-  imports: [CommonModule, DurationPipe, HoursPipe],
-  templateUrl: './month-overview-entries.component.html',
-  styleUrl: './month-overview-entries.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-month-overview-entries',
+    imports: [CommonModule, DurationPipe, HoursPipe],
+    templateUrl: './month-overview-entries.component.html',
+    styleUrl: './month-overview-entries.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MonthOverviewEntriesComponent implements OnChanges {
 

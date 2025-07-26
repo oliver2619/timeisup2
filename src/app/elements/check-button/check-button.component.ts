@@ -2,12 +2,11 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'tiu-check-button',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './check-button.component.html',
-  styleUrl: './check-button.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-check-button',
+    imports: [CommonModule],
+    templateUrl: './check-button.component.html',
+    styleUrl: './check-button.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CheckButtonComponent {
 

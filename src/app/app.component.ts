@@ -6,10 +6,9 @@ import {ToastContainerComponent} from "./elements/toast-container/toast-containe
 
 @Component({
     selector: 'tiu-root',
-    standalone: true,
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
-  imports: [CommonModule, RouterOutlet, MessageBoxComponent, ToastContainerComponent]
+    imports: [CommonModule, RouterOutlet, MessageBoxComponent, ToastContainerComponent]
 })
 export class AppComponent {
 }

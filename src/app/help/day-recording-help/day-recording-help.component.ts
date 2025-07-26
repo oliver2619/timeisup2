@@ -6,12 +6,11 @@ import { BackButtonDirective } from '../../elements/back-button.directive';
 import { RecordsHelpComponent } from '../records-help/records-help.component';
 
 @Component({
-  selector: 'tiu-day-recording-help',
-  standalone: true,
-  imports: [CommonModule, MenuComponent, HelpButtonDirective, BackButtonDirective, RecordsHelpComponent],
-  templateUrl: './day-recording-help.component.html',
-  styleUrl: './day-recording-help.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-day-recording-help',
+    imports: [CommonModule, MenuComponent, HelpButtonDirective, BackButtonDirective, RecordsHelpComponent],
+    templateUrl: './day-recording-help.component.html',
+    styleUrl: './day-recording-help.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DayRecordingHelpComponent {
 

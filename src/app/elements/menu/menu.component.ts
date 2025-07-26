@@ -3,12 +3,11 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from "@angular/router";
 
 @Component({
-  selector: 'tiu-menu',
-  standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
-  templateUrl: './menu.component.html',
-  styleUrl: './menu.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-menu',
+    imports: [CommonModule, RouterLink, RouterLinkActive],
+    templateUrl: './menu.component.html',
+    styleUrl: './menu.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MenuComponent {
 

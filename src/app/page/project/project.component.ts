@@ -22,12 +22,11 @@ interface ProjectFormValue {
 }
 
 @Component({
-  selector: 'tiu-project',
-  standalone: true,
-  imports: [CommonModule, MenuComponent, ReactiveFormsModule, RouterLink, TasksComponent, HelpButtonDirective, BackButtonDirective],
-  templateUrl: './project.component.html',
-  styleUrl: './project.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-project',
+    imports: [CommonModule, MenuComponent, ReactiveFormsModule, RouterLink, TasksComponent, HelpButtonDirective, BackButtonDirective],
+    templateUrl: './project.component.html',
+    styleUrl: './project.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectComponent {
 

@@ -1,4 +1,4 @@
-import { ApplicationConfig, APP_INITIALIZER, ErrorHandler, isDevMode } from '@angular/core';
+import { ApplicationConfig, ErrorHandler, isDevMode, inject, provideAppInitializer } from '@angular/core';
 import { provideRouter, withHashLocation } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -34,11 +34,9 @@ export const appConfig: ApplicationConfig = {
         provideState({ name: 'projectSettings', reducer: projectSettingsReducer }),
         provideEffects(settingsEffects),
         provideEffects(projectSettingsEffects),
-        {
-            provide: APP_INITIALIZER,
-            useFactory: (store: Store) => () => initApp(store),
-            multi: true,
-            deps: [Store]
-        },
+        provideAppInitializer(() => {
+        const initializerFn = ((store: Store) => () => initApp(store))(inject(Store));
+        return initializerFn();
+      }),
     ]
 };

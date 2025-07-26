@@ -15,12 +15,11 @@ import { ProjectState } from '../../state/project-state';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
-  selector: 'tiu-select-project',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './select-project.component.html',
-  styleUrl: './select-project.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-select-project',
+    imports: [CommonModule],
+    templateUrl: './select-project.component.html',
+    styleUrl: './select-project.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectProjectComponent implements OnChanges {
 

@@ -22,12 +22,11 @@ interface TaskFormValue {
 }
 
 @Component({
-  selector: 'tiu-task',
-  standalone: true,
-  imports: [CommonModule, MenuComponent, ReactiveFormsModule, RouterLink, TasksComponent, BackButtonDirective],
-  templateUrl: './task.component.html',
-  styleUrl: './task.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-task',
+    imports: [CommonModule, MenuComponent, ReactiveFormsModule, RouterLink, TasksComponent, BackButtonDirective],
+    templateUrl: './task.component.html',
+    styleUrl: './task.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskComponent {
 

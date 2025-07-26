@@ -21,12 +21,11 @@ interface MonthEditEntryFormValue {
 }
 
 @Component({
-  selector: 'tiu-month-edit-entry',
-  standalone: true,
-  templateUrl: './day-edit.component.html',
-  styleUrl: './day-edit.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, RouterModule, MenuComponent, RecordListComponent, DatePipe, CheckButtonComponent, ReactiveFormsModule, HelpButtonDirective, DurationPipe, HoursPipe]
+    selector: 'tiu-month-edit-entry',
+    templateUrl: './day-edit.component.html',
+    styleUrl: './day-edit.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule, RouterModule, MenuComponent, RecordListComponent, DatePipe, CheckButtonComponent, ReactiveFormsModule, HelpButtonDirective, DurationPipe, HoursPipe]
 })
 export class DayEditComponent {
 

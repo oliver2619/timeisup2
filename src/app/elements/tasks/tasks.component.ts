@@ -19,12 +19,11 @@ interface TasksFormValue {
 }
 
 @Component({
-  selector: 'tiu-tasks',
-  standalone: true,
-  imports: [CommonModule, MenuComponent, ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent, ButtonErrorDirective],
-  templateUrl: './tasks.component.html',
-  styleUrl: './tasks.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-tasks',
+    imports: [CommonModule, MenuComponent, ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent, ButtonErrorDirective],
+    templateUrl: './tasks.component.html',
+    styleUrl: './tasks.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TasksComponent {
 

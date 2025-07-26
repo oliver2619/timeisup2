@@ -23,12 +23,11 @@ interface SettingsFormValue {
 }
 
 @Component({
-  selector: 'tiu-settings',
-  standalone: true,
-  imports: [CommonModule, MenuComponent, ReactiveFormsModule, CheckButtonComponent, RouterModule, HelpButtonDirective, NumberInputComponent, BackButtonDirective],
-  templateUrl: './settings.component.html',
-  styleUrl: './settings.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-settings',
+    imports: [CommonModule, MenuComponent, ReactiveFormsModule, CheckButtonComponent, RouterModule, HelpButtonDirective, NumberInputComponent, BackButtonDirective],
+    templateUrl: './settings.component.html',
+    styleUrl: './settings.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsComponent {
 

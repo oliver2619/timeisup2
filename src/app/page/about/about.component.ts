@@ -4,12 +4,11 @@ import {MenuComponent} from "../../elements/menu/menu.component";
 import {version} from "../../../../package.json";
 
 @Component({
-  selector: 'tiu-about',
-  standalone: true,
-  imports: [CommonModule, MenuComponent],
-  templateUrl: './about.component.html',
-  styleUrl: './about.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-about',
+    imports: [CommonModule, MenuComponent],
+    templateUrl: './about.component.html',
+    styleUrl: './about.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AboutComponent {
 

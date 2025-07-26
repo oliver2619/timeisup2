@@ -32,12 +32,11 @@ interface RecordEditFormValue {
 }
 
 @Component({
-  selector: 'tiu-record-edit',
-  standalone: true,
-  templateUrl: './record-edit.component.html',
-  styleUrl: './record-edit.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, MenuComponent, SelectProjectComponent, SelectTaskComponent, HoursPipe, DurationPipe, TimeEditComponent, HelpButtonDirective]
+    selector: 'tiu-record-edit',
+    templateUrl: './record-edit.component.html',
+    styleUrl: './record-edit.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule, RouterModule, ReactiveFormsModule, MenuComponent, SelectProjectComponent, SelectTaskComponent, HoursPipe, DurationPipe, TimeEditComponent, HelpButtonDirective]
 })
 export class RecordEditComponent {
 

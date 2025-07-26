@@ -5,12 +5,11 @@ import { HelpButtonDirective } from '../../elements/help-button.directive';
 import { BackButtonDirective } from '../../elements/back-button.directive';
 
 @Component({
-  selector: 'tiu-settings-help',
-  standalone: true,
-  imports: [CommonModule, MenuComponent, HelpButtonDirective, BackButtonDirective],
-  templateUrl: './settings-help.component.html',
-  styleUrl: './settings-help.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-settings-help',
+    imports: [CommonModule, MenuComponent, HelpButtonDirective, BackButtonDirective],
+    templateUrl: './settings-help.component.html',
+    styleUrl: './settings-help.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsHelpComponent {
 

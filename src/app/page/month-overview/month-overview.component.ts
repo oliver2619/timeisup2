@@ -19,12 +19,11 @@ interface MonthOverviewFormValue {
 }
 
 @Component({
-  selector: 'tiu-month-overview',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MenuComponent, MonthOverviewEntriesComponent, HoursPipe, DurationPipe, RouterModule, HelpButtonDirective],
-  templateUrl: './month-overview.component.html',
-  styleUrl: './month-overview.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-month-overview',
+    imports: [CommonModule, ReactiveFormsModule, MenuComponent, MonthOverviewEntriesComponent, HoursPipe, DurationPipe, RouterModule, HelpButtonDirective],
+    templateUrl: './month-overview.component.html',
+    styleUrl: './month-overview.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MonthOverviewComponent {
 

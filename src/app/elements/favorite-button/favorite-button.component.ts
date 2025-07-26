@@ -3,12 +3,11 @@ import { CommonModule } from '@angular/common';
 import { ButtonErrorDirective } from '../button-error.directive';
 
 @Component({
-  selector: 'tiu-favorite-button',
-  standalone: true,
-  imports: [CommonModule, ButtonErrorDirective],
-  templateUrl: './favorite-button.component.html',
-  styleUrl: './favorite-button.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-favorite-button',
+    imports: [CommonModule, ButtonErrorDirective],
+    templateUrl: './favorite-button.component.html',
+    styleUrl: './favorite-button.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FavoriteButtonComponent {
 

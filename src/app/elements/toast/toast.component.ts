@@ -17,12 +17,11 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {timer} from "rxjs";
 
 @Component({
-  selector: 'tiu-toast',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './toast.component.html',
-  styleUrl: './toast.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-toast',
+    imports: [CommonModule],
+    templateUrl: './toast.component.html',
+    styleUrl: './toast.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToastComponent implements OnChanges, OnInit {
 

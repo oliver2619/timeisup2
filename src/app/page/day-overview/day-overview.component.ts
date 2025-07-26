@@ -25,12 +25,11 @@ interface ProjectRecording {
 }
 
 @Component({
-  selector: 'tiu-day-overview',
-  standalone: true,
-  imports: [CommonModule, RouterModule, MenuComponent, DurationPipe, HoursPipe, TimePipe],
-  templateUrl: './day-overview.component.html',
-  styleUrl: './day-overview.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-day-overview',
+    imports: [CommonModule, RouterModule, MenuComponent, DurationPipe, HoursPipe, TimePipe],
+    templateUrl: './day-overview.component.html',
+    styleUrl: './day-overview.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DayOverviewComponent {
 

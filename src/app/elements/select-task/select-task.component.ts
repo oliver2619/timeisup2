@@ -8,12 +8,11 @@ import { TaskState } from '../../state/task-state';
 import { ProjectSettingsState } from '../../state/project-settings-state';
 
 @Component({
-  selector: 'tiu-select-task',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './select-task.component.html',
-  styleUrl: './select-task.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-select-task',
+    imports: [CommonModule],
+    templateUrl: './select-task.component.html',
+    styleUrl: './select-task.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectTaskComponent implements OnInit {
 

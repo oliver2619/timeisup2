@@ -5,12 +5,11 @@ import { MessageBoxService } from '../../service/message-box.service';
 import { AccountingService } from '../../service/accounting.service';
 
 @Component({
-  selector: 'tiu-record-list-context-menu',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './record-list-context-menu.component.html',
-  styleUrl: './record-list-context-menu.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'tiu-record-list-context-menu',
+    imports: [CommonModule],
+    templateUrl: './record-list-context-menu.component.html',
+    styleUrl: './record-list-context-menu.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RecordListContextMenuComponent implements RecordListContextMenu {
 
