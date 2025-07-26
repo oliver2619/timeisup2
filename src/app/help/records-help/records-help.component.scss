@@ -1,8 +1,5 @@
-@import "../../../style/shared";
+@use "../../../style/page";
 
 :host {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    row-gap: $spacing-3;  
+    @include page.spaced-content();
 }

@@ -1,5 +1,5 @@
-@import "../../../style/shared";
+@use "../../../style/form";
 
 :host {
-  @include input-group;
+  @include form.input-group();
 }

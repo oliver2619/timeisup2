@@ -1,0 +1,9 @@
+@use "sass:math";
+
+@function m($s: 0) {
+    @return 1em * math.pow(2, math.div($s, 5));
+}
+
+@function x($s: 0) {
+    @return 1ex * math.pow(2, math.div($s, 5));
+}

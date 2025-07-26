@@ -1,5 +1,5 @@
-@import "../../../style/shared";
+@use "../../../style/page";
 
 :host {
-    @include spaced-content();
+    @include page.spaced-content();
 }

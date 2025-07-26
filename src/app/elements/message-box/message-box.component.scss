@@ -1,10 +1,10 @@
-@import "../../../style/shared";
+@use "../../../style/modal";
 
 :host {
-    @include modal-background();
+    @include modal.background();
 }
 
 .msgbox-frame {
-    @include modal-frame();
+    @include modal.frame();
 }
 

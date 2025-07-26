@@ -1,0 +1,204 @@
+@use "./color";
+@use "./font";
+@use "./spacing";
+
+$_borderRadius: spacing.x(-5);
+
+@mixin default {
+    @include font.default();
+    cursor: pointer;
+
+    &[disabled],
+    &.disabled {
+        cursor: default;
+        opacity: 0.5;
+
+        * {
+            filter: blur(1.66px);
+        }
+    }
+}
+
+@mixin menu {
+    @include default();
+    border: none;
+    padding: spacing.m(-5);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: color.$fg-1;
+    text-decoration: none;
+    background-color: transparent;
+
+    &.active .fas {
+        color: color.$fg-green-3;
+    }
+
+    &.red {
+        color: color.$fg-red-3;
+    }
+}
+
+@mixin button-list {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: spacing.m(-5);
+
+    &.center {
+        align-self: center;
+    }
+
+    &.inline {
+        display: inline-flex;
+    }
+
+    &.vertical {
+        flex-direction: column;
+        align-items: stretch;
+        row-gap: spacing.m(-5);
+
+        button.button {
+            text-align: center;
+            justify-content: center;
+        }
+    }
+}
+
+button {
+    @include default();
+}
+
+@keyframes button-active-blink {
+    from {
+        background-color: color.$bg-5;
+    }
+
+    49% {
+        background-color: color.$bg-5;
+    }
+
+    50% {
+        background-color: color.$bg-green;
+    }
+
+    to {
+        background-color: color.$bg-green;
+    }
+}
+
+button.button {
+    border: 2px solid color.$bg-3;
+    border-radius: $_borderRadius;
+    padding: spacing.m(-7.5) spacing.m(-5);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: color.$fg-1;
+    background-color: color.$bg-3;
+
+    &.large {
+        @include font.default(2.5);
+    }
+
+    &.green {
+        background-color: color.$bg-green;
+        border-color: color.$bg-green;
+    }
+
+    &.red {
+        background-color: color.$bg-red;
+        border-color: color.$bg-red;
+    }
+
+    &.yellow {
+        background-color: color.$bg-yellow;
+        border-color: color.$bg-yellow;
+    }
+
+    &.blue {
+        background-color: color.$bg-blue;
+        border-color: color.$bg-blue;
+    }
+
+    &.blink {
+        animation-name: button-active-blink;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+    }
+
+    &.multiline {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: start;
+    }
+}
+
+button.check {
+    border: 2px solid color.$fg-1;
+    border-radius: $_borderRadius;
+    padding: spacing.m(-5) spacing.m(-2.5);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: color.$fg-1;
+    background-color: color.$bg-5;
+
+    &.active {
+        background-color: color.$fg-1;
+        color: color.$bg-5;
+    }
+
+    &.green {
+        color: color.$bg-green;
+        border-color: color.$bg-green;
+
+        &.active {
+            background-color: color.$bg-green;
+            color: color.$fg-1;
+        }
+    }
+
+    &.red {
+        color: color.$bg-red;
+        border-color: color.$bg-red;
+
+        &.active {
+            background-color: color.$bg-red;
+            color: color.$fg-1;
+        }
+    }
+
+    &.yellow {
+        color: color.$bg-yellow;
+        border-color: color.$bg-yellow;
+
+        &.active {
+            background-color: color.$bg-yellow;
+            color: color.$fg-1;
+        }
+    }
+
+    &.blue {
+        color: color.$bg-blue;
+        border-color: color.$bg-blue;
+
+        &.active {
+            background-color: color.$bg-blue;
+            color: color.$fg-1;
+        }
+    }
+}
+
+button.menu-button {
+    @include menu();
+}
+
+.button-list {
+    @include button-list();
+}
+
+button.small {
+    @include font.default(-2.5);
+}

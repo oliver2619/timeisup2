@@ -1,7 +1,7 @@
-@import "../../../style/shared";
+@use "../../../style/modal";
 
 :host {
-    @include modal-background();
+    @include modal.background();
 }
 
 .backdrop {
@@ -14,5 +14,5 @@
 }
 
 .frame {
-    @include modal-frame();
+    @include modal.frame();
 }

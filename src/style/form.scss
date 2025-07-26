@@ -1,0 +1,229 @@
+@use "./color";
+@use "./font";
+@use "./spacing";
+
+$_border-radius: spacing.x(-3);
+
+@mixin input {
+    @include font.default();
+    outline: none;
+    background-color: color.$input-bg;
+}
+
+@mixin form {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    row-gap: spacing.m(-2.5);
+
+    & > button,
+    & > label {
+        align-self: flex-start;
+    }
+}
+
+@mixin input-group {
+    border: 1px solid color.$border-frame;
+    border-radius: $_border-radius;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-between;
+    align-self: stretch;
+
+    button,
+    input,
+    select,
+    label,
+    span {
+        border-width: 0;
+        border-style: none;
+        border-radius: 0;
+
+        &:first-child {
+            border-top-left-radius: $_border-radius;
+            border-bottom-left-radius: $_border-radius;
+        }
+
+        &:last-child {
+            border-top-right-radius: $_border-radius;
+            border-bottom-right-radius: $_border-radius;
+        }
+
+        &:nth-child(n + 2) {
+            border-left: 1px solid color.$border-frame;
+        }
+    }
+
+    input,
+    select {
+        flex-grow: 1;
+        flex-shrink: 1;
+        min-width: 0;
+    }
+
+    & > label,
+    & > span,
+    & > button {
+        flex-grow: 0;
+        flex-shrink: 1;
+        padding: spacing.m(-5) spacing.m(-3);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        background-color: color.$bg-4;
+
+        &.red {
+            background-color: color.$bg-red;
+        }
+
+        &.green {
+            background-color: color.$bg-green;
+        }
+
+        &.yellow {
+            background-color: color.$bg-yellow;
+        }
+    }
+
+    & > button {
+        min-width: 2em;
+    }
+}
+
+input[type="text"],
+input[type="number"] {
+    @include input();
+    border: 1px solid color.$border-frame;
+    border-radius: $_border-radius;
+    padding: spacing.m(-7.5);
+    color: color.$fg-1;
+
+    &:focus {
+        color: color.$input;
+        border-color: color.$input;
+    }
+
+    &[readonly] {
+        color: color.$fg-1;
+        background-color: color.$bg-4;
+    }
+}
+
+input[type="number"],
+input.number {
+    text-align: end;
+    appearance: textfield;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+        appearance: none;
+    }
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    cursor: pointer;
+    margin: 0;
+    margin-right: spacing.m(-3);
+}
+
+input[type="checkbox"] {
+    @include font.default(-3);
+    appearance: none;
+    width: 1.5em;
+    border: 2px solid color.$fg-1;
+    border-radius: $_border-radius;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    font-family: "Font Awesome 6 Free";
+    background-color: color.$bg-5;
+    color: color.$fg-1;
+
+    &:checked {
+        color: color.$bg-5;
+        background-color: color.$fg-1;
+    }
+
+    &::after {
+        content: "\f00d";
+    }
+
+    &:checked::after {
+        content: "\f00c";
+    }
+
+    &.yellow {
+        border-color: color.$bg-yellow;
+        color: color.$bg-yellow;
+
+        &:checked {
+            color: color.$fg-1;
+            background-color: color.$bg-yellow;
+        }
+    }
+}
+
+select {
+    @include input();
+    border: 1px solid color.$border-frame;
+    border-radius: $_border-radius;
+    padding: spacing.m(-7.5);
+}
+
+label {
+    @include font.default();
+    font-weight: 300;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+optgroup {
+    @include font.default();
+}
+
+option {
+    @include font.default();
+
+    &.favorite {
+        font-weight: bold;
+    }
+}
+
+.input-group {
+    @include input-group;
+}
+
+form,
+.form {
+    @include form();
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    input,
+    select,
+    .input-group {
+        align-self: stretch;
+    }
+}
+
+.form-2-columns {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: spacing.m(-3);
+    justify-items: stretch;
+    align-items: start;
+    align-self: stretch;
+    flex-grow: 1;
+    flex-shrink: 1;
+}

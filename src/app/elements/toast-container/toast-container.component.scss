@@ -1,12 +1,13 @@
-@import "../../../style/shared";
+@use "../../../style/spacing";
 
 :host {
   position: fixed;
-  right: $spacing-1;
-  bottom: $spacing-1;
+  right: spacing.m(-5);
+  bottom: spacing.m(-5);
+  margin-left: spacing.m(-5);
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   pointer-events: none;
-  row-gap: $spacing-1;
+  row-gap: spacing.m(-5);
 }

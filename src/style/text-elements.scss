@@ -1,0 +1,35 @@
+@use "./color";
+@use "./font";
+@use "./spacing";
+
+h1 {
+    @include font.default(3);
+    margin: spacing.m(-10) 0;
+}
+
+h2 {
+    @include font.default(1.5);
+    margin: 0;
+}
+
+p {
+    margin: 0;
+    text-align: justify;
+
+    &.small {
+        @include font.default(-2.5);
+    }
+
+    &.error {
+        color: color.$fg-error;
+    }
+}
+
+a {
+    color: inherit;
+}
+
+em {
+    font-style: normal;
+    font-weight: bold;
+}

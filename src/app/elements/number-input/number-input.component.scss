@@ -1,5 +1,5 @@
-@import "../../../style/shared.scss";
+@use "../../../style/form.scss";
 
 :host {
-    @include input-group;
+    @include form.input-group();
 }

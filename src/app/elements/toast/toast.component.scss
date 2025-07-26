@@ -1,14 +1,17 @@
-@import "../../../style/shared";
+@use "../../../style/box-shadow";
+@use "../../../style/color";
+@use "../../../style/font";
+@use "../../../style/spacing";
 
 :host {
-  @include font(0.8);
+  @include font.default(-2);
+  @include box-shadow.default();
   position: relative;
   border: 4px solid black;
-  border-radius: $border-radius-3;
-  box-shadow: $box-shadow-frame;
-  padding: $spacing-3;
-  color: $color-1;
-  background-color: $bg-color-5;
+  border-radius: spacing.x();
+  padding: spacing.m();
+  color: color.$fg-1;
+  background-color: color.$bg-5;
   text-align: justify;
   pointer-events: all;
   opacity: 0;
@@ -18,11 +21,11 @@
   transition-timing-function: ease-in-out;
 
   &.error {
-    border-color: $bg-color-red;
+    border-color: color.$bg-red;
   }
 
   &.info {
-    border-color: $bg-color-green;
+    border-color: color.$bg-green;
   }
 
   &.visible {

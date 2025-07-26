@@ -1,0 +1,33 @@
+@use "./color";
+@use "./spacing";
+@use "./box-shadow";
+
+@mixin background {
+    visibility: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(color.$bg-4, 0.5);
+
+    &.visible {
+        visibility: visible;
+    }
+}
+
+@mixin frame {
+    @include box-shadow.default();
+    border: 1px solid border-color-frame;
+    border-radius: spacing.x();
+    padding: spacing.m(2.5) spacing.m();
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: spacing.m(2.5);
+    background-color: color.$bg-5;
+}

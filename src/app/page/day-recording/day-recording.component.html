@@ -5,11 +5,10 @@
     <form [formGroup]="formGroup">
         @if(canStart) {
             <div class="form-group">
-                <label>Project</label>
+                <label>Project - Task</label>
                 <tiu-select-project [project-control]="projectControl"></tiu-select-project>
             </div>
             <div class="form-group">
-                <label>Task</label>
                 <tiu-select-task [project-control]="projectControl" [task-control]="taskControl"></tiu-select-task>
             </div>
         } @else {
@@ -45,6 +44,5 @@
             </div>
         </div>
     </div>
-    <h2>Log</h2>
     <tiu-record-list [year]="year()" [month]="month()" [day]="day()"></tiu-record-list>
 </div>

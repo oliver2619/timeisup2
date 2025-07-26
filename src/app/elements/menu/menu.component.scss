@@ -1,53 +1,56 @@
-@import "../../../style/shared";
+@use "../../../style/box-shadow";
+@use "../../../style/color";
+@use "../../../style/button";
+@use "../../../style/spacing";
 
 :host {
   display: flex;
   flex-direction: row;
   align-items: stretch;
   justify-content: space-between;
-  background-color: $bg-color-4;
+  background-color: color.$bg-4;
 }
 
 .menu-group {
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  column-gap: $spacing-1;
+  column-gap: spacing.m(-10);
 
   button, a {
-    @include menu-button();
+    @include button.menu();
   }
 }
 
 .dropdown {
+  @include box-shadow.default();
   z-index: 100;
   visibility: hidden;
   position: absolute;
-  border: 1px solid $border-color-frame;
-  border-radius: $border-radius-1;
-  box-shadow: $box-shadow-frame;
-  padding: $spacing-2 0;
+  border: 1px solid color.$border-frame;
+  border-radius: spacing.x(-5);
+  padding: spacing.m(-5) 0;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  background-color: $bg-color-5;
+  background-color: color.$bg-5;
 
   &.visible {
     visibility: visible;
   }
 
   a {
-    padding: $spacing-2 $spacing-3;
+    padding: spacing.m(-2.5) spacing.m();
     text-decoration: none;
-    color: $color-1;
-    background-color: $bg-color-5;
+    color: color.$fg-1;
+    background-color: color.$bg-5;
 
     &:hover {
-      background-color: $bg-color-4;
+      background-color: color.$bg-4;
     }
 
     &.active {
-      color: $color-green-3;
+      color: color.$fg-green-3;
     }
   }
 }

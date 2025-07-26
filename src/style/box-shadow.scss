@@ -1,0 +1,6 @@
+@use "./color";
+@use "./spacing";
+
+@mixin default {
+    box-shadow: 0 0 spacing.m(-3) color.$bg-2;
+}
