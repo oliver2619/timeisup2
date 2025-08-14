@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RecordListContextMenu } from './record-list-context-menu';
 import { MessageBoxService } from '../../service/message-box.service';
 import { AccountingService } from '../../service/accounting.service';
 
 @Component({
   selector: 'tiu-record-list-context-menu',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './record-list-context-menu.component.html',
   styleUrl: './record-list-context-menu.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

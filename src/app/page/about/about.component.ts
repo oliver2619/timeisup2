@@ -1,11 +1,11 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {CommonModule} from '@angular/common';
+
 import {MenuComponent} from "../../elements/menu/menu.component";
 import {version} from "../../../../package.json";
 
 @Component({
     selector: 'tiu-about',
-    imports: [CommonModule, MenuComponent],
+    imports: [MenuComponent],
     templateUrl: './about.component.html',
     styleUrl: './about.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

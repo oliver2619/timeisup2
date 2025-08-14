@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MenuComponent } from "../../elements/menu/menu.component";
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -36,7 +36,7 @@ interface RecordEditFormValue {
     templateUrl: './record-edit.component.html',
     styleUrl: './record-edit.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [CommonModule, RouterModule, ReactiveFormsModule, MenuComponent, SelectProjectComponent, SelectTaskComponent, HoursPipe, DurationPipe, TimeEditComponent, HelpButtonDirective]
+    imports: [RouterModule, ReactiveFormsModule, MenuComponent, SelectProjectComponent, SelectTaskComponent, HoursPipe, DurationPipe, TimeEditComponent, HelpButtonDirective]
 })
 export class RecordEditComponent {
 

@@ -1,12 +1,12 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ButtonCounterDirective } from '../button-counter.directive';
 
 @Component({
     selector: 'tiu-number-input',
-    imports: [CommonModule, ButtonCounterDirective],
+    imports: [ButtonCounterDirective],
     templateUrl: './number-input.component.html',
     styleUrl: './number-input.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MenuComponent } from "../../elements/menu/menu.component";
 import { RouterModule } from '@angular/router';
 import { HoursPipe } from '../../elements/hours.pipe';
@@ -8,7 +8,7 @@ import { selectCurrentTask, selectOverhours } from '../../selector/accounting-se
 
 @Component({
     selector: 'tiu-overview',
-    imports: [CommonModule, MenuComponent, RouterModule, HoursPipe],
+    imports: [MenuComponent, RouterModule, HoursPipe],
     templateUrl: './overview.component.html',
     styleUrl: './overview.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

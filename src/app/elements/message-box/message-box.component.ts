@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, HostBinding, OnDestroy, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MessageBoxService, YesNoCancelResult } from '../../service/message-box.service';
 import { Observable, Subject } from 'rxjs';
 
 @Component({
     selector: 'tiu-message-box',
-    imports: [CommonModule],
+    imports: [],
     templateUrl: './message-box.component.html',
     styleUrl: './message-box.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

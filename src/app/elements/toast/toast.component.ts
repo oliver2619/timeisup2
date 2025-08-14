@@ -11,14 +11,14 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import {CommonModule} from '@angular/common';
+
 import {Toast} from "../../service/toast.service";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {timer} from "rxjs";
 
 @Component({
     selector: 'tiu-toast',
-    imports: [CommonModule],
+    imports: [],
     templateUrl: './toast.component.html',
     styleUrl: './toast.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
