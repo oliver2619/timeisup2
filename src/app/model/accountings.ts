@@ -53,6 +53,10 @@ export class Accountings {
         return ret;
     }
 
+    canJoinWithPrevious(year: number, month: number, day: number, recordIndex: number): boolean {
+        return this.years.get(year)?.canJoinWithPrevious(month, day, recordIndex) ?? false;
+    }
+
     deleteDay(year: number, month: number, day: number) {
         const y = this._getYear(year);
         y.deleteDay(month, day);

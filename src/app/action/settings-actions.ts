@@ -7,6 +7,8 @@ export interface SettingsSetAction {
     readonly hoursPerWeek: number;
     readonly pensumPercentage: number;
     readonly workingDays: DayOfWeek[];
+    // readonly maximumWorkingHoursPerDay: number;
+    // readonly minimumPauseHoursPerDay: number;
 }
 
 export const settingsActions = createActionGroup({

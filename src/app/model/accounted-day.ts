@@ -30,6 +30,13 @@ export class AccountedDay {
         return new AccountedDay(year, month, day, [], '', 0);
     }
 
+    canJoinWithPrevious(recordIndex: number): boolean {
+        if (recordIndex <= 0) {
+            return false;
+        }
+        return this.records[recordIndex].canJoinWith(this.records[recordIndex - 1]);
+    }
+
     deleteRecord(recordIndex: number) {
         this.records.splice(recordIndex, 1);
     }
@@ -129,13 +136,6 @@ export class AccountedDay {
 
     stopRecording(currentTime: Date) {
         this.records.filter(it => it.endTime == undefined).forEach(it => it.stopRecording(currentTime));
-    }
-
-    private canJoinWithPrevious(recordIndex: number): boolean {
-        if (recordIndex <= 0) {
-            return false;
-        }
-        return this.records[recordIndex].canJoinWith(this.records[recordIndex - 1]);
     }
 
     private sortRecords() {

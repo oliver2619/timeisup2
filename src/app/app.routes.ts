@@ -22,6 +22,8 @@ import { DayRecordingHelpComponent } from './help/day-recording-help/day-recordi
 import { MonthOverviewHelpComponent } from './help/month-overview-help/month-overview-help.component';
 import { DayRecordHelpComponent } from './help/day-record-help/day-record-help.component';
 import { DayEditHelpComponent } from './help/day-edit-help/day-edit-help.component';
+import { OverhoursComponent } from './page/overhours/overhours.component';
+import { OvertimeHelpComponent } from './help/overtime-help/overtime-help.component';
 
 export const routes: Routes = [{
   path: '',
@@ -57,6 +59,10 @@ export const routes: Routes = [{
   pathMatch: 'full',
   component: MonthOverviewHelpComponent
 }, {
+  path: 'help/overtime',
+  pathMatch: 'full',
+  component: OvertimeHelpComponent,
+}, {
   path: 'help/projects',
   pathMatch: 'full',
   component: ProjectsHelpComponent
@@ -87,6 +93,10 @@ export const routes: Routes = [{
   pathMatch: 'full',
   canActivate: [dayOverviewGuard],
   component: DayOverviewComponent
+}, {
+  path: 'overtime',
+  pathMatch: 'full',
+  component: OverhoursComponent
 }, {
   path: 'overview',
   pathMatch: 'full',

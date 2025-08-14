@@ -2,8 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuComponent } from "../../elements/menu/menu.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { TasksComponent } from "../../elements/tasks/tasks.component";
+import { ActivatedRoute, Router } from "@angular/router";
 import { BackButtonDirective } from '../../elements/back-button.directive';
 import { Store } from '@ngrx/store';
 import { filter, map, Observable, zip } from 'rxjs';
@@ -23,7 +22,7 @@ interface TaskFormValue {
 
 @Component({
     selector: 'tiu-task',
-    imports: [CommonModule, MenuComponent, ReactiveFormsModule, RouterLink, TasksComponent, BackButtonDirective],
+    imports: [CommonModule, MenuComponent, ReactiveFormsModule, BackButtonDirective],
     templateUrl: './task.component.html',
     styleUrl: './task.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

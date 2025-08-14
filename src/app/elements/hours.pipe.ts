@@ -9,7 +9,7 @@ export class HoursPipe implements PipeTransform {
 
   private readonly decimalPipe = new DecimalPipe('en-US');
 
-  transform(value: unknown, ..._: unknown[]): unknown {
+  transform(value: unknown, ..._args: unknown[]): unknown {
     if (typeof value !== 'number' && typeof value !== 'string') {
       return value;
     }
@@ -25,9 +25,9 @@ export class HoursPipe implements PipeTransform {
     if(hours >= 24) {
       const days = Math.floor(hours / 24);
       const remainingHours = hours - days * 24;
-      return `${this.decimalPipe.transform(days, '1.0-0')}d\u00a0${this.decimalPipe.transform(remainingHours, '1.1-1')}h`;
+      return `${this.decimalPipe.transform(days, '1.0-0')}d\u00a0${this.decimalPipe.transform(remainingHours, '1.2-2')}h`;
     }else {
-      return `${this.decimalPipe.transform(hours, '1.1-1')}h`
+      return `${this.decimalPipe.transform(hours, '1.2-2')}h`
     }
   }
 }

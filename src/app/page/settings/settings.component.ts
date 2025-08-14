@@ -7,24 +7,21 @@ import { DayOfWeek } from "../../../model/dayofweek";
 import { RouterModule } from '@angular/router';
 import { HelpButtonDirective } from '../../elements/help-button.directive';
 import { NumberInputComponent } from '../../elements/number-input/number-input.component';
-import { BackButtonDirective } from '../../elements/back-button.directive';
 import { Store } from '@ngrx/store';
 import { selectSettings } from '../../selector/settings-selectors';
 import { settingsActions } from '../../action/settings-actions';
-import { selectOverhours } from '../../selector/accounting-selectors';
 import { AccountingService } from '../../service/accounting.service';
 
 interface SettingsFormValue {
   maxHoursPerDay: number;
   hoursPerWeek: number;
   pensum: number;
-  currentOvertime: number;
   dayOfWeek: boolean[];
 }
 
 @Component({
     selector: 'tiu-settings',
-    imports: [CommonModule, MenuComponent, ReactiveFormsModule, CheckButtonComponent, RouterModule, HelpButtonDirective, NumberInputComponent, BackButtonDirective],
+    imports: [CommonModule, MenuComponent, ReactiveFormsModule, CheckButtonComponent, RouterModule, HelpButtonDirective, NumberInputComponent],
     templateUrl: './settings.component.html',
     styleUrl: './settings.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -35,7 +32,6 @@ export class SettingsComponent {
   readonly daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
   private readonly initialValue: SettingsFormValue = {
-    currentOvertime: 0,
     dayOfWeek: [],
     hoursPerWeek: 0,
     maxHoursPerDay: 0,
@@ -84,7 +80,6 @@ export class SettingsComponent {
     this.formGroup.addControl('pensum', formBuilder.control(0, [Validators.required, Validators.min(1), Validators.max(100)]));
     const array = formBuilder.array(this.daysOfWeek.map((_, i) => formBuilder.control(false)));
     this.formGroup.addControl('dayOfWeek', array);
-    this.formGroup.addControl('currentOvertime', formBuilder.control(0, [Validators.required]));
     this.formGroup.setValidators([this.validatorDayOfWeekNotEmpty, this.validatorHoursPerDay]);
     this.store.select(selectSettings).subscribe({
       next: value => {
@@ -93,12 +88,6 @@ export class SettingsComponent {
         this.initialValue.hoursPerWeek = value.hoursPerWeek;
         this.initialValue.maxHoursPerDay = value.maxHoursPerDay;
         this.initialValue.pensum = value.pensumPercentage;
-        this.formGroup.setValue(this.initialValue);
-      }
-    });
-    this.store.select(selectOverhours).subscribe({
-      next: value => {
-        this.initialValue.currentOvertime = Math.round(value * 100) / 100;
         this.formGroup.setValue(this.initialValue);
       }
     });
@@ -122,14 +111,12 @@ export class SettingsComponent {
     v.hoursPerWeek = this.initialValue.hoursPerWeek;
     v.pensum = this.initialValue.pensum;
     v.dayOfWeek = this.initialValue.dayOfWeek.slice(0);
-    v.currentOvertime = this.initialValue.currentOvertime;
     this.formGroup.setValue(v);
     this.formGroup.markAsPristine();
   }
 
   save() {
     const v = this.value;
-    this.accountingService.setOverhours(this.value.currentOvertime);
     const workingDays: DayOfWeek[] = [];
     this.daysOfWeek.forEach((_, i) => {
       if (v.dayOfWeek[i]) {

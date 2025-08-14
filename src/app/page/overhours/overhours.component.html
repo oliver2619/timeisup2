@@ -1,0 +1,16 @@
+<tiu-menu>
+    <button tiuHelpButton="/help/overtime"></button>
+</tiu-menu>
+<div>
+    <h1>Overtime</h1>
+    <form [formGroup]="formGroup">
+        <div class="form-group">
+            <label>Current overtime</label>
+            <tiu-number-input [formGroup]="formGroup" name="currentOvertime" unit="h"></tiu-number-input>
+        </div>
+    </form>
+    <div class="button-list">
+        <button type="button" (click)="save()" [disabled]="!canSave" class="button green">Save</button>
+        <button type="button" (click)="reset()" [disabled]="!canReset" class="button red">Reset</button>
+    </div>
+</div>

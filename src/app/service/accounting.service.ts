@@ -70,6 +70,10 @@ export class AccountingService {
     return this.model.isTaskInUse(project, task);
   }
 
+  canJoinWithPrevious(year: number, month: number, day: number, recordIndex: number): boolean {
+    return this.model.canJoinWithPrevious(year, month, day, recordIndex);
+  }
+
   joinRecordWithPrevious(year: number, month: number, day: number, recordIndex: number): Observable<boolean> {
     this.model.joinRecordWithPrevious(year, month, day, recordIndex);
     this.updateState();

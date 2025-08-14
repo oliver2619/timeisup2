@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuComponent } from "../../elements/menu/menu.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router} from "@angular/router";
 import { combineLatest, filter, map, Observable } from "rxjs";
 import { TasksComponent } from "../../elements/tasks/tasks.component";
 import { HelpButtonDirective } from '../../elements/help-button.directive';
@@ -23,7 +23,7 @@ interface ProjectFormValue {
 
 @Component({
     selector: 'tiu-project',
-    imports: [CommonModule, MenuComponent, ReactiveFormsModule, RouterLink, TasksComponent, HelpButtonDirective, BackButtonDirective],
+    imports: [CommonModule, MenuComponent, ReactiveFormsModule, TasksComponent, HelpButtonDirective, BackButtonDirective],
     templateUrl: './project.component.html',
     styleUrl: './project.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

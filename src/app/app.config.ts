@@ -13,7 +13,8 @@ import * as projectSettingsEffects from './effect/project-settings-effects';
 import { projectSettingsReducer } from './reducer/project-settings-reducer';
 import { accountingReducer } from './reducer/accounting-reducer';
 
-function initApp(store: Store) {
+function initApp() {
+    const store = inject(Store);
     store.dispatch(globalActions.start());
 }
 
@@ -34,9 +35,6 @@ export const appConfig: ApplicationConfig = {
         provideState({ name: 'projectSettings', reducer: projectSettingsReducer }),
         provideEffects(settingsEffects),
         provideEffects(projectSettingsEffects),
-        provideAppInitializer(() => {
-        const initializerFn = ((store: Store) => () => initApp(store))(inject(Store));
-        return initializerFn();
-      }),
+        provideAppInitializer(() => initApp()),
     ]
 };

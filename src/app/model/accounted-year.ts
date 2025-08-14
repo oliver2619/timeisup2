@@ -24,6 +24,10 @@ export class AccountedYear {
         return new AccountedYear(year, new Map<number, AccountedMonth>(), undefined);
     }
 
+    canJoinWithPrevious(month: number, day: number, recordIndex: number): boolean {
+        return this.months.get(month)?.canJoinWithPrevious(day, recordIndex) ?? false;
+    }
+
     deleteDay(month: number, day: number) {
         const m = this._getMonth(month);
         m.deleteDay(day);

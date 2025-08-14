@@ -13,9 +13,9 @@
       </td>
       <td class="single-line right">
         <div class="button-list inline">
-          <tiu-favorite-button (change-favorite)="setFavorite(task.name)" [favorite]="task.favorite"></tiu-favorite-button>
+          <tiu-favorite-button (change-favorite)="setFavorite(task.name)" [favorite]="task.favorite" [enabled]="canSetTaskFavorite(task.name)"></tiu-favorite-button>
           <tiu-active-button (change-active)="setActive(task.name, $event)" [active]="task.active"></tiu-active-button>
-          <button type="button" (click)="removeTask(task.name)" class="button red"><span class="fas fa-trash-can"></span></button>
+          <button type="button" [disabled]="!canRemoveTask(task.name)" (click)="removeTask(task.name)" class="button red"><span class="fas fa-trash-can"></span></button>
         </div>
       </td>
     </tr>

@@ -6,7 +6,6 @@ import { Router } from "@angular/router";
 import { MessageBoxService } from '../../service/message-box.service';
 import { FavoriteButtonComponent } from "../../elements/favorite-button/favorite-button.component";
 import { ActiveButtonComponent } from "../../elements/active-button/active-button.component";
-import { ButtonErrorDirective } from '../../elements/button-error.directive';
 import { HelpButtonDirective } from '../../elements/help-button.directive';
 import { selectProjects } from '../../selector/project-settings-selectors';
 import { Store } from '@ngrx/store';
@@ -19,11 +18,11 @@ interface ProjectsFormValue {
 }
 
 @Component({
-    selector: 'tiu-projects',
-    imports: [CommonModule, MenuComponent, ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent, ButtonErrorDirective, HelpButtonDirective],
-    templateUrl: './projects.component.html',
-    styleUrl: './projects.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'tiu-projects',
+  imports: [CommonModule, MenuComponent, ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent, HelpButtonDirective],
+  templateUrl: './projects.component.html',
+  styleUrl: './projects.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectsComponent {
 
@@ -55,6 +54,14 @@ export class ProjectsComponent {
         }
       }
     });
+  }
+
+  canRemoveProject(name: string): boolean {
+    return this.projectSettingsService.canDeleteProject(name);
+  }
+
+  canSetProjectFavorite(name: string): boolean {
+    return this.projectSettingsService.canSetProjectFavorite(name);
   }
 
   editProject(name: string) {

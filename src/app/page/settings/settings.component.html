@@ -28,15 +28,10 @@
       <label for="settings.hoursPerDay">Hours per day</label>
       <input id="settings.hoursPerDay" type="text" readonly="readonly" value="{{hoursPerDay | number:'1.0-2'}}" class="number">
     </div>
-    <div class="form-group">
-      <label>Current overtime</label>
-      <tiu-number-input [formGroup]="formGroup" name="currentOvertime" unit="h"></tiu-number-input>
-    </div>
   </form>
   <p class="error">{{error}}</p>
   <div class="button-list">
     <button type="button" (click)="save()" [disabled]="!canSave" class="button green">Save</button>
     <button type="button" (click)="reset()" [disabled]="!canReset" class="button red">Reset</button>
-    <button tiuBackButton></button>
   </div>
 </div>

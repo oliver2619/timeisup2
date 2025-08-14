@@ -64,8 +64,24 @@ export class ProjectSettingsService {
     return of(true);
   }
 
+  canDeleteProject(projectName: string): boolean {
+    return !this.accountingService.isProjectInUse(projectName);
+  }
+
+  canDeleteTask(projectName: string, taskName: string): boolean {
+    return !this.accountingService.isTaskInUse(projectName, taskName);
+  }
+
+  canSetProjectFavorite(projectName: string): boolean {
+    return this.currentState.projects[projectName].useable;
+  }
+
+  canSetTaskFavorite(projectName: string, taskName: string): boolean {
+    return this.currentState.projects[projectName].tasks[taskName].useable;
+  }
+
   deleteProject(projectName: string): Observable<boolean> {
-    if (this.accountingService.isProjectInUse(projectName)) {
+    if (!this.canDeleteProject(projectName)) {
       throw new Error(`Project ${projectName} is in use and cannot be deleted.`);
     }
     const newState: ProjectSettingsState = {
@@ -138,7 +154,7 @@ export class ProjectSettingsService {
   }
 
   setProjectFavorite(projectName: string): Observable<boolean> {
-    if (!this.currentState.projects[projectName].useable) {
+    if (!this.canSetProjectFavorite(projectName)) {
       throw new Error(`Project ${projectName} is not useable as it contains no active tasks or is inactive`);
     }
     const newState: ProjectSettingsState = {
@@ -171,7 +187,7 @@ export class ProjectSettingsService {
   }
 
   setTaskFavorite(projectName: string, taskName: string): Observable<boolean> {
-    if (!this.currentState.projects[projectName].tasks[taskName].useable) {
+    if (!this.canSetTaskFavorite(projectName, taskName)) {
       throw new Error(`Task ${taskName} in project ${projectName} is not useable as it is not active`);
     }
     const newState: ProjectSettingsState = {

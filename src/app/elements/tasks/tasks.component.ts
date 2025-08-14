@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MenuComponent } from "../menu/menu.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { combineLatest, filter, map, Observable } from "rxjs";
 import { ProjectRouteParams } from "../../page/project/project.component";
@@ -8,7 +7,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angula
 import { MessageBoxService } from '../../service/message-box.service';
 import { FavoriteButtonComponent } from "../favorite-button/favorite-button.component";
 import { ActiveButtonComponent } from "../active-button/active-button.component";
-import { ButtonErrorDirective } from '../button-error.directive';
 import { TaskState } from '../../state/task-state';
 import { selectProjects } from '../../selector/project-settings-selectors';
 import { ProjectSettingsService } from '../../service/project-settings.service';
@@ -20,7 +18,7 @@ interface TasksFormValue {
 
 @Component({
     selector: 'tiu-tasks',
-    imports: [CommonModule, MenuComponent, ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent, ButtonErrorDirective],
+    imports: [CommonModule,  ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent],
     templateUrl: './tasks.component.html',
     styleUrl: './tasks.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -63,6 +61,14 @@ export class TasksComponent {
         }
       }
     });
+  }
+
+  canRemoveTask(task: string): boolean {
+    return this.projectSettingsService.canDeleteTask(this.currentProjectName, task);
+  }
+
+  canSetTaskFavorite(task: string): boolean {
+    return this.projectSettingsService.canSetTaskFavorite(this.currentProjectName, task);
   }
 
   editTask(task: string) {
