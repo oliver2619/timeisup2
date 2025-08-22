@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MenuComponent } from "../../elements/menu/menu.component";
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { CheckButtonComponent } from "../../elements/check-button/check-button.component";
@@ -10,7 +9,7 @@ import { NumberInputComponent } from '../../elements/number-input/number-input.c
 import { Store } from '@ngrx/store';
 import { selectSettings } from '../../selector/settings-selectors';
 import { settingsActions } from '../../action/settings-actions';
-import { AccountingService } from '../../service/accounting.service';
+import { DecimalPipe } from '@angular/common';
 
 interface SettingsFormValue {
   maxHoursPerDay: number;
@@ -21,7 +20,7 @@ interface SettingsFormValue {
 
 @Component({
     selector: 'tiu-settings',
-    imports: [CommonModule, MenuComponent, ReactiveFormsModule, CheckButtonComponent, RouterModule, HelpButtonDirective, NumberInputComponent],
+    imports: [MenuComponent, ReactiveFormsModule, CheckButtonComponent, RouterModule, HelpButtonDirective, NumberInputComponent, DecimalPipe],
     templateUrl: './settings.component.html',
     styleUrl: './settings.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -30,6 +29,8 @@ export class SettingsComponent {
 
   readonly formGroup: FormGroup;
   readonly daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+
+  private readonly store = inject(Store);
 
   private readonly initialValue: SettingsFormValue = {
     dayOfWeek: [],
@@ -73,12 +74,14 @@ export class SettingsComponent {
     return hoursPerDay <= v.maxHoursPerDay ? null : ({ maxHoursPerDay: 'Max hours per day must be greater or equal to hours per day.' });
   };
 
-  constructor(private readonly store: Store, private readonly accountingService: AccountingService, formBuilder: FormBuilder) {
+  constructor() {
+    const formBuilder = inject(FormBuilder);
+
     this.formGroup = formBuilder.group({});
     this.formGroup.addControl('maxHoursPerDay', formBuilder.control(0, [Validators.required, Validators.min(1), Validators.max(24)]));
     this.formGroup.addControl('hoursPerWeek', formBuilder.control(0, [Validators.required, Validators.min(1), Validators.max(168)]));
     this.formGroup.addControl('pensum', formBuilder.control(0, [Validators.required, Validators.min(1), Validators.max(100)]));
-    const array = formBuilder.array(this.daysOfWeek.map((_, i) => formBuilder.control(false)));
+    const array = formBuilder.array(this.daysOfWeek.map((_, __) => formBuilder.control(false)));
     this.formGroup.addControl('dayOfWeek', array);
     this.formGroup.setValidators([this.validatorDayOfWeekNotEmpty, this.validatorHoursPerDay]);
     this.store.select(selectSettings).subscribe({

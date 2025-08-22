@@ -24,7 +24,7 @@
         }
     </form>
     @if(hasSelection()) {
-        <tiu-month-overview-entries [month]="selectedMonth()" [year]="selectedYear()"></tiu-month-overview-entries>
+        <tiu-month-overview-entries [month]="selectedMonth()" [year]="selectedYear()" />
     } @else {
         <p>No months found, that contain any accounted working days.</p>
     }

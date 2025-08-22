@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, Signal, signal, WritableSignal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, signal, WritableSignal, inject } from '@angular/core';
 import { MenuComponent } from '../../elements/menu/menu.component';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DayRouteParams } from '../../day-route-params';
@@ -12,6 +11,7 @@ import { selectAccounting } from '../../selector/accounting-selectors';
 import { DayState } from '../../state/day-state';
 import { MonthState } from '../../state/month-state';
 import { selectHoursPerDay } from '../../selector/settings-selectors';
+import { DatePipe, DecimalPipe } from '@angular/common';
 
 interface TaskRecording {
   task: string;
@@ -26,7 +26,7 @@ interface ProjectRecording {
 
 @Component({
     selector: 'tiu-day-overview',
-    imports: [CommonModule, RouterModule, MenuComponent, DurationPipe, HoursPipe, TimePipe],
+    imports: [RouterModule, MenuComponent, DecimalPipe, DatePipe, DurationPipe, HoursPipe, TimePipe],
     templateUrl: './day-overview.component.html',
     styleUrl: './day-overview.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -48,10 +48,14 @@ export class DayOverviewComponent {
   readonly hasPrevious = computed(() => this.allDaysOfMonth().some(it => it < this.date().getDate()));
   readonly hasNext = computed(() => this.allDaysOfMonth().some(it => it > this.date().getDate()));
 
+  private router = inject(Router);
   private readonly hoursPerDay = signal(0);
   private readonly allDaysOfMonth = signal<number[]>([]);
 
-  constructor(private router: Router, store: Store, activatedRoute: ActivatedRoute) {
+  constructor() {
+    const store = inject(Store);
+    const activatedRoute = inject(ActivatedRoute);
+
     store.select(selectHoursPerDay).subscribe({ next: h => this.hoursPerDay.set(h) });
     combineLatest([activatedRoute.params as Observable<DayRouteParams>, store.select(selectAccounting)]).pipe(
       map(([route, acc]) => {

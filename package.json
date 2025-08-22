@@ -7,7 +7,8 @@
     "build": "ng build",
     "build-github": "ng build --base-href /timeisup2/",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "cleanup-imports": "ng g @angular/core:cleanup-unused-imports"
   },
   "private": true,
   "dependencies": {

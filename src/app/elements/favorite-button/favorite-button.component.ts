@@ -1,29 +1,25 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, output, input } from '@angular/core';
 import { ButtonErrorDirective } from '../button-error.directive';
+import { NgClass } from '@angular/common';
 
 @Component({
-    selector: 'tiu-favorite-button',
-    imports: [CommonModule, ButtonErrorDirective],
-    templateUrl: './favorite-button.component.html',
-    styleUrl: './favorite-button.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'tiu-favorite-button',
+  imports: [NgClass, ButtonErrorDirective],
+  templateUrl: './favorite-button.component.html',
+  styleUrl: './favorite-button.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FavoriteButtonComponent {
 
-  @Input('favorite')
-  isFavorite = false;
+  readonly isFavorite = input(false, { alias: "favorite" });
 
-  @Input('enabled')
-  enabled = true;
+  readonly enabled = input(true);
 
-  @Input('error')
-  buttonError = '';
+  readonly buttonError = input('', { alias: "error" });
 
-  @Output('change-favorite')
-  readonly onChangeFavorite = new EventEmitter<void>();
+  readonly onChangeFavorite = output<void>({ alias: 'change-favorite' });
 
   onClick() {
-    this.onChangeFavorite.emit();
+    this.onChangeFavorite.emit(undefined);
   }
 }

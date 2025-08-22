@@ -1,4 +1,4 @@
-import { ErrorHandler, Injectable } from '@angular/core';
+import { ErrorHandler, Injectable, inject } from '@angular/core';
 import { ToastService } from "./toast.service";
 
 @Injectable({
@@ -6,8 +6,7 @@ import { ToastService } from "./toast.service";
 })
 export class ToastErrorHandlerService implements ErrorHandler {
 
-  constructor(private readonly toastService: ToastService) {
-  }
+  private readonly toastService = inject(ToastService);
 
   handleError(error: any): void {
     if (error instanceof Error) {

@@ -1,74 +1,47 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  HostBinding,
-  HostListener,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, OnInit, computed, effect, input, output, signal } from '@angular/core';
 
-import {Toast} from "../../service/toast.service";
-import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
-import {timer} from "rxjs";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { timer } from "rxjs";
+import { Toast } from "../../service/toast.service";
 
 @Component({
-    selector: 'tiu-toast',
-    imports: [],
-    templateUrl: './toast.component.html',
-    styleUrl: './toast.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'tiu-toast',
+  imports: [],
+  templateUrl: './toast.component.html',
+  styleUrl: './toast.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class.visible]': 'visible()'
+  }
 })
-export class ToastComponent implements OnChanges, OnInit {
+export class ToastComponent implements OnInit {
 
-  @Input()
-  toast: Toast | undefined;
-
-  @Output('finish')
-  readonly onFinish = new EventEmitter<Toast>();
-
-  @HostBinding('class.visible')
-  visible = false;
+  readonly toast = input.required<Toast>();
+  readonly onFinish = output<Toast>({ alias: 'finish' });
+  readonly visible = signal(false);
+  readonly message = computed(() => this.toast().message);
 
   private readonly untilDestroyed = takeUntilDestroyed<number>();
 
-  get message(): string {
-    return this.toast?.message ?? '';
+  constructor() {
+    effect(() => {
+      timer(this.toast().until).pipe(this.untilDestroyed).subscribe(() => this.visible.set(false));
+    });
   }
 
-  constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
-
-  ngOnChanges(changes: SimpleChanges) {
-    if(changes['toast'] != undefined && this.toast != undefined) {
-      timer(this.toast.until).pipe(this.untilDestroyed).subscribe({
-        next: () => {
-          this.visible = false;
-          this.changeDetectorRef.markForCheck();
-        }
-      });
-    }
-  }
-
-  ngOnInit(){
-    window.setTimeout(()=>{
-      this.visible = true;
-      this.changeDetectorRef.markForCheck();
-    }, 1);
+  ngOnInit() {
+    window.setTimeout(() => this.visible.set(true), 1);
   }
 
   @HostListener('click')
   onClick() {
-    this.visible = false;
+    this.visible.set(false);
   }
 
   @HostListener('transitionend')
   onAnimationEnd() {
-    if(!this.visible) {
-      this.onFinish.emit(this.toast);
+    if (!this.visible()) {
+      this.onFinish.emit(this.toast());
     }
   }
 }

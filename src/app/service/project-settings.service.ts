@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import _ from 'lodash';
 import { EMPTY, Observable, of } from 'rxjs';
@@ -20,9 +20,14 @@ const projectSettingsJsonLocalStoreKey = `${modelJsonStorePrefix}projectSettings
 })
 export class ProjectSettingsService {
 
+  private readonly store = inject(Store);
+  private readonly accountingService = inject(AccountingService);
+
   private currentState: ProjectSettingsState = { favoriteProject: undefined, projects: {} };
 
-  constructor(private readonly store: Store, private readonly accountingService: AccountingService) {
+  constructor() {
+    const store = this.store;
+
     store.select(selectProjectSettings).subscribe({ next: state => this.currentState = state });
   }
 

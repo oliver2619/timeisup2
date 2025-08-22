@@ -3,7 +3,6 @@ import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 
 @Directive({
   selector: '[tiuBackButton]',
-  standalone: true
 })
 export class BackButtonDirective {
 

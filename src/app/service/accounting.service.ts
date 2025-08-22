@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import _ from 'lodash';
 import { Observable, of } from 'rxjs';
@@ -20,11 +20,15 @@ export class AccountingService {
 
   private static readonly TIMER_TIMEOUT = 500;
 
+  private readonly store = inject(Store);
+
   private timer: number | undefined;
   private settings: Settings = new Settings(0, 0, new Set());
   private model: Accountings;
 
-  constructor(private readonly store: Store) {
+  constructor() {
+    const store = this.store;
+
     this.model = this.load(this.settings);
     this.store.dispatch(accountingActions.load(this.model.getState(this.settings)));
     store.select(selectCurrentTask).subscribe({

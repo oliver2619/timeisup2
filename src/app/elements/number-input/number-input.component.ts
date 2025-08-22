@@ -1,58 +1,35 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
-
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnChanges, OnDestroy, SimpleChanges, computed, input, viewChild } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ButtonCounterDirective } from '../button-counter.directive';
 
 @Component({
-    selector: 'tiu-number-input',
-    imports: [ButtonCounterDirective],
-    templateUrl: './number-input.component.html',
-    styleUrl: './number-input.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'tiu-number-input',
+  imports: [ButtonCounterDirective],
+  templateUrl: './number-input.component.html',
+  styleUrl: './number-input.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NumberInputComponent implements OnChanges, OnDestroy, AfterViewInit {
 
-  @Input('unit')
-  unit: string = '';
-
-  @Input('formGroup')
-  formGroup: FormGroup | undefined;
-
-  @Input('name')
-  name: string | undefined;
-
-  @Input('min')
-  min: number | undefined;
-
-  @Input('max')
-  max: number | undefined;
-
-  @Input('step')
-  step = 1;
-
-  @ViewChild('input')
-  input: ElementRef<HTMLInputElement> | undefined;
+  readonly unit = input<string>('');
+  readonly formGroup = input.required<FormGroup>();
+  readonly name = input.required<string>();
+  readonly min = input<number>();
+  readonly max = input<number>();
+  readonly step = input(1);
+  readonly input = viewChild.required<ElementRef<HTMLInputElement>>('input');
+  readonly toggleSignEnabled = computed(() => this.min() == undefined || this.min()! < 0);
+  readonly hasUnit = computed(() => this.unit().length > 0);
 
   private control: AbstractControl<number | null> | undefined;
   private subscription: Subscription | undefined;
   private changeLock = false;
 
-  get hasUnit(): boolean {
-    return this.unit.length > 0;
-  }
-
-  get toggleSignEnabled(): boolean {
-    if(this.min != undefined && this.min >= 0) {
-      return false;
-    }
-    return true;
-  }
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes['formGroup'] != undefined || changes['name'] != undefined) {
       if (this.formGroup != undefined && this.name != undefined) {
-        this.setControl(this.formGroup.controls[this.name]);
+        this.setControl(this.formGroup().controls[this.name()]);
       }
     }
   }
@@ -76,7 +53,7 @@ export class NumberInputComponent implements OnChanges, OnDestroy, AfterViewInit
 
   change(amount: number) {
     this.changeValueCheckRange(current => {
-      return this.filterRange(current == null ? amount * this.step : current + amount * this.step);
+      return this.filterRange(current == null ? amount * this.step() : current + amount * this.step());
     });
   }
 
@@ -105,34 +82,32 @@ export class NumberInputComponent implements OnChanges, OnDestroy, AfterViewInit
   }
 
   private controlToInput() {
-    if (this.input != undefined) {
-      if (this.control == undefined || this.control.value == null) {
-        this.input.nativeElement.value = '';
-      } else {
-        this.input.nativeElement.value = String(this.control.value);
-      }
+    if (this.control == undefined || this.control.value == null) {
+      this.input().nativeElement.value = '';
+    } else {
+      this.input().nativeElement.value = String(this.control.value);
     }
   }
 
   private filterRange(value: number | null): number | null {
-    if(value == null) {
+    if (value == null) {
       return value;
     }
-    if (this.step != 0) {
-      value = Math.round(value / this.step) * this.step;
+    if (this.step() != 0) {
+      value = Math.round(value / this.step()) * this.step();
     }
-    if (this.min != undefined && value < this.min) {
-      value = this.min;
+    if (this.min() != undefined && value < this.min()!) {
+      value = this.min()!;
     }
-    if (this.max != undefined && value > this.max) {
-      value = this.max;
+    if (this.max() != undefined && value > this.max()!) {
+      value = this.max()!;
     }
     return value;
   }
 
   private inputToControl() {
-    if (this.control != undefined && this.input != undefined) {
-      const v = this.input.nativeElement.value;
+    if (this.control != undefined) {
+      const v = this.input().nativeElement.value;
       if (v == '') {
         this.control.setValue(null);
       } else {

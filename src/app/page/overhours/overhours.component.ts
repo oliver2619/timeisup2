@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MenuComponent } from "../../elements/menu/menu.component";
 import { NumberInputComponent } from "../../elements/number-input/number-input.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -22,6 +22,9 @@ export class OverhoursComponent {
 
   readonly formGroup: FormGroup;
 
+  private readonly store = inject(Store);
+  private readonly accountingService = inject(AccountingService);
+
   private readonly initialValue: OverhoursFormValue = {
     currentOvertime: 0,
   };
@@ -38,7 +41,9 @@ export class OverhoursComponent {
     return this.formGroup.value as OverhoursFormValue;
   }
 
-  constructor(private readonly store: Store, private readonly accountingService: AccountingService, formBuilder: FormBuilder) {
+  constructor() {
+    const formBuilder = inject(FormBuilder);
+
     this.formGroup = formBuilder.group({});
     this.formGroup.addControl('currentOvertime', formBuilder.control(0, [Validators.required]));
     this.store.select(selectOverhours).subscribe({
@@ -58,7 +63,7 @@ export class OverhoursComponent {
 
   save() {
     const v = this.value;
-    this.accountingService.setOverhours(this.value.currentOvertime);
+    this.accountingService.setOverhours(v.currentOvertime);
     this.formGroup.markAsPristine();
   }
 

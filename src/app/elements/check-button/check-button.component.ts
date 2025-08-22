@@ -1,22 +1,20 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
+import {ChangeDetectionStrategy, Component, output, input} from '@angular/core';
 
 @Component({
     selector: 'tiu-check-button',
-    imports: [CommonModule],
+    imports: [NgClass],
     templateUrl: './check-button.component.html',
     styleUrl: './check-button.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CheckButtonComponent {
 
-  @Input('active')
-  active = false;
+  readonly active = input(false);
 
-  @Output('change-active')
-  readonly onChangeActive = new EventEmitter<boolean>();
+  readonly onChangeActive = output<boolean>({ alias: 'change-active' });
 
   onClick() {
-    this.onChangeActive.emit(!this.active);
+    this.onChangeActive.emit(!this.active());
   }
 }

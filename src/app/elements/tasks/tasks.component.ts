@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { combineLatest, filter, map, Observable } from "rxjs";
 import { ProjectRouteParams } from "../../page/project/project.component";
@@ -11,24 +10,27 @@ import { TaskState } from '../../state/task-state';
 import { selectProjects } from '../../selector/project-settings-selectors';
 import { ProjectSettingsService } from '../../service/project-settings.service';
 import { Store } from '@ngrx/store';
+import { AsyncPipe } from '@angular/common';
 
 interface TasksFormValue {
   name: string;
 }
 
 @Component({
-    selector: 'tiu-tasks',
-    imports: [CommonModule,  ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent],
-    templateUrl: './tasks.component.html',
-    styleUrl: './tasks.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'tiu-tasks',
+  imports: [ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent, AsyncPipe],
+  templateUrl: './tasks.component.html',
+  styleUrl: './tasks.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TasksComponent {
 
   readonly formGroup: FormGroup;
-
   readonly tasks$: Observable<TaskState[]>;
 
+  private readonly router = inject(Router);
+  private readonly messageBoxService = inject(MessageBoxService);
+  private readonly projectSettingsService = inject(ProjectSettingsService);
   private currentProjectName = '';
 
   get canAddTask(): boolean {
@@ -39,7 +41,11 @@ export class TasksComponent {
     return this.formGroup.value as TasksFormValue;
   }
 
-  constructor(private readonly router: Router, private readonly messageBoxService: MessageBoxService, private readonly projectSettingsService: ProjectSettingsService, store: Store, route: ActivatedRoute, formBuilder: FormBuilder) {
+  constructor() {
+    const store = inject(Store);
+    const route = inject(ActivatedRoute);
+    const formBuilder = inject(FormBuilder);
+
     this.formGroup = formBuilder.group({});
     this.formGroup.addControl('name', formBuilder.control('', [Validators.required]));
     const selectedRoute$ = route.params as Observable<ProjectRouteParams>;

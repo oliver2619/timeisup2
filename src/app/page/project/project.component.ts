@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MenuComponent } from "../../elements/menu/menu.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ActivatedRoute, Router} from "@angular/router";
@@ -11,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { selectProjects } from '../../selector/project-settings-selectors';
 import { ProjectState } from '../../state/project-state';
 import { ProjectSettingsService } from '../../service/project-settings.service';
+import { AsyncPipe } from '@angular/common';
 
 export interface ProjectRouteParams {
   name: string;
@@ -23,7 +23,7 @@ interface ProjectFormValue {
 
 @Component({
     selector: 'tiu-project',
-    imports: [CommonModule, MenuComponent, ReactiveFormsModule, TasksComponent, HelpButtonDirective, BackButtonDirective],
+    imports: [MenuComponent, ReactiveFormsModule, TasksComponent, HelpButtonDirective, BackButtonDirective, AsyncPipe],
     templateUrl: './project.component.html',
     styleUrl: './project.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -34,6 +34,8 @@ export class ProjectComponent {
 
   projectName$: Observable<string>;
 
+  private readonly router = inject(Router);
+  private readonly projectSettingsService = inject(ProjectSettingsService);
   private currentProject: ProjectState | undefined;
 
   get canReset(): boolean {
@@ -48,7 +50,11 @@ export class ProjectComponent {
     return this.formGroup.value as ProjectFormValue;
   }
 
-  constructor(private readonly router: Router, private readonly projectSettingsService: ProjectSettingsService, store: Store, route: ActivatedRoute, formBuilder: FormBuilder) {
+  constructor() {
+    const store = inject(Store);
+    const route = inject(ActivatedRoute);
+    const formBuilder = inject(FormBuilder);
+
     this.formGroup = formBuilder.group({});
     this.formGroup.addControl('name', formBuilder.control('', Validators.required));
     this.formGroup.addControl('active', formBuilder.control(true));

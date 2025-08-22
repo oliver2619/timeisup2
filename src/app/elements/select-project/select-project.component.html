@@ -1,6 +1,6 @@
 <select #select [disabled]="!isEnabled()" (change)="onChange(select.value)">
     @for(project of projects$ | async; track project.name) {
-        <option [value]="project.name" [ngClass]="{favorite: project.favorite}" [selected]="project.name == value">{{project.name}}</option>
+        <option [value]="project.name" [ngClass]="{favorite: project.favorite}" [selected]="project.name === value()">{{project.name}}</option>
     }
 </select>
 <!--<button type="button" class="fas fa-caret-down"></button>-->

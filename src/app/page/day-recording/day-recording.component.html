@@ -6,10 +6,10 @@
         @if(canStart) {
             <div class="form-group">
                 <label>Project - Task</label>
-                <tiu-select-project [project-control]="projectControl"></tiu-select-project>
+                <tiu-select-project [project-control]="projectControl" />
             </div>
             <div class="form-group">
-                <tiu-select-task [project-control]="projectControl" [task-control]="taskControl"></tiu-select-task>
+                <tiu-select-task [project-control]="projectControl" [task-control]="taskControl" />
             </div>
         } @else {
             <p class="error">There is no selectible task to start with. Please configure a <a routerLink="/projects">project</a> with tasks first.</p>
@@ -44,5 +44,5 @@
             </div>
         </div>
     </div>
-    <tiu-record-list [year]="year()" [month]="month()" [day]="day()"></tiu-record-list>
+    <tiu-record-list [year]="year()" [month]="month()" [day]="day()" />
 </div>

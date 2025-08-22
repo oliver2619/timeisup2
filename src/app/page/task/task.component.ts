@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MenuComponent } from "../../elements/menu/menu.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -9,6 +8,7 @@ import { filter, map, Observable, zip } from 'rxjs';
 import { selectTasksByProject } from '../../selector/project-settings-selectors';
 import { TaskState } from '../../state/task-state';
 import { ProjectSettingsService } from '../../service/project-settings.service';
+import { AsyncPipe } from '@angular/common';
 
 export interface TaskRouteParams {
   project: string;
@@ -22,7 +22,7 @@ interface TaskFormValue {
 
 @Component({
     selector: 'tiu-task',
-    imports: [CommonModule, MenuComponent, ReactiveFormsModule, BackButtonDirective],
+    imports: [MenuComponent, ReactiveFormsModule, BackButtonDirective, AsyncPipe],
     templateUrl: './task.component.html',
     styleUrl: './task.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -32,6 +32,10 @@ export class TaskComponent {
   readonly formGroup: FormGroup;
 
   projectName$: Observable<string>;
+
+  private readonly router = inject(Router);
+  private readonly store = inject(Store);
+  private readonly projectSettingsService = inject(ProjectSettingsService);
 
   private currentTask: TaskState | undefined;
   private currentProject: string = '';
@@ -48,7 +52,11 @@ export class TaskComponent {
     return this.formGroup.value as TaskFormValue;
   }
 
-  constructor(private readonly router: Router, private readonly store: Store, private readonly projectSettingsService: ProjectSettingsService, route: ActivatedRoute, formBuilder: FormBuilder) {
+  constructor() {
+    const store = this.store;
+    const route = inject(ActivatedRoute);
+    const formBuilder = inject(FormBuilder);
+
     this.formGroup = formBuilder.group({});
     this.formGroup.addControl('name', formBuilder.control('', Validators.required));
     this.formGroup.addControl('active', formBuilder.control(true));

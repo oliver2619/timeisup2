@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, signal, inject } from '@angular/core';
 import { MenuComponent } from "../../elements/menu/menu.component";
 import { SelectProjectComponent } from "../../elements/select-project/select-project.component";
 import { SelectTaskComponent } from "../../elements/select-task/select-task.component";
@@ -15,6 +14,7 @@ import { Store } from '@ngrx/store';
 import { selectProjectSettings } from '../../selector/project-settings-selectors';
 import { AccountingService } from '../../service/accounting.service';
 import { selectCurrentComment, selectCurrentDate, selectCurrentDay, selectCurrentTask } from '../../selector/accounting-selectors';
+import { NgClass } from '@angular/common';
 
 interface DayRecordingFormValue {
   project: string;
@@ -27,7 +27,7 @@ interface DayRecordingFormValue {
     templateUrl: './day-recording.component.html',
     styleUrl: './day-recording.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [CommonModule, MenuComponent, SelectProjectComponent, SelectTaskComponent, ReactiveFormsModule, RecordListComponent, ButtonErrorDirective, RouterModule, DurationPipe, HoursPipe, HelpButtonDirective]
+    imports: [NgClass, MenuComponent, SelectProjectComponent, SelectTaskComponent, ReactiveFormsModule, RecordListComponent, ButtonErrorDirective, RouterModule, DurationPipe, HoursPipe, HelpButtonDirective]
 })
 export class DayRecordingComponent {
 
@@ -38,6 +38,8 @@ export class DayRecordingComponent {
   readonly month = signal(0);
   readonly day = signal(0);
   readonly isRecording = signal(false);
+
+  private readonly accountingService = inject(AccountingService);
 
   get canSaveComment(): boolean {
     return this.formGroup.controls['comment'].dirty;
@@ -59,7 +61,10 @@ export class DayRecordingComponent {
     return this.formGroup.value as DayRecordingFormValue;
   }
 
-  constructor(private readonly accountingService: AccountingService, store: Store, formBuilder: FormBuilder) {
+  constructor() {
+    const store = inject(Store);
+    const formBuilder = inject(FormBuilder);
+
     this.formGroup = formBuilder.group({});
     this.formGroup.addControl('project', formBuilder.control('', [Validators.required]));
     this.formGroup.addControl('task', formBuilder.control('', [Validators.required]));

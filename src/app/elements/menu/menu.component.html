@@ -4,12 +4,12 @@
   <a routerLink="/month" routerLinkActive="active"><span class="fas fa-calendar-days"></span></a>
 </div>
 <div class="menu-group">
-  <ng-content></ng-content>
+  <ng-content />
 </div>
 <div class="menu-group">
-  <button #menuButton type="button" (click)="toggleMenu()" [ngClass]="{active: dropDownVisible}"><span class="fas fa-bars"></span></button>
+  <button #menuButton type="button" (click)="toggleMenu()" [ngClass]="{active: dropDownVisible()}"><span class="fas fa-bars"></span></button>
 </div>
-<div #dropDown class="dropdown" [ngClass]="{visible: dropDownVisible}" style="left: {{dropDownPosition.x}}px; top: {{dropDownPosition.y}}px">
+<div #dropDown class="dropdown" [ngClass]="{visible: dropDownVisible()}" style="left: {{dropDownPosition().x}}px; top: {{dropDownPosition().y}}px">
   <a routerLink="/projects" routerLinkActive="active">Projects</a>
   <a routerLink="/overtime" routerLinkActive="active">Overtime</a>
   <a routerLink="/settings" routerLinkActive="active">Settings</a>

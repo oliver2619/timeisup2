@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnChanges, SimpleChanges, inject, viewChild, input } from '@angular/core';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { HoursPipe } from "../hours.pipe";
 import { RecordListContextMenuComponent } from '../record-list-context-menu/record-list-context-menu.component';
-import { RecordListContextMenu } from '../record-list-context-menu/record-list-context-menu';
 import { DurationPipe } from '../duration.pipe';
 import { Store } from '@ngrx/store';
 import { combineLatest, filter, map, Observable, Subject } from 'rxjs';
@@ -28,30 +27,25 @@ interface Item {
 
 @Component({
     selector: 'tiu-record-list',
-    imports: [CommonModule, HoursPipe, DurationPipe, RecordListContextMenuComponent, TimePipe],
+    imports: [NgClass, AsyncPipe, HoursPipe, DurationPipe, RecordListContextMenuComponent, TimePipe],
     templateUrl: './record-list.component.html',
     styleUrl: './record-list.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RecordListComponent implements OnChanges {
 
-  @Input()
-  year: number = 0;
-
-  @Input()
-  month: number = 0;
-
-  @Input()
-  day: number = 0;
-
-  @ViewChild(RecordListContextMenuComponent)
-  dayRecordingContextMenu: RecordListContextMenu | undefined;
-
+  readonly year = input.required<number>();
+  readonly month = input.required<number>();
+  readonly day = input.required<number>();
+  readonly dayRecordingContextMenu = viewChild.required(RecordListContextMenuComponent);
   readonly items$: Observable<Item[]>;
 
+  private readonly router = inject(Router);
   private readonly date = new Subject<DateState>();
 
-  constructor(private readonly router: Router, store: Store) {
+  constructor() {
+    const store = inject(Store);
+
     this.items$ = combineLatest([this.date, store.select(selectAccounting)]).pipe(
       map(([date, accounting]) => ({
         day: accounting.months.find(m => m.year === date.year && m.month === date.month)?.days.find(d => d.day === date.day),
@@ -63,20 +57,20 @@ export class RecordListComponent implements OnChanges {
   }
 
   ngOnChanges(_: SimpleChanges) {
-    window.setTimeout(() => this.date.next({ day: this.day, month: this.month, year: this.year }), 1);
+    window.setTimeout(() => this.date.next({ day: this.day(), month: this.month(), year: this.year() }), 1);
   }
 
   edit(index: number) {
     const url = this.router.url;
     if (url == '/day') {
-      this.router.navigate(['day', this.year!, this.month!, this.day!, index]);
+      this.router.navigate(['day', this.year(), this.month(), this.day(), index]);
     } else if (url.startsWith('/month/')) {
-      this.router.navigate(['month', this.year!, this.month!, this.day!, 'edit', index]);
+      this.router.navigate(['month', this.year(), this.month(), this.day(), 'edit', index]);
     }
   }
 
   showContextMenu(index: number) {
-    this.dayRecordingContextMenu?.show(this.year!, this.month!, this.day!, index);
+    this.dayRecordingContextMenu().show(this.year(), this.month(), this.day(), index);
   }
 
   private dayToItems(day: DayState, currentTime: number): Item[] {

@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, signal, inject } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { MenuComponent } from "../../elements/menu/menu.component";
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { DayRouteParams } from '../../day-route-params';
@@ -21,11 +21,11 @@ interface MonthEditEntryFormValue {
 }
 
 @Component({
-    selector: 'tiu-month-edit-entry',
-    templateUrl: './day-edit.component.html',
-    styleUrl: './day-edit.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [CommonModule, RouterModule, MenuComponent, RecordListComponent, DatePipe, CheckButtonComponent, ReactiveFormsModule, HelpButtonDirective, DurationPipe, HoursPipe]
+  selector: 'tiu-month-edit-entry',
+  templateUrl: './day-edit.component.html',
+  styleUrl: './day-edit.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterModule, MenuComponent, RecordListComponent, DatePipe, CheckButtonComponent, ReactiveFormsModule, HelpButtonDirective, DurationPipe, HoursPipe]
 })
 export class DayEditComponent {
 
@@ -36,6 +36,8 @@ export class DayEditComponent {
   readonly absenceHours = signal(0);
 
   date = new Date();
+
+  private readonly accountingService = inject(AccountingService);
 
   private _absence = 0;
 
@@ -52,7 +54,11 @@ export class DayEditComponent {
     this.accountingService.setDayAbsence(this.year(), this.month(), this.day(), absence);
   }
 
-  constructor(private readonly accountingService: AccountingService, store: Store, formBuilder: FormBuilder, activatedRoute: ActivatedRoute) {
+  constructor() {
+    const store = inject(Store);
+    const formBuilder = inject(FormBuilder);
+    const activatedRoute = inject(ActivatedRoute);
+
     this.formGroup = formBuilder.group({});
     this.formGroup.addControl('comment', formBuilder.control(''));
     combineLatest([activatedRoute.params, store.select(selectAccounting), store.select(selectHoursPerDay)]).subscribe({

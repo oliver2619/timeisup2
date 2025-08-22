@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnChanges, SimpleChanges, inject, input } from '@angular/core';
+import { AsyncPipe, DatePipe, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { MessageBoxService } from '../../service/message-box.service';
 import { HoursPipe } from "../hours.pipe";
@@ -21,25 +21,27 @@ interface Item {
 }
 
 @Component({
-    selector: 'tiu-month-overview-entries',
-    imports: [CommonModule, DurationPipe, HoursPipe],
-    templateUrl: './month-overview-entries.component.html',
-    styleUrl: './month-overview-entries.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'tiu-month-overview-entries',
+  imports: [NgClass, DatePipe, AsyncPipe, DurationPipe, HoursPipe],
+  templateUrl: './month-overview-entries.component.html',
+  styleUrl: './month-overview-entries.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MonthOverviewEntriesComponent implements OnChanges {
 
-  @Input('year')
-  year: number = 0;
-
-  @Input('month')
-  month: number = 0;
-
+  readonly year = input.required<number>();
+  readonly month = input.required<number>();
   readonly items$: Observable<Item[]>;
 
+  private readonly accountingService = inject(AccountingService);
+  private readonly router = inject(Router);
+  private readonly messageBoxService = inject(MessageBoxService);
   private readonly selectedMonth$ = new Subject<{ year: number, month: number }>();
 
-  constructor(private readonly accountingService: AccountingService, private readonly router: Router, private readonly messageBoxService: MessageBoxService, store: Store) {
+  constructor() {
+    const store = inject(Store);
+
+    // TODO this needs to be overworked
     this.items$ = combineLatest([this.selectedMonth$, store.select(selectAccounting)]).pipe(
       map(([sel, acc]) => acc.months.find(m => m.year === sel.year && m.month === sel.month)?.days ?? []),
       map(days => this.daysToItems(days))
@@ -47,42 +49,42 @@ export class MonthOverviewEntriesComponent implements OnChanges {
   }
 
   ngOnChanges(_: SimpleChanges) {
-    window.setTimeout(() => this.selectedMonth$.next({ year: this.year, month: this.month }), 1);
+    window.setTimeout(() => this.selectedMonth$.next({ year: this.year(), month: this.month() }), 1);
   }
 
   edit(day: number) {
-    this.router.navigate(['month', this.year, this.month, day, 'edit']);
+    this.router.navigate(['month', this.year(), this.month(), day, 'edit']);
   }
 
   setAbsence(day: number) {
-    this.accountingService.setDayAbsence(this.year, this.month, day, 1).subscribe({ next: _ => { } });
+    this.accountingService.setDayAbsence(this.year(), this.month(), day, 1).subscribe({ next: _ => { } });
   }
 
   remove(day: number) {
     const date = new Date();
     date.setTime(0);
-    date.setFullYear(this.year);
-    date.setMonth(this.month);
+    date.setFullYear(this.year());
+    date.setMonth(this.month());
     date.setDate(day);
     this.messageBoxService.question(`Do you want to delete all recordings for ${date.toLocaleDateString()}?`).subscribe({
       next: result => {
         if (result) {
-          this.accountingService.deleteDay(this.year, this.month, day).subscribe({ next: _ => { } });
+          this.accountingService.deleteDay(this.year(), this.month(), day).subscribe({ next: _ => { } });
         }
       }
     });
   }
 
   view(day: number) {
-    this.router.navigate(['month', this.year, this.month, day, 'view']);
+    this.router.navigate(['month', this.year(), this.month(), day, 'view']);
   }
 
   private daysToItems(days: DayState[]): Item[] {
     return days.map(d => {
       const date = new Date();
       date.setTime(0);
-      date.setFullYear(this.year);
-      date.setMonth(this.month);
+      date.setFullYear(this.year());
+      date.setMonth(this.month());
       date.setDate(d.day);
       const ret: Item = {
         accounted: d.accounted,

@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, HostListener} from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, inject } from '@angular/core';
 
 import {Router} from "@angular/router";
 
@@ -11,8 +11,7 @@ import {Router} from "@angular/router";
 })
 export class SplashComponent {
 
-  constructor(private readonly router: Router) {
-  }
+  private readonly router = inject(Router);
 
   @HostListener("document:click")
   navigateToOverview() {

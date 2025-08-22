@@ -1,13 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DecimalPipe } from "@angular/common";
+import { formatNumber } from "@angular/common";
 
 @Pipe({
   name: 'tiuHours',
-  standalone: true
 })
 export class HoursPipe implements PipeTransform {
-
-  private readonly decimalPipe = new DecimalPipe('en-US');
 
   transform(value: unknown, ..._args: unknown[]): unknown {
     if (typeof value !== 'number' && typeof value !== 'string') {
@@ -22,12 +19,13 @@ export class HoursPipe implements PipeTransform {
   }
 
   private transformPositiveHours(hours: number): string {
-    if(hours >= 24) {
+    const locale = document.documentElement.lang;
+    if (hours >= 24) {
       const days = Math.floor(hours / 24);
       const remainingHours = hours - days * 24;
-      return `${this.decimalPipe.transform(days, '1.0-0')}d\u00a0${this.decimalPipe.transform(remainingHours, '1.2-2')}h`;
-    }else {
-      return `${this.decimalPipe.transform(hours, '1.2-2')}h`
+      return `${formatNumber(days, locale, '1.0-0')}d\u00a0${formatNumber(remainingHours, locale, '1.2-2')}h`;
+    } else {
+      return `${formatNumber(hours, locale, '1.2-2')}h`;
     }
   }
 }

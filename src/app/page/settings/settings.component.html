@@ -6,15 +6,15 @@
   <form [formGroup]="formGroup">
     <div class="form-group">
       <label>Maximum hours per day</label>
-      <tiu-number-input [formGroup]="formGroup" name="maxHoursPerDay" [min]="1" [max]="24" unit="h"></tiu-number-input>
+      <tiu-number-input [formGroup]="formGroup" name="maxHoursPerDay" [min]="1" [max]="24" unit="h" />
     </div>
     <div class="form-group">
       <label>Hours per week (100 %)</label>
-      <tiu-number-input [formGroup]="formGroup" name="hoursPerWeek" [min]="1" [max]="168" unit="h"></tiu-number-input>
+      <tiu-number-input [formGroup]="formGroup" name="hoursPerWeek" [min]="1" [max]="168" unit="h" />
     </div>
     <div class="form-group">
       <label>Pensum</label>
-      <tiu-number-input [formGroup]="formGroup" name="pensum" [min]="1" [max]="100" [step]="10" unit="%"></tiu-number-input>
+      <tiu-number-input [formGroup]="formGroup" name="pensum" [min]="1" [max]="100" [step]="10" unit="%" />
     </div>
     <div class="form-group">
       <label>Working days</label>

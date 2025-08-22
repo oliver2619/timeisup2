@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MenuComponent } from "../../elements/menu/menu.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
@@ -12,6 +11,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { ProjectState } from '../../state/project-state';
 import { ProjectSettingsService } from '../../service/project-settings.service';
+import { AsyncPipe } from '@angular/common';
 
 interface ProjectsFormValue {
   name: string;
@@ -19,7 +19,7 @@ interface ProjectsFormValue {
 
 @Component({
   selector: 'tiu-projects',
-  imports: [CommonModule, MenuComponent, ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent, HelpButtonDirective],
+  imports: [MenuComponent, ReactiveFormsModule, FavoriteButtonComponent, ActiveButtonComponent, HelpButtonDirective, AsyncPipe],
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -30,6 +30,10 @@ export class ProjectsComponent {
 
   readonly projects$: Observable<ProjectState[]>;
 
+  private readonly router = inject(Router);
+  private readonly messageBoxService = inject(MessageBoxService);
+  private readonly projectSettingsService = inject(ProjectSettingsService);
+
   get canAddProject(): boolean {
     return this.formGroup.valid;
   }
@@ -38,7 +42,10 @@ export class ProjectsComponent {
     return this.formGroup.value as ProjectsFormValue;
   }
 
-  constructor(private readonly router: Router, private readonly messageBoxService: MessageBoxService, private readonly projectSettingsService: ProjectSettingsService, store: Store, formBuilder: FormBuilder) {
+  constructor() {
+    const store = inject(Store);
+    const formBuilder = inject(FormBuilder);
+
     this.projects$ = store.select(selectProjects);
     this.formGroup = formBuilder.group({});
     this.formGroup.addControl('name', formBuilder.control('', [Validators.required]));

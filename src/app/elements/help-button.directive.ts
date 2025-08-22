@@ -3,7 +3,6 @@ import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 
 @Directive({
   selector: '[tiuHelpButton]',
-  standalone: true
 })
 export class HelpButtonDirective {
 

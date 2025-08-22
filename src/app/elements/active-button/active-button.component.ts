@@ -1,22 +1,20 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {ChangeDetectionStrategy, Component, output, input} from '@angular/core';
+import { NgClass} from '@angular/common';
 
 @Component({
     selector: 'tiu-active-button',
-    imports: [CommonModule],
+    imports: [NgClass],
     templateUrl: './active-button.component.html',
     styleUrl: './active-button.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ActiveButtonComponent {
 
-  @Input('active')
-  isActive = true;
+  readonly isActive = input(true, { alias: "active" });
 
-  @Output('change-active')
-  readonly onChangeActive = new EventEmitter<boolean>();
+  readonly onChangeActive = output<boolean>({ alias: 'change-active' });
 
   onClick() {
-    this.onChangeActive.emit(!this.isActive);
+    this.onChangeActive.emit(!this.isActive());
   }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 
 import { RecordListContextMenu } from './record-list-context-menu';
 import { MessageBoxService } from '../../service/message-box.service';
@@ -9,26 +9,26 @@ import { AccountingService } from '../../service/accounting.service';
   imports: [],
   templateUrl: './record-list-context-menu.component.html',
   styleUrl: './record-list-context-menu.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class.visible]': 'visible()'
+  }
 })
 export class RecordListContextMenuComponent implements RecordListContextMenu {
+
+  readonly visible = signal(false);
+  readonly canJoinWithPrevious = signal(false);
+
+  private readonly messageBoxService = inject(MessageBoxService);
+  private readonly accountingService = inject(AccountingService);
 
   private year: number = 0;
   private month: number = 0;
   private day: number = 0;
   private recordIndex: number = 0;
 
-  @HostBinding('class.visible')
-  visible = false;
-
-  get canJoinWithPrevious(): boolean {
-    return this.accountingService.canJoinWithPrevious(this.year, this.month, this.day, this.recordIndex);
-  }
-
-  constructor(private readonly messageBoxService: MessageBoxService, private readonly accountingService: AccountingService) { }
-
   hide() {
-    this.visible = false;
+    this.visible.set(false);
   }
 
   joinWithPrevious() {
@@ -72,7 +72,8 @@ export class RecordListContextMenuComponent implements RecordListContextMenu {
     this.month = month;
     this.day = day;
     this.recordIndex = recordIndex;
-    this.visible = true;
+    this.canJoinWithPrevious.set(this.accountingService.canJoinWithPrevious(this.year, this.month, this.day, this.recordIndex));
+    this.visible.set(true);
   }
 
   split() {

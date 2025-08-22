@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { MenuComponent } from "../../elements/menu/menu.component";
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -43,6 +43,9 @@ export class RecordEditComponent {
   readonly formGroup: FormGroup;
 
   hasEnd = true;
+
+  private readonly router = inject(Router);
+  private readonly accountingService = inject(AccountingService);
 
   private recordingIndex = 0;
   private year = 0;
@@ -105,7 +108,11 @@ export class RecordEditComponent {
     this.formGroup.setValue(v);
   }
 
-  constructor(private readonly router: Router, private readonly accountingService: AccountingService, store: Store, formBuilder: FormBuilder, activatedRoute: ActivatedRoute) {
+  constructor() {
+    const store = inject(Store);
+    const formBuilder = inject(FormBuilder);
+    const activatedRoute = inject(ActivatedRoute);
+
     this.formGroup = formBuilder.group({});
     this.formGroup.addControl('startHour', formBuilder.control(0, [Validators.required, Validators.min(0), Validators.max(23)]));
     this.formGroup.addControl('endHour', formBuilder.control(0, [Validators.required, Validators.min(0), Validators.max(23)]));

@@ -1,37 +1,41 @@
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, HostListener, Signal, signal, viewChild } from '@angular/core';
 import { RouterLink, RouterLinkActive } from "@angular/router";
 
 @Component({
-    selector: 'tiu-menu',
-    imports: [CommonModule, RouterLink, RouterLinkActive],
-    templateUrl: './menu.component.html',
-    styleUrl: './menu.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'tiu-menu',
+  imports: [NgClass, RouterLink, RouterLinkActive],
+  templateUrl: './menu.component.html',
+  styleUrl: './menu.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuComponent {
 
-  dropDownVisible = false;
-  dropDownPosition: { x: number, y: number } = { x: 0, y: 0 };
+  readonly dropDownVisible = signal(false);
+  readonly dropDownPosition: Signal<{ x: number, y: number }> = computed(() => {
+    const mb = this.menuButton()?.nativeElement;
+    const dd = this.dropDown()?.nativeElement;
+    if (mb == undefined || dd == undefined) {
+      return { x: 0, y: 0 };
+    } else {
+      return {
+        x: mb.offsetLeft + mb.offsetWidth - dd.offsetWidth,
+        y: mb.offsetTop + mb.offsetHeight,
+      }
+    }
+  });
 
-  @ViewChild('menuButton')
-  menuButton: ElementRef<HTMLButtonElement> | undefined;
-
-  @ViewChild('dropDown')
-  dropDown: ElementRef<HTMLElement> | undefined;
+  readonly menuButton = viewChild<ElementRef<HTMLButtonElement>>('menuButton');
+  readonly dropDown = viewChild<ElementRef<HTMLElement>>('dropDown');
 
   toggleMenu() {
-    this.dropDownVisible = !this.dropDownVisible;
-    if (this.menuButton != undefined && this.dropDown != undefined) {
-      this.dropDownPosition.x = this.menuButton.nativeElement.offsetLeft + this.menuButton.nativeElement.offsetWidth - this.dropDown.nativeElement.offsetWidth;
-      this.dropDownPosition.y = this.menuButton.nativeElement.offsetTop + this.menuButton.nativeElement.offsetHeight;
-    }
+    this.dropDownVisible.update(value => !value);
   }
 
   @HostListener("document:mouseup")
   hideMenu() {
-    if (this.dropDownVisible) {
-      this.dropDownVisible = false;
+    if (this.dropDownVisible()) {
+      this.dropDownVisible.set(false);
     }
   }
 }

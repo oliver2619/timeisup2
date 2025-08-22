@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, signal, inject } from '@angular/core';
 import { MenuComponent } from "../../elements/menu/menu.component";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -13,17 +12,18 @@ import { combineLatest, concat, Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectAccountedMonths, selectAccounting } from '../../selector/accounting-selectors';
 import { AccountingService } from '../../service/accounting.service';
+import { AsyncPipe } from '@angular/common';
 
 interface MonthOverviewFormValue {
   month: string;
 }
 
 @Component({
-    selector: 'tiu-month-overview',
-    imports: [CommonModule, ReactiveFormsModule, MenuComponent, MonthOverviewEntriesComponent, HoursPipe, DurationPipe, RouterModule, HelpButtonDirective],
-    templateUrl: './month-overview.component.html',
-    styleUrl: './month-overview.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'tiu-month-overview',
+  imports: [ReactiveFormsModule, MenuComponent, MonthOverviewEntriesComponent, AsyncPipe, HoursPipe, DurationPipe, RouterModule, HelpButtonDirective],
+  templateUrl: './month-overview.component.html',
+  styleUrl: './month-overview.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MonthOverviewComponent {
 
@@ -36,6 +36,9 @@ export class MonthOverviewComponent {
   readonly selectedYear = signal(0);
   readonly hasSelection = signal(false);
 
+  private readonly accountingService = inject(AccountingService);
+  private readonly messageBoxService = inject(MessageBoxService);
+
   get canRemoveAll(): boolean {
     return this.formGroup.valid;
   }
@@ -44,7 +47,10 @@ export class MonthOverviewComponent {
     return this.formGroup.value as MonthOverviewFormValue;
   }
 
-  constructor(private readonly accountingService: AccountingService, private readonly messageBoxService: MessageBoxService, store: Store, formBuilder: FormBuilder) {
+  constructor() {
+    const store = inject(Store);
+    const formBuilder = inject(FormBuilder);
+
     this.years$ = store.select(selectAccountedMonths);
     this.formGroup = formBuilder.group({});
     const monthControl = formBuilder.control('', Validators.required);
@@ -60,7 +66,7 @@ export class MonthOverviewComponent {
         }
       }
     });
-    
+
     const selectMonth$ = concat(of(monthControl.value), monthControl.valueChanges);
     combineLatest([store.select(selectAccounting), selectMonth$]).subscribe({
       next: ([accounting, month]) => {
@@ -76,12 +82,11 @@ export class MonthOverviewComponent {
   }
 
   removeAll() {
-    this.messageBoxService.questionYesNoCancel('All recordings for the entire month will be deleted. Do you want to save the month\'s overtime?').subscribe({
-      next: result => {
-        if (result !== YesNoCancelResult.CANCEL) {
-          this.accountingService.deleteMonth(this.selectedYear(), this.selectedMonth(), result === YesNoCancelResult.YES).subscribe({ next: _ => { } });
-        }
+    this.messageBoxService.questionYesNoCancel('All recordings for the entire month will be deleted. Do you want to save the month\'s overtime?').subscribe(result => {
+      if (result !== YesNoCancelResult.CANCEL) {
+        this.accountingService.deleteMonth(this.selectedYear(), this.selectedMonth(), result === YesNoCancelResult.YES).subscribe({ next: _ => { } });
       }
-    });
+    }
+    );
   }
 }

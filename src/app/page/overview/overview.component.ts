@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, inject, Signal, computed } from '@angular/core';
 
 import { MenuComponent } from "../../elements/menu/menu.component";
 import { RouterModule } from '@angular/router';
 import { HoursPipe } from '../../elements/hours.pipe';
 import { Store } from '@ngrx/store';
 import { selectCurrentTask, selectOverhours } from '../../selector/accounting-selectors';
+import { RecordState } from '../../state/record-state';
 
 @Component({
     selector: 'tiu-overview',
@@ -15,21 +16,12 @@ import { selectCurrentTask, selectOverhours } from '../../selector/accounting-se
 })
 export class OverviewComponent {
 
-  readonly currentProject = signal('');
-  readonly currentTask = signal('');
-  readonly currentlyWorking = signal(false);
-  readonly overhours = signal(0);
+  private readonly store = inject(Store);
+  private readonly currentTaskObj = this.store.selectSignal(selectCurrentTask);
 
-  constructor(store: Store) {
-    store.select(selectCurrentTask).subscribe({
-      next: task => {
-        this.currentlyWorking.set(task != undefined);
-        this.currentTask.set(task == undefined ? '' : task.task);
-        this.currentProject.set(task == undefined ? '' : task.project);
-      }
-    });
-    store.select(selectOverhours).subscribe({
-      next: o => this.overhours.set(o)
-    });
-  }
+  readonly currentProject = computed(() => this.currentTaskObj()?.project);
+  readonly currentTask = computed(() => this.currentTaskObj()?.task);
+  readonly currentlyWorking = computed(() => this.currentTaskObj() != undefined);
+  readonly overhours = this.store.selectSignal(selectOverhours);
+  
 }
