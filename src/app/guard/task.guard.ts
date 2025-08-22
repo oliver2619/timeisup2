@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { selectProjects } from '../selector/project-settings-selectors';
 import { map } from 'rxjs';
 
-export const taskGuard: CanActivateFn = (route, _) => {
+export const taskGuard: CanActivateFn = (route) => {
   const params = route.params as TaskRouteParams;
   const projectName = params.project;
   const taskName = params.task;

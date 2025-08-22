@@ -218,12 +218,12 @@ export class ProjectSettingsService {
       favoriteProject = undefined;
     }
     if (favoriteProject == undefined) {
-      favoriteProject = Object.entries(projects).sort((p1, p2) => p1[0].localeCompare(p2[0])).find(([_, v]) => v.useable)?.[0];
+      favoriteProject = Object.entries(projects).sort((p1, p2) => p1[0].localeCompare(p2[0])).find(([_k, v]) => v.useable)?.[0];
     }
     if (favoriteProject != undefined) {
       projects[favoriteProject] = { ...projects[favoriteProject], favorite: true }
     }
-    let ret: ProjectSettingsState = {
+    const ret: ProjectSettingsState = {
       favoriteProject,
       projects
     }
@@ -246,7 +246,7 @@ export class ProjectSettingsService {
       favoriteTask = undefined;
     }
     if (favoriteTask == undefined) {
-      favoriteTask = Object.entries(tasks).sort((t1, t2) => t1[0].localeCompare(t2[0])).find(([_, v]) => v.useable)?.[0];
+      favoriteTask = Object.entries(tasks).sort((t1, t2) => t1[0].localeCompare(t2[0])).find(([_k, v]) => v.useable)?.[0];
     }
     if (favoriteTask != undefined) {
       tasks[favoriteTask] = { ...tasks[favoriteTask], favorite: true };
@@ -274,7 +274,7 @@ export class ProjectSettingsService {
     return ret;
   }
 
-  private loadProjects(input: { [key: string]: ProjectJson }): { [key: string]: ProjectState } {
+  private loadProjects(input: Record<string, ProjectJson>): Record<string, ProjectState> {
     return Object.fromEntries(Object.entries(input).map(([k, v]) => [k, this.loadProject(k, v)]));
   }
 

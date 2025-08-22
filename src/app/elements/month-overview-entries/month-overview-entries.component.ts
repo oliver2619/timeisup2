@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnChanges, SimpleChanges, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnChanges, inject, input } from '@angular/core';
 import { AsyncPipe, DatePipe, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { MessageBoxService } from '../../service/message-box.service';
@@ -48,7 +48,7 @@ export class MonthOverviewEntriesComponent implements OnChanges {
     );
   }
 
-  ngOnChanges(_: SimpleChanges) {
+  ngOnChanges() {
     window.setTimeout(() => this.selectedMonth$.next({ year: this.year(), month: this.month() }), 1);
   }
 
@@ -57,7 +57,7 @@ export class MonthOverviewEntriesComponent implements OnChanges {
   }
 
   setAbsence(day: number) {
-    this.accountingService.setDayAbsence(this.year(), this.month(), day, 1).subscribe({ next: _ => { } });
+    this.accountingService.setDayAbsence(this.year(), this.month(), day, 1).subscribe(() => undefined);
   }
 
   remove(day: number) {
@@ -69,7 +69,7 @@ export class MonthOverviewEntriesComponent implements OnChanges {
     this.messageBoxService.question(`Do you want to delete all recordings for ${date.toLocaleDateString()}?`).subscribe({
       next: result => {
         if (result) {
-          this.accountingService.deleteDay(this.year(), this.month(), day).subscribe({ next: _ => { } });
+          this.accountingService.deleteDay(this.year(), this.month(), day).subscribe(() => undefined);
         }
       }
     });

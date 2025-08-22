@@ -10,11 +10,11 @@ import { NgClass} from '@angular/common';
 })
 export class ActiveButtonComponent {
 
-  readonly isActive = input(true, { alias: "active" });
+  readonly active = input(true);
 
-  readonly onChangeActive = output<boolean>({ alias: 'change-active' });
+  readonly changeActive = output<boolean>({ alias: 'change-active' });
 
   onClick() {
-    this.onChangeActive.emit(!this.isActive());
+    this.changeActive.emit(!this.active());
   }
 }

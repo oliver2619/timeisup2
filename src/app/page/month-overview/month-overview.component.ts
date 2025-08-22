@@ -84,7 +84,7 @@ export class MonthOverviewComponent {
   removeAll() {
     this.messageBoxService.questionYesNoCancel('All recordings for the entire month will be deleted. Do you want to save the month\'s overtime?').subscribe(result => {
       if (result !== YesNoCancelResult.CANCEL) {
-        this.accountingService.deleteMonth(this.selectedYear(), this.selectedMonth(), result === YesNoCancelResult.YES).subscribe({ next: _ => { } });
+        this.accountingService.deleteMonth(this.selectedYear(), this.selectedMonth(), result === YesNoCancelResult.YES).subscribe(() => undefined);
       }
     }
     );

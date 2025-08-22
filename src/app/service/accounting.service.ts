@@ -1,6 +1,5 @@
 import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import _ from 'lodash';
 import { Observable, of } from 'rxjs';
 import { AccountingJson } from '../../model/accounting-json';
 import { ModelJson, modelJsonStorePrefix } from '../../model/model-json';

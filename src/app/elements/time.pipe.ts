@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TimePipe implements PipeTransform {
 
-  transform(value: unknown, ..._args: unknown[]): unknown {
+  transform(value: unknown): unknown {
     if (typeof value === 'string' || typeof value === 'number' || value instanceof Date) {
       return formatDate(value, 'HH:mm', document.documentElement.lang);
     } else {

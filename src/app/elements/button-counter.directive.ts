@@ -1,13 +1,13 @@
 import { Directive, HostListener, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { delay, interval,  takeWhile } from 'rxjs';
+import { delay, interval, takeWhile } from 'rxjs';
 
 @Directive({
   selector: '[tiuButtonCounter]',
 })
 export class ButtonCounterDirective {
 
-  readonly onCounter = output<void>({ alias: 'counter' });
+  readonly counter = output<void>();
 
   private takeUntilDestroyed = takeUntilDestroyed();
 
@@ -21,12 +21,10 @@ export class ButtonCounterDirective {
     if (ev.button === 0) {
       const el = ev.target as HTMLElement;
       el.setPointerCapture(ev.pointerId);
-      this.onCounter.emit(undefined);
+      this.counter.emit(undefined);
       interval(150)
-        .pipe(delay(400), this.takeUntilDestroyed, takeWhile(_ => el.hasPointerCapture(ev.pointerId)))
-        .subscribe({
-          next: _ => this.onCounter.emit(undefined)
-        });
+        .pipe(delay(400), this.takeUntilDestroyed, takeWhile(() => el.hasPointerCapture(ev.pointerId)))
+        .subscribe(() => this.counter.emit(undefined));
     }
   }
 

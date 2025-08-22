@@ -22,7 +22,7 @@ export class SelectTaskComponent implements OnInit {
   readonly value = signal('');
   readonly isEnabled = signal(false);
 
-  tasks$: Observable<ReadonlyArray<TaskState>> = of([]);
+  tasks$: Observable<readonly TaskState[]> = of([]);
 
   private readonly tasksByProject$: Observable<TasksByProject>;
   private readonly projectSettings$: Observable<ProjectSettingsState>;

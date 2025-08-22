@@ -11,15 +11,15 @@ import { NgClass } from '@angular/common';
 })
 export class FavoriteButtonComponent {
 
-  readonly isFavorite = input(false, { alias: "favorite" });
+  readonly favorite = input(false);
 
   readonly enabled = input(true);
 
-  readonly buttonError = input('', { alias: "error" });
+  readonly error = input('');
 
-  readonly onChangeFavorite = output<void>({ alias: 'change-favorite' });
+  readonly changeFavorite = output<void>({ alias: 'change-favorite' });
 
   onClick() {
-    this.onChangeFavorite.emit(undefined);
+    this.changeFavorite.emit(undefined);
   }
 }

@@ -38,7 +38,7 @@ export class TaskComponent {
   private readonly projectSettingsService = inject(ProjectSettingsService);
 
   private currentTask: TaskState | undefined;
-  private currentProject: string = '';
+  private currentProject = '';
 
   get canReset(): boolean {
     return this.formGroup.dirty;

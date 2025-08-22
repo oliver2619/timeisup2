@@ -6,7 +6,7 @@ import { formatNumber } from "@angular/common";
 })
 export class HoursPipe implements PipeTransform {
 
-  transform(value: unknown, ..._args: unknown[]): unknown {
+  transform(value: unknown): unknown {
     if (typeof value !== 'number' && typeof value !== 'string') {
       return value;
     }

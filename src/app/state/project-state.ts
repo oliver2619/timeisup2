@@ -6,7 +6,7 @@ export interface ProjectState {
     readonly active: boolean;
     readonly favorite: boolean;
     readonly useable: boolean;
-    readonly tasks: {[key: string]: TaskState};
+    readonly tasks: Record<string, TaskState>;
     readonly favoriteTask: string | undefined;
 
 }

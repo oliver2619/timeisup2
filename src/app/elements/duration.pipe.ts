@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class DurationPipe implements PipeTransform {
 
-  transform(value: unknown, ..._: unknown[]): unknown {
+  transform(value: unknown): unknown {
     if (typeof value !== 'number') {
       return value;
     }

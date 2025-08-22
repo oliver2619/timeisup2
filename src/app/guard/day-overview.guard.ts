@@ -5,7 +5,7 @@ import { map } from 'rxjs';
 import { DayRouteParams } from '../day-route-params';
 import { selectAccounting } from '../selector/accounting-selectors';
 
-export const dayOverviewGuard: CanActivateFn = (route, _) => {
+export const dayOverviewGuard: CanActivateFn = (route) => {
 
   const date: DayRouteParams = route.params as DayRouteParams;
   const year = Number.parseInt(date.year);

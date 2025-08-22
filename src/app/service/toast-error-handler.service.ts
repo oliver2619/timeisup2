@@ -8,7 +8,7 @@ export class ToastErrorHandlerService implements ErrorHandler {
 
   private readonly toastService = inject(ToastService);
 
-  handleError(error: any): void {
+  handleError(error: unknown): void {
     if (error instanceof Error) {
       this.toastService.error(error.message);
     } else {

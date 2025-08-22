@@ -79,17 +79,17 @@ export class ProjectsComponent {
     this.messageBoxService.question(`Do you want to remove project ${name}?`).subscribe({
       next: result => {
         if (result) {
-          this.projectSettingsService.deleteProject(name).subscribe({ next: _ => { } });
+          this.projectSettingsService.deleteProject(name).subscribe(() => undefined);
         }
       }
     });
   }
 
   setActive(project: string, active: boolean) {
-    this.projectSettingsService.setProject(project, project, active).subscribe({ next: _ => { } });
+    this.projectSettingsService.setProject(project, project, active).subscribe(() => undefined);
   }
 
   setFavorite(project: string) {
-    this.projectSettingsService.setProjectFavorite(project).subscribe({ next: _ => { } });
+    this.projectSettingsService.setProjectFavorite(project).subscribe(() => undefined);
   }
 }

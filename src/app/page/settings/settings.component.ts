@@ -81,12 +81,12 @@ export class SettingsComponent {
     this.formGroup.addControl('maxHoursPerDay', formBuilder.control(0, [Validators.required, Validators.min(1), Validators.max(24)]));
     this.formGroup.addControl('hoursPerWeek', formBuilder.control(0, [Validators.required, Validators.min(1), Validators.max(168)]));
     this.formGroup.addControl('pensum', formBuilder.control(0, [Validators.required, Validators.min(1), Validators.max(100)]));
-    const array = formBuilder.array(this.daysOfWeek.map((_, __) => formBuilder.control(false)));
+    const array = formBuilder.array(this.daysOfWeek.map(() => formBuilder.control(false)));
     this.formGroup.addControl('dayOfWeek', array);
     this.formGroup.setValidators([this.validatorDayOfWeekNotEmpty, this.validatorHoursPerDay]);
     this.store.select(selectSettings).subscribe({
       next: value => {
-        this.initialValue.dayOfWeek = this.daysOfWeek.map(_ => false);
+        this.initialValue.dayOfWeek = this.daysOfWeek.map(() => false);
         value.workingDays.forEach(it => this.initialValue.dayOfWeek[it] = true);
         this.initialValue.hoursPerWeek = value.hoursPerWeek;
         this.initialValue.maxHoursPerDay = value.maxHoursPerDay;

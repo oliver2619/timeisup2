@@ -5,7 +5,7 @@ import { map } from 'rxjs';
 import { RecordEditRouteParams } from '../page/record-edit/record-edit.component';
 import { selectAccounting } from '../selector/accounting-selectors';
 
-export const recordGuard: CanActivateFn = (route, _) => {
+export const recordGuard: CanActivateFn = (route) => {
 
   const params = route.params as RecordEditRouteParams;
   const index = Number.parseInt(params.index);

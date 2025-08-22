@@ -22,10 +22,10 @@ export class RecordListContextMenuComponent implements RecordListContextMenu {
   private readonly messageBoxService = inject(MessageBoxService);
   private readonly accountingService = inject(AccountingService);
 
-  private year: number = 0;
-  private month: number = 0;
-  private day: number = 0;
-  private recordIndex: number = 0;
+  private year = 0;
+  private month = 0;
+  private day = 0;
+  private recordIndex = 0;
 
   hide() {
     this.visible.set(false);

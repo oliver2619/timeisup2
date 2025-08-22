@@ -2,7 +2,7 @@ import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { ProjectSettingsState } from "../state/project-settings-state";
 import { TaskState } from "../state/task-state";
 
-export type TasksByProject = { [key: string]: ReadonlyArray<TaskState> };
+export type TasksByProject = Record<string, readonly TaskState[]>;
 
 export const selectProjectSettings = createSelector(
     createFeatureSelector<ProjectSettingsState>('projectSettings'),

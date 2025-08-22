@@ -69,13 +69,12 @@ export class NumberInputComponent implements OnChanges, OnDestroy, AfterViewInit
       }
       this.control = control;
       if (this.control != undefined) {
-        this.subscription = this.control.valueChanges.subscribe({
-          next: _ => {
+        this.subscription = this.control.valueChanges.subscribe(() => {
             if (!this.changeLock) {
               this.controlToInput();
             }
           }
-        });
+        );
       }
       this.controlToInput();
     }

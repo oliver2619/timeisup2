@@ -53,20 +53,19 @@ export class TasksComponent {
     this.tasks$ = combineLatest([selectedRoute$, store.select(selectProjects)]).pipe(
       map(([selectedRoute, projects]) => projects.find(p => p.name === selectedRoute.name)),
       filter(it => it != undefined),
-      map(it => Object.values(it!!.tasks).sort((t1, t2) => t1.name.localeCompare(t2.name)))
+      map(it => Object.values(it!.tasks).sort((t1, t2) => t1.name.localeCompare(t2.name)))
     );
   }
 
   addTask() {
     const v = this.value;
-    this.projectSettingsService.addTask(this.currentProjectName, v.name).subscribe({
-      next: result => {
-        if (result) {
-          v.name = '';
-          this.formGroup.setValue(v);
-        }
+    this.projectSettingsService.addTask(this.currentProjectName, v.name).subscribe(result => {
+      if (result) {
+        v.name = '';
+        this.formGroup.setValue(v);
       }
-    });
+    }
+    );
   }
 
   canRemoveTask(task: string): boolean {
@@ -83,20 +82,18 @@ export class TasksComponent {
 
   removeTask(task: string) {
     const projectName = this.currentProjectName;
-    this.messageBoxService.question(`Do you want to remove task ${task} from project ${projectName}?`).subscribe({
-      next: result => {
-        if (result) {
-          this.projectSettingsService.deleteTask(projectName, task).subscribe({ next: _ => { } });
-        }
+    this.messageBoxService.question(`Do you want to remove task ${task} from project ${projectName}?`).subscribe(result => {
+      if (result) {
+        this.projectSettingsService.deleteTask(projectName, task).subscribe(() => undefined);
       }
     });
   }
 
   setActive(task: string, active: boolean) {
-    this.projectSettingsService.setTask(this.currentProjectName, task, task, active).subscribe({ next: _ => { } });
+    this.projectSettingsService.setTask(this.currentProjectName, task, task, active).subscribe(() => undefined);
   }
 
   setFavorite(task: string) {
-    this.projectSettingsService.setTaskFavorite(this.currentProjectName, task).subscribe({ next: _ => { } });
+    this.projectSettingsService.setTaskFavorite(this.currentProjectName, task).subscribe(() => undefined);
   }
 }

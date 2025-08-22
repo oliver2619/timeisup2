@@ -7,7 +7,7 @@ import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 export class HelpButtonDirective {
 
   @Input('tiuHelpButton')
-  url: string = '.';
+  url = '.';
 
   @HostBinding('class.menu-button')
   readonly classMenuButton = true;

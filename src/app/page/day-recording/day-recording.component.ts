@@ -23,11 +23,11 @@ interface DayRecordingFormValue {
 }
 
 @Component({
-    selector: 'tiu-day-recording',
-    templateUrl: './day-recording.component.html',
-    styleUrl: './day-recording.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [NgClass, MenuComponent, SelectProjectComponent, SelectTaskComponent, ReactiveFormsModule, RecordListComponent, ButtonErrorDirective, RouterModule, DurationPipe, HoursPipe, HelpButtonDirective]
+  selector: 'tiu-day-recording',
+  templateUrl: './day-recording.component.html',
+  styleUrl: './day-recording.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgClass, MenuComponent, SelectProjectComponent, SelectTaskComponent, ReactiveFormsModule, RecordListComponent, ButtonErrorDirective, RouterModule, DurationPipe, HoursPipe, HelpButtonDirective]
 })
 export class DayRecordingComponent {
 
@@ -118,11 +118,11 @@ export class DayRecordingComponent {
   }
 
   start() {
-    this.accountingService.startRecording(this.value.project, this.value.task).subscribe({ next: _ => { } });
+    this.accountingService.startRecording(this.value.project, this.value.task).subscribe(() => undefined);
   }
 
   stop() {
-    this.accountingService.stopRecording().subscribe({ next: _ => { } });
+    this.accountingService.stopRecording().subscribe(() => undefined);
   }
 
   saveComment() {

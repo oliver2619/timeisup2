@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { selectProjects } from '../selector/project-settings-selectors';
 import { map } from 'rxjs';
 
-export const projectGuard: CanActivateFn = (route, _) => {
+export const projectGuard: CanActivateFn = (route) => {
 
   const projectName = (route.params as ProjectRouteParams).name;
   const router = inject(Router);

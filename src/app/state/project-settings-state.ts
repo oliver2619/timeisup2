@@ -2,6 +2,6 @@ import { ProjectState } from "./project-state";
 
 export interface ProjectSettingsState {
 
-    readonly projects: {[key: string]: ProjectState};
+    readonly projects: Record<string, ProjectState>;
     readonly favoriteProject: string | undefined;
 }

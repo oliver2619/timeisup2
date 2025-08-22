@@ -1,5 +1,4 @@
 import { createReducer, on } from "@ngrx/store";
-import _ from "lodash";
 import { projectActions } from "../action/project-actions";
 import { ProjectSettingsState } from "../state/project-settings-state";
 
@@ -8,7 +7,7 @@ const initialProjectSettingsState: ProjectSettingsState = {
     projects: {}
 };
 
-function loadProjectSettings(_: ProjectSettingsState, action: ProjectSettingsState): ProjectSettingsState {
+function loadProjectSettings(_state: ProjectSettingsState, action: ProjectSettingsState): ProjectSettingsState {
     return action;
 }
 

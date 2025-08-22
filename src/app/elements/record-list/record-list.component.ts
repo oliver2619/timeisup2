@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnChanges, SimpleChanges, inject, viewChild, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnChanges, inject, viewChild, input } from '@angular/core';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { HoursPipe } from "../hours.pipe";
@@ -56,7 +56,7 @@ export class RecordListComponent implements OnChanges {
     );
   }
 
-  ngOnChanges(_: SimpleChanges) {
+  ngOnChanges() {
     window.setTimeout(() => this.date.next({ day: this.day(), month: this.month(), year: this.year() }), 1);
   }
 

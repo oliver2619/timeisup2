@@ -7,7 +7,7 @@ import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 export class BackButtonDirective {
 
   @Input('tiuBackButton')
-  url: string = '';
+  url = '';
   
   @HostBinding('textContent')
   readonly backText = 'Back'

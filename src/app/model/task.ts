@@ -1,5 +1,3 @@
-import { Project } from "./project";
-
 export class Task {
 
     constructor(readonly project: string, readonly name: string) { }

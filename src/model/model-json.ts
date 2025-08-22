@@ -6,7 +6,7 @@ export interface ModelJson {
 
     readonly version: 1;
     readonly settings?: SettingsJson;
-    readonly projects?: { [key: string]: ProjectJson };
+    readonly projects?: Record<string, ProjectJson>;
     readonly months: MonthJson[];
     readonly active: DateJson | undefined;
     readonly overtime: number; // hours

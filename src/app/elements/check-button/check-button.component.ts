@@ -12,9 +12,9 @@ export class CheckButtonComponent {
 
   readonly active = input(false);
 
-  readonly onChangeActive = output<boolean>({ alias: 'change-active' });
+  readonly changeActive = output<boolean>({ alias: 'change-active' });
 
   onClick() {
-    this.onChangeActive.emit(!this.active());
+    this.changeActive.emit(!this.active());
   }
 }

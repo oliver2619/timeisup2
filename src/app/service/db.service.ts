@@ -59,7 +59,7 @@ export class DbService {
   }
 
   private onMigrateV1(db: IDBDatabase) {
-    const settings = db.createObjectStore(DbService.settingsStore);
+    db.createObjectStore(DbService.settingsStore);
 
   }
 

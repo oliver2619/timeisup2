@@ -17,7 +17,7 @@ import { Toast } from "../../service/toast.service";
 export class ToastComponent implements OnInit {
 
   readonly toast = input.required<Toast>();
-  readonly onFinish = output<Toast>({ alias: 'finish' });
+  readonly finish = output<Toast>();
   readonly visible = signal(false);
   readonly message = computed(() => this.toast().message);
 
@@ -41,7 +41,7 @@ export class ToastComponent implements OnInit {
   @HostListener('transitionend')
   onAnimationEnd() {
     if (!this.visible()) {
-      this.onFinish.emit(this.toast());
+      this.finish.emit(this.toast());
     }
   }
 }

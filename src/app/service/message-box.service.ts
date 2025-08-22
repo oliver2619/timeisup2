@@ -21,8 +21,6 @@ export class MessageBoxService {
 
   private handler: MessageBoxHandler | undefined;
 
-  constructor() { }
-
   setHandler(handler: MessageBoxHandler | undefined) {
     this.handler = handler;
   }
