@@ -5,9 +5,9 @@
 $_border-radius: spacing.x(-3);
 
 @mixin input {
-    @include font.default();
     outline: none;
     background-color: color.$input-bg;
+    @include font.default();
 }
 
 @mixin form {
@@ -95,11 +95,11 @@ $_border-radius: spacing.x(-3);
 
 input[type="text"],
 input[type="number"] {
-    @include input();
     border: 1px solid color.$border-frame;
     border-radius: $_border-radius;
     padding: spacing.m(-7.5);
     color: color.$fg-1;
+    @include input();
 
     &:focus {
         color: color.$input;
@@ -131,7 +131,6 @@ input[type="radio"] {
 }
 
 input[type="checkbox"] {
-    @include font.default(-3);
     appearance: none;
     width: 1.5em;
     border: 2px solid color.$fg-1;
@@ -144,6 +143,7 @@ input[type="checkbox"] {
     font-family: "Font Awesome 6 Free";
     background-color: color.$bg-5;
     color: color.$fg-1;
+    @include font.default(-3);
 
     &:checked {
         color: color.$bg-5;
@@ -170,18 +170,18 @@ input[type="checkbox"] {
 }
 
 select {
-    @include input();
     border: 1px solid color.$border-frame;
     border-radius: $_border-radius;
     padding: spacing.m(-7.5);
+    @include input();
 }
 
 label {
-    @include font.default();
     font-weight: 300;
     display: inline-flex;
     flex-direction: row;
     align-items: center;
+    @include font.default();
 }
 
 optgroup {

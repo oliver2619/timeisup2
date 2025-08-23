@@ -5,8 +5,8 @@
 $_borderRadius: spacing.x(-5);
 
 @mixin default {
-    @include font.default();
     cursor: pointer;
+    @include font.default();
 
     &[disabled],
     &.disabled {
@@ -20,7 +20,6 @@ $_borderRadius: spacing.x(-5);
 }
 
 @mixin menu {
-    @include default();
     border: none;
     padding: spacing.m(-5);
     display: flex;
@@ -29,6 +28,7 @@ $_borderRadius: spacing.x(-5);
     color: color.$fg-1;
     text-decoration: none;
     background-color: transparent;
+    @include default();
 
     &.active .fas {
         color: color.$fg-green-3;

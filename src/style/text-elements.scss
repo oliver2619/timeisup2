@@ -3,13 +3,13 @@
 @use "./spacing";
 
 h1 {
-    @include font.default(3);
     margin: spacing.m(-10) 0;
+    @include font.default(3);
 }
 
 h2 {
-    @include font.default(1.5);
     margin: 0;
+    @include font.default(1.5);
 }
 
 p {

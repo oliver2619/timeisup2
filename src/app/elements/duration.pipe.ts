@@ -18,7 +18,8 @@ export class DurationPipe implements PipeTransform {
     if (hours >= 24) {
       const days = Math.floor(hours / 24);
       const remainingHours = hours - days * 24;
-      return `${formatNumber(days, locale, '1.0-0')}d\u00a0${formatNumber(remainingHours, locale, '1.0-0')}h`;
+      const remainingDate = new Date(remainingHours * 3600_000);
+      return `${formatNumber(days, locale, '1.0-0')}d\u00a0${formatDate(remainingDate, 'HH:mm', locale, 'GMT')}`;
     }
     const date = new Date(hours * 3600_000);
     return formatDate(date, 'HH:mm', locale, 'GMT');

@@ -10,7 +10,6 @@ html {
 }
 
 body {
-  @include font.default();
   height: 100%;
   margin: 0;
   display: flex;
@@ -18,4 +17,5 @@ body {
   align-items: stretch;
   background-color: color.$bg-5;
   user-select: none;
+  @include font.default();
 }

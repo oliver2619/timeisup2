@@ -21,7 +21,6 @@
 }
 
 @mixin frame {
-    @include box-shadow.default();
     border: 1px solid border-color-frame;
     border-radius: spacing.x();
     padding: spacing.m(2.5) spacing.m();
@@ -30,4 +29,5 @@
     align-items: center;
     row-gap: spacing.m(2.5);
     background-color: color.$bg-5;
+    @include box-shadow.default();
 }
