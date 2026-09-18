@@ -3,6 +3,9 @@ import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 
 @Directive({
   selector: '[tiuHelpButton]',
+  host: {
+    'type': 'button',
+  }
 })
 export class HelpButtonDirective {
 
@@ -11,9 +14,6 @@ export class HelpButtonDirective {
 
   @HostBinding('class.menu-button')
   readonly classMenuButton = true;
-
-  @HostBinding('type')
-  readonly buttonType = 'button';
 
   @HostBinding('innerHTML')
   readonly childHtml = '<span class="fas fa-circle-question"></span>'

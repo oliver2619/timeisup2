@@ -3,6 +3,9 @@ import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 
 @Directive({
   selector: '[tiuBackButton]',
+  host: {
+    'type': 'button',
+  }
 })
 export class BackButtonDirective {
 
@@ -14,9 +17,6 @@ export class BackButtonDirective {
 
   @HostBinding('class.button')
   readonly styleAsButton = true;
-
-  @HostBinding('type')
-  readonly buttonType = 'button'
 
   private readonly router: Router;
   private readonly activatedRoute: ActivatedRoute;
