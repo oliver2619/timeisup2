@@ -1,6 +1,7 @@
 @use "./color";
 @use "./font";
 @use "./spacing";
+@use "../../node_modules/@fortawesome/fontawesome-free/scss/variables";
 
 $_border-radius: spacing.x(-3);
 
@@ -140,7 +141,7 @@ input[type="checkbox"] {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    font-family: "Font Awesome 6 Free";
+    font-family: variables.$family !important;
     background-color: color.$bg-5;
     color: color.$fg-1;
     @include font.default(-3);

@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, signal, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
-import { MessageBoxService, YesNoCancelResult } from '../../service/message-box.service';
+import { YesNoCancelResult } from '../../service/message-box.service';
 import { Observable, Subject } from 'rxjs';
+import { MessageBox } from './message-box';
 
 @Component({
   selector: 'tiu-message-box',
@@ -13,7 +14,7 @@ import { Observable, Subject } from 'rxjs';
     '[class.visible]': 'visible()',
   }
 })
-export class MessageBoxComponent implements OnDestroy {
+export class MessageBoxComponent implements MessageBox {
 
   readonly title = signal('');
   readonly question = signal('');
@@ -23,22 +24,8 @@ export class MessageBoxComponent implements OnDestroy {
   readonly noVisible = signal(false);
   readonly visible = signal(false);
 
-  private readonly messageBoxService = inject(MessageBoxService);
-
   private booleanSubject: Subject<boolean> | undefined;
   private yesNoCancelSubject: Subject<YesNoCancelResult> | undefined;
-
-  constructor() {
-    this.messageBoxService.setHandler({
-      information: message => this.doInformation(message),
-      question: message => this.doQuestion(message),
-      questionYesNoCancel: message => this.doQuestionYesNoCancel(message)
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.messageBoxService.setHandler(undefined);
-  }
 
   yes() {
     this.visible.set(false);
@@ -68,7 +55,7 @@ export class MessageBoxComponent implements OnDestroy {
     yncs?.next(YesNoCancelResult.CANCEL);
   }
 
-  private doInformation(message: string) {
+  showInformation(message: string): void {
     this.title.set('Information');
     this.question.set(message);
     this.okVisible.set(true);
@@ -78,7 +65,7 @@ export class MessageBoxComponent implements OnDestroy {
     this.visible.set(true);
   }
 
-  private doQuestion(message: string): Observable<boolean> {
+  showQuestionOkCancel(message: string): Observable<boolean> {
     this.title.set('Question');
     this.question.set(message);
     this.okVisible.set(true);
@@ -90,7 +77,7 @@ export class MessageBoxComponent implements OnDestroy {
     return this.booleanSubject;
   }
 
-  private doQuestionYesNoCancel(message: string): Observable<YesNoCancelResult> {
+  showQuestionYesNoCancel(message: string): Observable<YesNoCancelResult> {
     this.title.set('Question');
     this.question.set(message);
     this.okVisible.set(false);

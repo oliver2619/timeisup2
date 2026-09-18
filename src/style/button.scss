@@ -31,7 +31,7 @@ $_borderRadius: spacing.x(-5);
     @include default();
 
     &.active .fas {
-        color: color.$fg-green-3;
+        color: color.$fg-blue-3;
     }
 
     &.red {
@@ -132,6 +132,15 @@ button.button {
         flex-direction: column;
         align-items: flex-start;
         text-align: start;
+    }
+
+    &.stretch {
+        align-self: stretch;
+        flex: 1 1;
+    }
+
+    &.center {
+        justify-content: center;
     }
 }
 
